@@ -1,3 +1,5 @@
+package com.luxoft.bankapp.service.bank;
+
 import com.luxoft.bankapp.domain.bank.Client;
 
 /**
