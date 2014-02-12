@@ -13,7 +13,7 @@ public class BankApplication {
 	
 	public static void main(String[] args) {
 
-        Bank bank = new Bank("Big com.luxoft.bankapp.domain.bank.Bank");
+        Bank bank = new Bank("Big Bank");
         Client cl1 = new Client("JJ KK", Gender.MALE);
         Client cl2 = new Client("KK LL", Gender.FEMALE);
         cl1.addAccount("C", 2000, 200);

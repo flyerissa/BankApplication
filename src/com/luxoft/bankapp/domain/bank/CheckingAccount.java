@@ -2,30 +2,32 @@ package com.luxoft.bankapp.domain.bank;
 
 import com.luxoft.bankapp.domain.bank.Account;
 
-public class CheckingAccount extends AbstractAccount {
-	private float overdraft;
-    private float balance;
+import java.math.BigDecimal;
 
-    public CheckingAccount(float balance, float overdraft){
+public class CheckingAccount extends AbstractAccount {
+	private double overdraft;
+    private double balance;
+
+    public CheckingAccount(double balance, double overdraft){
         this.balance = balance;
         this.overdraft = balance;
     }
-	public void setOverdraft(float x){
+	public void setOverdraft(double x){
 		overdraft = x;
 	}
 
-    public float getBalance(){
+    public double getBalance(){
         return balance;
     }
 
-    public void deposit(float x) {
+    public void deposit(double x) {
         balance += x;
 
     }
 
 	@Override
-	public void withdraw(float x) {
-		float withdraw = balance - x;
+	public void withdraw(double x) {
+		double withdraw = balance - x;
 		if (withdraw >= overdraft){
 			balance = withdraw;
 		}
@@ -34,20 +36,13 @@ public class CheckingAccount extends AbstractAccount {
 	}
 
     @Override
-    public float maximumAmountToWithdraw() {
-        float sum = 0;
+    public double maximumAmountToWithdraw() {
+        double sum = 0;
         if (balance > 0){
             sum = balance + overdraft;
         }
         else sum = overdraft;
         return sum;
     }
-	/*@Override
-	public String printReport() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Overdraft is: " + overdraft + ", Balance is: " + balance);
-		return sb.toString();
-		
-	}
-*/
+
 }

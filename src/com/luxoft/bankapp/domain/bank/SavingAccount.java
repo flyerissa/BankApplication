@@ -3,22 +3,22 @@ package com.luxoft.bankapp.domain.bank;
 import com.luxoft.bankapp.domain.bank.Account;
 
 public class SavingAccount extends AbstractAccount {
-    private float balance;
-    public SavingAccount(float balance){
+    private double balance;
+    public SavingAccount(double balance){
         this.balance = balance;
     }
 
-    public float getBalance(){
+    public double getBalance(){
         return balance;
     }
 
-    public void deposit(float x) {
+    public void deposit(double x) {
         balance += x;
 
     }
 
 	@Override
-	public void withdraw(float x) {
+	public void withdraw(double x) {
 		if (x <= balance){
 			balance -= x;
 		}
@@ -28,7 +28,7 @@ public class SavingAccount extends AbstractAccount {
 	}
 
     @Override
-    public float maximumAmountToWithdraw() {
+    public double maximumAmountToWithdraw() {
         return balance;
     }
 

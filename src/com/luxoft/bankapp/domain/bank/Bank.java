@@ -26,23 +26,5 @@ public class Bank  {
 		return clients;
 	}
 	
-	/*public void addClient(com.luxoft.bankapp.domain.bank.Client c){
-		clients.add(c);
-	}
-/*
-	@Override
-	public String printReport() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(name + "\n");
-		for(com.luxoft.bankapp.domain.bank.Client c: clients){
-			sb.append("Name: " + c.getName() + "\n");
-			sb.append("Balance is: " + c.getBalance() + "\n");
-		}
-		
-		return sb.toString();
-	}
 
-    //registerEvent(EventNotificationListener e){}
-
-*/
 }

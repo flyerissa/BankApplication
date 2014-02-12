@@ -1,8 +1,10 @@
 package com.luxoft.bankapp.domain.bank;
 
+import java.math.BigDecimal;
+
 public interface Account  {
-    float getBalance();
-	void deposit(float x);
-	void withdraw(float x);
-    float maximumAmountToWithdraw();
+    double getBalance();
+	void deposit(double x);
+	void withdraw(double x);
+    double maximumAmountToWithdraw();
 }
