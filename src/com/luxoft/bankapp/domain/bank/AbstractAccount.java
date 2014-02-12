@@ -1,3 +1,5 @@
+package com.luxoft.bankapp.domain.bank;
+
 import com.luxoft.bankapp.domain.bank.Account;
 
 /**
@@ -18,4 +20,5 @@ public abstract class AbstractAccount implements Account{
     public float maximumAmountToWithdraw() {
         return 0;
     }
+
 }

@@ -1,3 +1,5 @@
+package com.luxoft.bankapp.domain.bank;
+
 import com.luxoft.bankapp.domain.bank.Account;
 
 public class SavingAccount extends AbstractAccount {

@@ -1,10 +1,5 @@
 package com.luxoft.bankapp.domain.bank;
 
-import com.luxoft.bankapp.domain.bank.Account;
-import com.luxoft.bankapp.domain.bank.Gender;
-
-
-
 public class Client {
 	private String name;
     private Gender gender;
@@ -110,13 +105,13 @@ public class Client {
 	public com.luxoft.bankapp.domain.bank.Account createAccount(String accountType){
 		com.luxoft.bankapp.domain.bank.Account account = null;
 		if(accountType.equals("C")){
-			CheckingAccount account2 = new CheckingAccount();
+			com.luxoft.bankapp.domain.bank.CheckingAccount account2 = new com.luxoft.bankapp.domain.bank.CheckingAccount();
 			account2.setOverdraft(initialOverdraft);
 			account = account2;
 			accounts.add(account2);
 		}
 		else if (accountType.equals("S")){
-			SavingAccount account3 = new SavingAccount();
+			com.luxoft.bankapp.domain.bank.SavingAccount account3 = new com.luxoft.bankapp.domain.bank.SavingAccount();
 			account = account3;
 			accounts.add(account3);
 		}

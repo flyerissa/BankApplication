@@ -1,6 +1,8 @@
+package com.luxoft.bankapp.domain.bank;
+
 import com.luxoft.bankapp.domain.bank.Account;
 
-public class CheckingAccount extends AbstractAccount  {
+public class CheckingAccount extends AbstractAccount {
 	private float overdraft;
     private float balance;
 
