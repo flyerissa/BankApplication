@@ -1,7 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
 
-import com.luxoft.bankapp.service.bank.NotEnoughFundsException;
 import com.luxoft.bankapp.service.bank.OverdraftLimitExceededException;
 
 public class CheckingAccount extends AbstractAccount {
@@ -32,7 +31,7 @@ public class CheckingAccount extends AbstractAccount {
     }
 
     @Override
-    public void withdraw(double x) throws NotEnoughFundsException {
+    public void withdraw(double x) throws OverdraftLimitExceededException {
         double withdraw = balance - x;
         if (withdraw <= overdraft) {
             balance = withdraw;

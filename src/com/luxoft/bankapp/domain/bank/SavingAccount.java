@@ -22,7 +22,6 @@ public class SavingAccount extends AbstractAccount {
         if (x <= balance) {
             balance -= x;
         } else
-            //System.out.println("Withdraw is impossible!Not enough money on your account!");
             throw new NotEnoughFundsException();
     }
 
