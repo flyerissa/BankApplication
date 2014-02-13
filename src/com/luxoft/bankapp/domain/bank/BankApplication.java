@@ -38,16 +38,16 @@ public class BankApplication {
     private static void modifyBank(Bank bank) {
         Client client3 = new Client("OOO", Gender.FEMALE);
         try {
-            client3.addAccount("C", 5000, 800);
+            client3.addAccount("C", 5000, 200);
         } catch (IllegalArgumentException e) {
             System.out.println("Balance and overdraft should be greater or equal zero");
         }
         Account account = client3.getActiveAccount();
         account.deposit(1000);
         try {
-            account.withdraw(6500);
+            account.withdraw(8000);
         } catch (OverdraftLimitExceededException e) {
-            System.out.println("Not enough money to withdraw! Please ask for increasing overdraft");
+            System.out.println("Cant withdraw. Balance is " + e.getBalance() + ". Maximum amount to withdraw is " + e.getAmount());
         } catch (NotEnoughFundsException e) {
             System.out.println("Not enough money to withdraw!");
         }
