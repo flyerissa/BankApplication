@@ -1,9 +1,8 @@
 package com.luxoft.bankapp.domain.bank;
 
-import com.luxoft.bankapp.domain.bank.Account;
-
 public class SavingAccount extends AbstractAccount {
     private double balance;
+
     public SavingAccount(double balance){
         this.balance = balance;
     }
@@ -14,7 +13,6 @@ public class SavingAccount extends AbstractAccount {
 
     public void deposit(double x) {
         balance += x;
-
     }
 
 	@Override
@@ -22,7 +20,6 @@ public class SavingAccount extends AbstractAccount {
 		if (x <= balance){
 			balance -= x;
 		}
-		
 		else
 			System.out.println("Withdraw is impossible!Not enough money on your account!");
 	}
@@ -31,12 +28,4 @@ public class SavingAccount extends AbstractAccount {
     public double maximumAmountToWithdraw() {
         return balance;
     }
-
-    /*@Override
-	public String printReport() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Balance is: " + balance);
-		return sb.toString();
-	}
-*/
 }

@@ -10,37 +10,36 @@ import com.luxoft.bankapp.service.bank.BankService;
 public class BankApplication {
 
 
-	
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-        Bank bank = new Bank("Big Bank");
+        Bank bank = new Bank();
         Client cl1 = new Client("JJ KK", Gender.MALE);
         Client cl2 = new Client("KK LL", Gender.FEMALE);
         cl1.addAccount("C", 2000, 200);
         cl2.addAccount("S", 1000, 0);
+
         BankService.addClient(bank, cl1);
         BankService.addClient(bank, cl2);
 
         modifyBank(bank);
         printBalance(bank);
 
-	}
+    }
 
-    public static void modifyBank(Bank bank){
+    private static void modifyBank(Bank bank) {
         Client client3 = new Client("OOO", Gender.FEMALE);
         client3.addAccount("C", 5000, 800);
         Account account = client3.getActiveAccount();
         account.deposit(1000);
-        account.withdraw(3000);
+        account.withdraw(6500);
         BankService.addClient(bank, client3);
-
     }
 
-    public static void printBalance(Bank bank){
-        for(Client c : bank.getClients()){
+    private static void printBalance(Bank bank) {
+        for (Client c : bank.getClients()) {
             System.out.println("Balance is: " + c.getActiveAccount().getBalance());
         }
     }
-	
+
 
 }
