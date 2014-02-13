@@ -18,8 +18,6 @@ public class BankService {
             for (Client client1 : list) {
                 if (client1.getName().equals(nextName)) {
                     throw new ClientExistsException();
-                } else {
-                    newList.add(client1);
                 }
             }
 
