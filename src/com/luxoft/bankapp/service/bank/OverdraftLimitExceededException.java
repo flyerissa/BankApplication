@@ -4,11 +4,9 @@ package com.luxoft.bankapp.service.bank;
  * Created by User on 13.02.14.
  */
 public class OverdraftLimitExceededException extends NotEnoughFundsException {
-    private Object object;
     private double balance;
 
-    public OverdraftLimitExceededException(Object o, double bal, double amount) {
-        object = o;
+    public OverdraftLimitExceededException(double bal, double amount) {
         balance = bal;
         this.amount = amount;
     }
@@ -16,11 +14,5 @@ public class OverdraftLimitExceededException extends NotEnoughFundsException {
     public double getBalance() {
         return balance;
     }
-
-
-    public Object getObject() {
-        return object;
-    }
-
 
 }
