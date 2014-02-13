@@ -13,7 +13,7 @@ public class BankApplication {
 
         Bank bank = new Bank();
         Client cl1 = new Client("JJ KK", Gender.MALE);
-        Client cl2 = new Client("JJ KK", Gender.FEMALE);
+        Client cl2 = new Client("RR KK", Gender.FEMALE);
         try {
             cl1.addAccount("C", 2000, 200);
             cl2.addAccount("S", 1000, 0);

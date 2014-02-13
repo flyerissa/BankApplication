@@ -6,4 +6,5 @@ package com.luxoft.bankapp.service.bank;
 public class NotEnoughFundsException extends BankException {
     private double amount;
 
+
 }
