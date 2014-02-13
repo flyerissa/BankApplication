@@ -1,17 +1,25 @@
 package com.luxoft.bankapp.domain.bank;
 
 
+import com.luxoft.bankapp.service.bank.NotEnoughFundsException;
+import com.luxoft.bankapp.service.bank.OverdraftLimitExceededException;
+
 public class CheckingAccount extends AbstractAccount {
     private double overdraft;
     private double balance;
 
     public CheckingAccount(double balance, double overdraft) {
-        this.balance = balance;
-        this.overdraft = overdraft;
+        if (balance >= 0 && overdraft >= 0) {
+            this.balance = balance;
+            this.overdraft = overdraft;
+        } else throw new IllegalArgumentException();
     }
 
     public void setOverdraft(double x) {
-        overdraft = x;
+
+        if (x >= 0) {
+            overdraft = x;
+        } else throw new IllegalArgumentException();
     }
 
     public double getBalance() {
@@ -24,12 +32,12 @@ public class CheckingAccount extends AbstractAccount {
     }
 
     @Override
-    public void withdraw(double x) {
+    public void withdraw(double x) throws NotEnoughFundsException {
         double withdraw = balance - x;
         if (withdraw <= overdraft) {
             balance = withdraw;
         } else
-            System.out.println("Withdraw is impossible!Not enough money on your account!");
+            throw new OverdraftLimitExceededException();
     }
 
     @Override

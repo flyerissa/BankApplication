@@ -1,13 +1,15 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.service.bank.NotEnoughFundsException;
+
 public class SavingAccount extends AbstractAccount {
     private double balance;
 
-    public SavingAccount(double balance){
+    public SavingAccount(double balance) {
         this.balance = balance;
     }
 
-    public double getBalance(){
+    public double getBalance() {
         return balance;
     }
 
@@ -15,14 +17,14 @@ public class SavingAccount extends AbstractAccount {
         balance += x;
     }
 
-	@Override
-	public void withdraw(double x) {
-		if (x <= balance){
-			balance -= x;
-		}
-		else
-			System.out.println("Withdraw is impossible!Not enough money on your account!");
-	}
+    @Override
+    public void withdraw(double x) throws NotEnoughFundsException {
+        if (x <= balance) {
+            balance -= x;
+        } else
+            //System.out.println("Withdraw is impossible!Not enough money on your account!");
+            throw new NotEnoughFundsException();
+    }
 
     @Override
     public double maximumAmountToWithdraw() {

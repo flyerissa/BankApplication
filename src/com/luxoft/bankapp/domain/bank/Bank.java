@@ -1,18 +1,19 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.service.bank.ClientExistsException;
+import com.luxoft.bankapp.service.bank.ClientRegistrationListener;
+
 import java.util.ArrayList;
 import java.util.List;
-import com.luxoft.bankapp.service.bank.ClientRegistrationListener;
 
 public class Bank {
     private List<Client> clients = new ArrayList<Client>();
     private String name;
-    private ClientRegistrationListener[] listeners;
+    private List<ClientRegistrationListener> listeners = new ArrayList<ClientRegistrationListener>();
 
     public Bank() {
-        listeners = new ClientRegistrationListener[]{
-                new EmailNotificationListener(), new PrintClientListener()
-        };
+        listeners.add(new EmailNotificationListener());
+        listeners.add(new PrintClientListener());
     }
 
     public String getName() {
@@ -27,11 +28,19 @@ public class Bank {
         return clients;
     }
 
-    public void addClient(Client c) {
-        clients.add(c);
-        for (ClientRegistrationListener clientListener : listeners) {
-            clientListener.onClientAdded(c);
+    public void addClient(Client c) throws ClientExistsException {
+        for (Client client : clients) {
+            if (c.getName().equals(client.getName())) {
+                throw new ClientExistsException();
+            } else {
+                clients.add(c);
+                for (ClientRegistrationListener clientListener : listeners) {
+                    clientListener.onClientAdded(c);
+                }
+            }
         }
+
+
     }
 
     private class EmailNotificationListener implements ClientRegistrationListener {
