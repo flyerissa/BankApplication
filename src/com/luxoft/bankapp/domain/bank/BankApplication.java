@@ -58,7 +58,7 @@ public class BankApplication {
         }
     }
 
-    public static void printBalance(Bank bank) {
+    private static void printBalance(Bank bank) {
         for (Client c : bank.getClients()) {
             System.out.println("Balance is: " + c.getActiveAccount().getBalance());
         }
