@@ -1,9 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
 import com.luxoft.bankapp.service.bank.BankService;
-import com.luxoft.bankapp.service.bank.ClientExistsException;
-import com.luxoft.bankapp.service.bank.NotEnoughFundsException;
-import com.luxoft.bankapp.service.bank.OverdraftLimitExceededException;
 
 
 public class BankApplication {

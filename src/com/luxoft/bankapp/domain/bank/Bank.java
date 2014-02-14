@@ -1,6 +1,5 @@
 package com.luxoft.bankapp.domain.bank;
 
-import com.luxoft.bankapp.service.bank.ClientExistsException;
 import com.luxoft.bankapp.service.bank.ClientRegistrationListener;
 
 import java.util.ArrayList;

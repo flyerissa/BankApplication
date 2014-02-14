@@ -1,8 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
 
-import com.luxoft.bankapp.service.bank.OverdraftLimitExceededException;
-
 public class CheckingAccount extends AbstractAccount {
     private double overdraft;
     private double balance;

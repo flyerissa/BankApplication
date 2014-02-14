@@ -1,7 +1,5 @@
 package com.luxoft.bankapp.domain.bank;
 
-import com.luxoft.bankapp.service.bank.NotEnoughFundsException;
-
 public class SavingAccount extends AbstractAccount {
     private double balance;
 

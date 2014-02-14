@@ -1,4 +1,4 @@
-package com.luxoft.bankapp.service.bank;
+package com.luxoft.bankapp.domain.bank;
 
 /**
  * Created by User on 13.02.14.
