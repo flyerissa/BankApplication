@@ -1,5 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
+//3d exercise
 public class Client {
     private String name;
     private Gender gender;

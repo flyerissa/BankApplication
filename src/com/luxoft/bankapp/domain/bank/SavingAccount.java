@@ -1,7 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
-import com.luxoft.bankapp.service.bank.NotEnoughFundsException;
-
+//3d exercise
 public class SavingAccount extends AbstractAccount {
     private double balance;
 
@@ -22,7 +21,7 @@ public class SavingAccount extends AbstractAccount {
         if (x <= balance) {
             balance -= x;
         } else
-            throw new NotEnoughFundsException();
+            throw new NotEnoughFundsException(balance, balance);
     }
 
     @Override

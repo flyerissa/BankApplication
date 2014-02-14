@@ -1,19 +1,15 @@
 package com.luxoft.bankapp.domain.bank;
 
 import com.luxoft.bankapp.service.bank.BankService;
-import com.luxoft.bankapp.service.bank.ClientExistsException;
-import com.luxoft.bankapp.service.bank.NotEnoughFundsException;
-import com.luxoft.bankapp.service.bank.OverdraftLimitExceededException;
 
-
+// 3d exercise
 public class BankApplication {
-
 
     public static void main(String[] args) throws ClientExistsException {
 
         Bank bank = new Bank();
         Client cl1 = new Client("JJ KK", Gender.MALE);
-        Client cl2 = new Client("RR KK", Gender.FEMALE);
+        Client cl2 = new Client("JJ KK", Gender.FEMALE);
         try {
             cl1.addAccount("C", 2000, 200);
             cl2.addAccount("S", 1000, 0);
@@ -38,8 +34,6 @@ public class BankApplication {
     private static void modifyBank(Bank bank) {
         Client client3 = new Client("OOO", Gender.FEMALE);
         try {
-
-            ////
             client3.addAccount("C", 5000, 200);
         } catch (IllegalArgumentException e) {
             System.out.println("Balance and overdraft should be greater or equal zero");
@@ -65,6 +59,5 @@ public class BankApplication {
             System.out.println("Balance is: " + c.getActiveAccount().getBalance());
         }
     }
-
 
 }

@@ -2,10 +2,11 @@ package com.luxoft.bankapp.service.bank;
 
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
+import com.luxoft.bankapp.domain.bank.ClientExistsException;
 
 import java.util.List;
 
-
+//3d exercise
 public class BankService {
     public static void addClient(Bank bank, Client client) throws ClientExistsException {
         int size = bank.getClients().size();

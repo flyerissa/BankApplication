@@ -1,11 +1,9 @@
 package com.luxoft.bankapp.domain.bank;
 
-import com.luxoft.bankapp.service.bank.ClientExistsException;
-import com.luxoft.bankapp.service.bank.ClientRegistrationListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
+//3d exercise
 public class Bank {
     private List<Client> clients = new ArrayList<Client>();
     private String name;

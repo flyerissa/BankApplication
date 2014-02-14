@@ -1,8 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
-
-import com.luxoft.bankapp.service.bank.OverdraftLimitExceededException;
-
+//3d exercise
 public class CheckingAccount extends AbstractAccount {
     private double overdraft;
     private double balance;
@@ -38,7 +36,7 @@ public class CheckingAccount extends AbstractAccount {
         if (withdraw >= overdraft) {
             balance = withdraw;
         } else
-            throw new OverdraftLimitExceededException(this, balance, amount);
+            throw new OverdraftLimitExceededException(balance, amount);
     }
 
     @Override
