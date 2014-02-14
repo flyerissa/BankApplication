@@ -5,7 +5,7 @@ import com.luxoft.bankapp.service.bank.BankService;
 // 3d exercise
 public class BankApplication {
 
-    public static void main(String[] args) throws ClientExistsException {
+    public static void main(String[] args) {
 
         Bank bank = new Bank();
         Client cl1 = new Client("JJ KK", Gender.MALE);
