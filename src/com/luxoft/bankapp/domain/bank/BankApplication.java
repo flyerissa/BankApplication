@@ -38,6 +38,8 @@ public class BankApplication {
     private static void modifyBank(Bank bank) {
         Client client3 = new Client("OOO", Gender.FEMALE);
         try {
+
+            ////
             client3.addAccount("C", 5000, 200);
         } catch (IllegalArgumentException e) {
             System.out.println("Balance and overdraft should be greater or equal zero");
