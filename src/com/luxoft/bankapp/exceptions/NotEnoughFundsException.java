@@ -1,4 +1,4 @@
-package com.luxoft.bankapp.domain.bank;
+package com.luxoft.bankapp.exceptions;
 
 //3d exercise
 public class NotEnoughFundsException extends BankException {
@@ -9,8 +9,8 @@ public class NotEnoughFundsException extends BankException {
         return amount;
     }
 
-    public NotEnoughFundsException(double bal, double amount) {
-        balance = bal;
+    public NotEnoughFundsException(double balance, double amount) {
+        this.balance = balance;
         this.amount = amount;
     }
 

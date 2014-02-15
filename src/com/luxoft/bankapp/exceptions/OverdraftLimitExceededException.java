@@ -1,4 +1,4 @@
-package com.luxoft.bankapp.domain.bank;
+package com.luxoft.bankapp.exceptions;
 
 //3d exercise
 public class OverdraftLimitExceededException extends NotEnoughFundsException {

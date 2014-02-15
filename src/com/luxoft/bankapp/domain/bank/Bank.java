@@ -1,5 +1,7 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.exceptions.ClientExistsException;
+
 import java.util.ArrayList;
 import java.util.List;
 
