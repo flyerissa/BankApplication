@@ -4,6 +4,7 @@ import com.luxoft.bankapp.domain.bank.Account;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
+import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 
 import java.util.List;
 import java.util.Scanner;
@@ -74,5 +75,10 @@ public class BankService {
         Account account = client.getActiveAccount();
         account.deposit(sum);
 
+    }
+
+    public static void withdrawAccount(Client client, double sum) throws NotEnoughFundsException {
+        Account account = client.getActiveAccount();
+        account.withdraw(sum);
     }
 }
