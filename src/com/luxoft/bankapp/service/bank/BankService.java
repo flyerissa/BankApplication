@@ -81,4 +81,12 @@ public class BankService {
         Account account = client.getActiveAccount();
         account.withdraw(sum);
     }
+
+    public static void transfer(Client from, double transfer, Client to) throws NotEnoughFundsException {
+        Account accountFrom = from.getActiveAccount();
+        accountFrom.withdraw(transfer);
+        Account accountTo = to.getActiveAccount();
+        accountTo.deposit(transfer);
+
+    }
 }
