@@ -1,14 +1,67 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.service.bank.BankService;
+
 //4th exercise
 public class Client {
     private String name;
+    private String surname;
     private Gender gender;
     private Account activeAccount;
+    private String email;
+    private String fullName;
+    private String phone;
+    private double overdraft;
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName() {
+        this.fullName = name + " " + surname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        if (BankService.validateEmail(email)) {
+            this.email = email;
+        }
+
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        if (BankService.validatePhone(phone)) {
+            this.phone = phone;
+        }
+    }
+
+    public double getOverdraft() {
+        return overdraft;
+    }
+
+    public void setOverdraft(double overdraft) {
+        this.overdraft = overdraft;
+    }
+
 
     public Client(String name, Gender gender) {
         this.name = name;
         this.gender = gender;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     @Override
@@ -79,15 +132,5 @@ public class Client {
 
     }
 
-   /* public static void main(String[] args) {
-        Client cl1 = new Client("JJ KK", Gender.MALE);
-        Client cl2 = new Client("JJ KK", Gender.FEMALE);
-        Bank bank = new Bank();
-        if(cl1.equals(cl2)){
-            System.out.println("equals");
-        }
-        else System.out.println("false");
 
-    }
-*/
 }
