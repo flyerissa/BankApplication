@@ -29,6 +29,6 @@ public class TransferCommand implements Command {
 
     @Override
     public void printCommandInfo() {
-
+        System.out.println("Transfer");
     }
 }

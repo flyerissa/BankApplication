@@ -1,5 +1,9 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.exceptions.ClientExistsException;
+
+import java.util.Scanner;
+
 /**
  * Created by User on 17.02.14.
  */
@@ -28,9 +32,15 @@ public class BankCommander {
                 System.out.print(i + ") ");
                 commands[i].printCommandInfo();
             }
-            String commandString = System.console().readLine();
-            int command = 0; // initialize command with commandString
-            commands[command].execute();
+            Scanner sc = new Scanner(System.in);
+
+            String commandString = sc.nextLine();
+            int command = Integer.parseInt(commandString); // initialize command with commandString
+            try {
+                commands[command].execute();
+            } catch (ClientExistsException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

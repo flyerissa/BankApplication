@@ -51,8 +51,8 @@ public class Client {
     }
 
 
-    public Client(String name, Gender gender) {
-        this.name = name;
+    public Client(String fullName, Gender gender) {
+        this.fullName = fullName;
         this.gender = gender;
     }
 

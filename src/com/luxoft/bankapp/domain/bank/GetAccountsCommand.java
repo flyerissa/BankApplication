@@ -27,6 +27,6 @@ public class GetAccountsCommand implements Command {
 
     @Override
     public void printCommandInfo() {
-
+        System.out.println("Get account info for client");
     }
 }
