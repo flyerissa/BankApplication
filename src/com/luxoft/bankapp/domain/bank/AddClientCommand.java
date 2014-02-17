@@ -47,9 +47,13 @@ public class AddClientCommand implements Command {
         Matcher matcher2 = pattern2.matcher(gender);
         if (matcher.matches() && matcher2.matches()) {
             client = new Client(clientName, Gender.valueOf(gender));
+            System.out.println("Add account to client, enter type C or S, balance and overdraft, like as C 2000 500");
+            Scanner scanner = new Scanner(System.in);
+            String account1 = scanner.nextLine();
+            String[] account = account1.split(" ");
+            client.addAccount(account[0], Double.parseDouble(account[1]), Double.parseDouble(account[2]));
         }
 
-        
         BankService.addClient(bank, client);
     }
 
