@@ -69,4 +69,10 @@ public class BankService {
         System.out.println(client + "Balance is: " + balance);
 
     }
+
+    public static void depositAccount(Client client, double sum) {
+        Account account = client.getActiveAccount();
+        account.deposit(sum);
+
+    }
 }

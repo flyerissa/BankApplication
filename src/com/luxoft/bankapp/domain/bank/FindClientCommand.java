@@ -10,11 +10,15 @@ import java.util.regex.Pattern;
  * Created by User on 17.02.14.
  */
 public class FindClientCommand implements Command {
+
+    public Bank bank = null;
+    Client currentClient = null;
+
     @Override
     public void execute() {
         System.out.println("Enter name of the bank: ");
         Scanner sc = new Scanner(System.in);
-        Bank bank = null;
+
         String bankName = sc.nextLine();
         Pattern pattern1 = Pattern.compile("^\\s*[A-Za-z]{3,}\\s*");
         Matcher matcher1 = pattern1.matcher(bankName);
@@ -30,7 +34,7 @@ public class FindClientCommand implements Command {
                 }
             }
         }
-        Client currentClient = BankService.findClientByName(bank);
+        currentClient = BankService.findClientByName(bank);
         System.out.println("Current client is: " + currentClient);
 
     }
