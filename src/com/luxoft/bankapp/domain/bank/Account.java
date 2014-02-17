@@ -12,4 +12,6 @@ public interface Account {
     void withdraw(double x) throws OverdraftLimitExceededException, NotEnoughFundsException;
 
     double maximumAmountToWithdraw();
+
+    double decimalValue();
 }

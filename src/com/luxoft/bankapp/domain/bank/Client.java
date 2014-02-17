@@ -1,6 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
-//3d exercise
+//4th exercise
 public class Client {
     private String name;
     private Gender gender;
@@ -9,6 +9,34 @@ public class Client {
     public Client(String name, Gender gender) {
         this.name = name;
         this.gender = gender;
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "name='" + name + '\'' +
+                ", activeAccount=" + activeAccount +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Client)) return false;
+
+        Client client = (Client) o;
+
+        if (gender != client.gender) return false;
+        if (!name.equals(client.name)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + gender.hashCode();
+        return result;
     }
 
     public String getName() {
@@ -51,4 +79,15 @@ public class Client {
 
     }
 
+   /* public static void main(String[] args) {
+        Client cl1 = new Client("JJ KK", Gender.MALE);
+        Client cl2 = new Client("JJ KK", Gender.FEMALE);
+        Bank bank = new Bank();
+        if(cl1.equals(cl2)){
+            System.out.println("equals");
+        }
+        else System.out.println("false");
+
+    }
+*/
 }

@@ -2,9 +2,43 @@ package com.luxoft.bankapp.domain.bank;
 
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 
-//3d exercise
+//4th exercise
 public class SavingAccount extends AbstractAccount {
     private double balance;
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "SavingAccount{" +
+                "balance=" + balance +
+                ", id=" + id +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SavingAccount)) return false;
+
+        SavingAccount that = (SavingAccount) o;
+
+        if (id != that.id) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public SavingAccount(double balance) {
         this.balance = balance;
@@ -29,5 +63,10 @@ public class SavingAccount extends AbstractAccount {
     @Override
     public double maximumAmountToWithdraw() {
         return balance;
+    }
+
+    @Override
+    public double decimalValue() {
+        return Math.round(balance);
     }
 }

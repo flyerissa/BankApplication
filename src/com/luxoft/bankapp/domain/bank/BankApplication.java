@@ -5,14 +5,18 @@ import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 import com.luxoft.bankapp.exceptions.OverdraftLimitExceededException;
 import com.luxoft.bankapp.service.bank.BankService;
 
+import java.util.ArrayList;
+
 // 3d exercise
 public class BankApplication {
+    public static ArrayList<Bank> listOfBanks = new ArrayList<Bank>();
 
     public static void main(String[] args) {
 
         Bank bank = new Bank();
+        listOfBanks.add(bank);
         Client cl1 = new Client("JJ KK", Gender.MALE);
-        Client cl2 = new Client("JJ KK", Gender.FEMALE);
+        Client cl2 = new Client("JJ RR", Gender.FEMALE);
         try {
             cl1.addAccount("C", 2000, 200);
             cl2.addAccount("S", 1000, 0);
@@ -26,6 +30,7 @@ public class BankApplication {
 
         modifyBank(bank);
         printBalance(bank);
+        BankService.findClientByName(bank);
 
     }
 
