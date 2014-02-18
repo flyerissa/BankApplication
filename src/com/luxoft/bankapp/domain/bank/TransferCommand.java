@@ -21,6 +21,8 @@ public class TransferCommand implements Command {
         String input = sc.nextLine();
         try {
             BankService.transfer(fromClient.currentClient, Double.parseDouble(input), toClient.currentClient);
+            System.out.println(input + " from " + fromClient.currentClient.getFullName() + " was transfered to " +
+                    toClient.currentClient.getFullName());
         } catch (NotEnoughFundsException e) {
             e.printStackTrace();
         }

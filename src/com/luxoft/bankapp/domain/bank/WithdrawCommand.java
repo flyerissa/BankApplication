@@ -18,6 +18,7 @@ public class WithdrawCommand implements Command {
         String input = sc.nextLine();
         try {
             BankService.withdrawAccount(findClient.currentClient, Double.parseDouble(input));
+            System.out.println(input + " was withdrawed!");
         } catch (NotEnoughFundsException e) {
             e.printStackTrace();
         }

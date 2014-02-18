@@ -17,6 +17,7 @@ public class DepositCommand implements Command {
         String input = sc.nextLine();
 
         BankService.depositAccount(findClient.currentClient, Double.parseDouble(input));
+        System.out.println(input + " was deposited!");
 
     }
 

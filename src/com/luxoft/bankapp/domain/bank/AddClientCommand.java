@@ -3,6 +3,7 @@ package com.luxoft.bankapp.domain.bank;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.service.bank.BankService;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,20 +17,28 @@ public class AddClientCommand implements Command {
         System.out.println("Enter name of the bank:");
         Scanner sc = new Scanner(System.in);
         Bank bank = null;
+        ArrayList<Bank> listofbanks = BankApplication.getListOfBanks();
         String bankName = sc.nextLine();
         Pattern pattern1 = Pattern.compile("^\\s*[A-Za-z]{3,}\\s*");
         Matcher matcher1 = pattern1.matcher(bankName);
 
 
         if (matcher1.matches()) {
-
-            for (Bank existingBank : BankApplication.listOfBanks) {
-                if (existingBank.getName().equals(bankName)) {
-                    bank = existingBank;
-                } else {
-                    System.out.println("Bank's name is incorrect!");
+            if (listofbanks.size() > 0) {
+                for (Bank existingBank : listofbanks) {
+                    if (existingBank.getName().equals(bankName)) {
+                        bank = existingBank;
+                    }
                 }
+            } else {
+                bank = new Bank();
+                bank.setName(bankName);
+                listofbanks.add(bank);
             }
+
+        } else {
+            System.out.println("Bank's name is incorrect!");
+            return;
         }
 
         System.out.println("Enter name of the client to be added to bank");
@@ -46,7 +55,12 @@ public class AddClientCommand implements Command {
         Pattern pattern2 = Pattern.compile("F|M");
         Matcher matcher2 = pattern2.matcher(gender);
         if (matcher.matches() && matcher2.matches()) {
-            client = new Client(clientName, Gender.valueOf(gender));
+            if (gender.equals("F")) {
+                client = new Client(clientName, Gender.FEMALE);
+            } else {
+                client = new Client(clientName, Gender.MALE);
+            }
+
             System.out.println("Add account to client, enter type C or S, balance and overdraft, like as C 2000 500");
             Scanner scanner = new Scanner(System.in);
             String account1 = scanner.nextLine();
@@ -55,6 +69,7 @@ public class AddClientCommand implements Command {
         }
 
         BankService.addClient(bank, client);
+        System.out.println("Client " + client.getFullName() + " was added to bank " + bank.getName());
     }
 
     @Override
