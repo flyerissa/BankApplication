@@ -2,6 +2,7 @@ package com.luxoft.bankapp.domain.bank;
 
 import com.luxoft.bankapp.service.bank.BankService;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,10 +13,12 @@ import java.util.regex.Pattern;
 public class FindClientCommand implements Command {
 
     public Bank bank = null;
-    Client currentClient = null;
+    public Client currentClient = null;
+
 
     @Override
     public void execute() {
+        ArrayList<Bank> banklist = BankApplication.getListOfBanks();
         System.out.println("Enter name of the bank: ");
         Scanner sc = new Scanner(System.in);
 
@@ -26,7 +29,7 @@ public class FindClientCommand implements Command {
 
         if (matcher1.matches()) {
 
-            for (Bank existingBank : BankApplication.listOfBanks) {
+            for (Bank existingBank : banklist) {
                 if (existingBank.getName().equals(bankName)) {
                     bank = existingBank;
                 } else {

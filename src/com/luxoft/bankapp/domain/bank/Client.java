@@ -4,8 +4,8 @@ import com.luxoft.bankapp.service.bank.BankService;
 
 //4th exercise
 public class Client {
-    private String name;
-    private String surname;
+    //private String name;
+    //private String surname;
     private Gender gender;
     private Account activeAccount;
     private String email;
@@ -17,8 +17,8 @@ public class Client {
         return fullName;
     }
 
-    public void setFullName() {
-        this.fullName = name + " " + surname;
+    public void setFullName(String fullname) {
+        this.fullName = fullname;
     }
 
     public String getEmail() {
@@ -56,18 +56,12 @@ public class Client {
         this.gender = gender;
     }
 
-    public String getSurname() {
-        return surname;
-    }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
 
     @Override
     public String toString() {
         return "Client{" +
-                "name='" + name + '\'' +
+                "name='" + fullName + '\'' +
                 ", activeAccount=" + activeAccount +
                 '}';
     }
@@ -80,25 +74,19 @@ public class Client {
         Client client = (Client) o;
 
         if (gender != client.gender) return false;
-        if (!name.equals(client.name)) return false;
+        if (!fullName.equals(client.fullName)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
+        int result = fullName.hashCode();
         result = 31 * result + gender.hashCode();
         return result;
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public Account getActiveAccount() {
         return activeAccount;
@@ -123,10 +111,10 @@ public class Client {
     public void getClientSalutation() {
         switch (gender) {
             case MALE:
-                System.out.println("MR " + name);
+                System.out.println("MR " + fullName);
                 break;
             case FEMALE:
-                System.out.println("Ms " + name);
+                System.out.println("Ms " + fullName);
                 break;
         }
 

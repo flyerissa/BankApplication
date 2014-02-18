@@ -30,7 +30,7 @@ public class Bank {
 
     public void addClient(Client c) throws ClientExistsException {
         for (Client client : clients) {
-            if (c.getName().equals(client.getName())) {
+            if (c.getFullName().equals(client.getFullName())) {
                 throw new ClientExistsException();
             } else {
                 clients.add(c);

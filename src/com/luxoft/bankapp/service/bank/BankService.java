@@ -15,12 +15,12 @@ import java.util.regex.Pattern;
 public class BankService {
     public static void addClient(Bank bank, Client client) throws ClientExistsException {
         int size = bank.getClients().size();
-        String nextName = client.getName();
+        String nextName = client.getFullName();
         List<Client> list = bank.getClients();
 
         if (size > 0) {
             for (Client existingClient : list) {
-                if (existingClient.getName().equals(nextName)) {
+                if (existingClient.getFullName().equals(nextName)) {
                     throw new ClientExistsException();
                 }
             }
@@ -53,7 +53,7 @@ public class BankService {
 
         if (matches) {
             for (Client existingClient : bank.getClients()) {
-                if (existingClient.getName().equals(client)) {
+                if (existingClient.getFullName().equals(client)) {
                     foundClient = existingClient;
                 }
             }

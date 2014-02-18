@@ -9,11 +9,18 @@ import java.util.ArrayList;
 
 // 3d exercise
 public class BankApplication {
+
+
     public static ArrayList<Bank> listOfBanks = new ArrayList<Bank>();
+
+    public static ArrayList<Bank> getListOfBanks() {
+        return listOfBanks;
+    }
 
     public static void main(String[] args) {
 
         Bank bank = new Bank();
+        bank.setName("Bank");
         listOfBanks.add(bank);
         Client cl1 = new Client("JJ KK", Gender.MALE);
         Client cl2 = new Client("JJ RR", Gender.FEMALE);

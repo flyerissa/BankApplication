@@ -15,7 +15,7 @@ public class GetAccountsCommand implements Command {
         String name = sc.nextLine();
         for (Bank b : BankApplication.listOfBanks) {
             for (Client c : b.getClients()) {
-                if (c.getName().equals(name)) {
+                if (c.getFullName().equals(name)) {
                     BankService.getAccount(c);
                 } else {
                     System.out.println("There is no such client!");
