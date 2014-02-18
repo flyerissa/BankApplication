@@ -32,6 +32,7 @@ public class FindClientCommand implements Command {
             for (Bank existingBank : banklist) {
                 if (existingBank.getName().equals(bankName)) {
                     bank = existingBank;
+
                 } else {
                     System.out.println("Bank's name is incorrect!");
                 }

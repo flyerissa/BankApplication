@@ -33,7 +33,9 @@ public class AddClientCommand implements Command {
             } else {
                 bank = new Bank();
                 bank.setName(bankName);
-                listofbanks.add(bank);
+                //listofbanks.add(bank);
+                BankApplication.addBank(bank);
+                listofbanks = BankApplication.getListOfBanks();
             }
 
         } else {
@@ -75,5 +77,10 @@ public class AddClientCommand implements Command {
     @Override
     public void printCommandInfo() {
         System.out.println("Add client");
+    }
+
+    public static void main(String[] args) throws ClientExistsException {
+        AddClientCommand addClientCommand = new AddClientCommand();
+        addClientCommand.execute();
     }
 }

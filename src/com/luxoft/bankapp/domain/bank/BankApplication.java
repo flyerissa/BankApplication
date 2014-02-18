@@ -11,10 +11,14 @@ import java.util.ArrayList;
 public class BankApplication {
 
 
-    public static ArrayList<Bank> listOfBanks = new ArrayList<Bank>();
+    private static ArrayList<Bank> listOfBanks = new ArrayList<Bank>();
 
     public static ArrayList<Bank> getListOfBanks() {
         return listOfBanks;
+    }
+
+    public static void addBank(Bank bank) {
+        listOfBanks.add(bank);
     }
 
     public static void main(String[] args) {
