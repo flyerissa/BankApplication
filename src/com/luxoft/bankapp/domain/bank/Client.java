@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 //4th exercise
-public class Client {
+public class Client implements Comparable {
     //private String name;
     //private String surname;
     private Gender gender;
@@ -18,6 +18,7 @@ public class Client {
     private double overdraft;
     private String city;
     private Set<Account> accounts = new HashSet<Account>();
+    private Double balance;
 
     public String getCity() {
         return city;
@@ -25,6 +26,14 @@ public class Client {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public Double getBalance() {
+        Double result = 0.00;
+        for (Account account : accounts) {
+            result += account.getBalance();
+        }
+        return result;
     }
 
     public Set<Account> getAccounts() {
@@ -75,7 +84,6 @@ public class Client {
     }
 
 
-
     @Override
     public String toString() {
         return "Client{" +
@@ -103,7 +111,6 @@ public class Client {
         result = 31 * result + gender.hashCode();
         return result;
     }
-
 
 
     public Account getActiveAccount() {
@@ -150,4 +157,9 @@ public class Client {
 
     }
 
+    @Override
+    public int compareTo(Object o) {
+        Client that = (Client) o;
+        return this.getBalance().compareTo(that.getBalance());
+    }
 }

@@ -9,12 +9,12 @@ import java.util.*;
 
 public class BankReport {
 
-    public int getNumberOfClients(Bank bank) {
+    public static int getNumberOfClients(Bank bank) {
         return bank.getClients().size();
 
     }
 
-    public int getAccountsNumber(Bank bank) {
+    public static int getAccountsNumber(Bank bank) {
         int result = 0;
 
         for (Client client : bank.getClients().values()) {
@@ -24,7 +24,7 @@ public class BankReport {
         return result;
     }
 
-    public Set<Client> getClientsSorted(Bank bank) {
+    public static Set<Client> getClientsSorted(Bank bank) {
         SortedSet<Client> sorted = new TreeSet<Client>();
         for (Client client : bank.getClients().values()) {
             sorted.add(client);
@@ -32,7 +32,7 @@ public class BankReport {
         return sorted;
     }
 
-    public double getBankCreditSum(Bank bank) {
+    public static double getBankCreditSum(Bank bank) {
         int result = 0;
         for (Client client : bank.getClients().values()) {
             for (Account account : client.getAccounts()) {
@@ -44,7 +44,7 @@ public class BankReport {
         return result;
     }
 
-    public Map<String, List<String>> getClientsByCity(Bank bank) {
+    public static Map<String, List<String>> getClientsByCity(Bank bank) {
         Map<String, List<String>> cityList = new HashMap<String, List<String>>();
         for (Client client : bank.getClients().values()) {
             if (!cityList.containsKey(client.getCity())) {

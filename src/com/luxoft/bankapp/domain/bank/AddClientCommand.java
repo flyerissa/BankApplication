@@ -1,7 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
 import com.luxoft.bankapp.exceptions.ClientExistsException;
-import com.luxoft.bankapp.service.bank.BankService;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -70,7 +69,7 @@ public class AddClientCommand implements Command {
             client.addAccount(account[0], Double.parseDouble(account[1]), Double.parseDouble(account[2]));
         }
 
-        BankService.addClient(bank, client);
+        bank.addClient(client);
         System.out.println("Client " + client.getFullName() + " was added to bank " + bank.getName());
     }
 
