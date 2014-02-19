@@ -2,12 +2,13 @@ package com.luxoft.bankapp.domain.bank;
 
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-//3d exercise
+//5th exercise
 public class Bank {
-    private List<Client> clients = new ArrayList<Client>();
+    //private List<Client> clients = new ArrayList<Client>();
+    private Set<Client> clients = new HashSet<Client>();
+
     private String name;
     private List<ClientRegistrationListener> listeners = new ArrayList<ClientRegistrationListener>();
 
@@ -24,13 +25,13 @@ public class Bank {
         this.name = name;
     }
 
-    public List<Client> getClients() {
-        return clients;
+    public Set<Client> getClients() {
+        return Collections.unmodifiableSet(clients);
     }
 
     public void addClient(Client c) throws ClientExistsException {
         for (Client client : clients) {
-            if (c.getFullName().equals(client.getFullName())) {
+            if (c.equals(client)) {
                 throw new ClientExistsException();
             } else {
                 clients.add(c);
@@ -41,6 +42,23 @@ public class Bank {
         }
 
 
+    }
+
+    public static void main(String[] args) {
+        Bank bank = new Bank();
+        bank.setName("DDD");
+        Client cl1 = new Client("HH JJ", Gender.MALE);
+        Client cl2 = new Client("LL JJ", Gender.MALE);
+        Client cl3 = new Client("HH JJ", Gender.MALE);
+        try {
+            bank.addClient(cl1);
+            System.out.println("client added");
+            bank.addClient(cl2);
+            System.out.println("cl2 added");
+            bank.addClient(cl3);
+        } catch (ClientExistsException e) {
+            e.printStackTrace();
+        }
     }
 
     private class EmailNotificationListener implements ClientRegistrationListener {
