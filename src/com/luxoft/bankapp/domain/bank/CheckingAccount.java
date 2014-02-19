@@ -3,7 +3,7 @@ package com.luxoft.bankapp.domain.bank;
 import com.luxoft.bankapp.exceptions.OverdraftLimitExceededException;
 
 //4th exercise
-public class CheckingAccount extends AbstractAccount {
+public class CheckingAccount extends AbstractAccount implements Comparable {
     private double overdraft;
     private double balance;
     private double amount;
@@ -86,4 +86,13 @@ public class CheckingAccount extends AbstractAccount {
         return Math.round(balance);
     }
 
+    @Override
+    public int compareTo(Object o) {
+        Account other = (Account) o;
+        int result;
+        Double thisBalance = this.getBalance();
+        Double thatBalance = other.getBalance();
+        result = thisBalance.compareTo(thatBalance);
+        return result;
+    }
 }

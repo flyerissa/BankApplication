@@ -79,8 +79,4 @@ public class AddClientCommand implements Command {
         System.out.println("Add client");
     }
 
-    public static void main(String[] args) throws ClientExistsException {
-        AddClientCommand addClientCommand = new AddClientCommand();
-        addClientCommand.execute();
-    }
 }

@@ -16,7 +16,16 @@ public class Client {
     private String fullName;
     private String phone;
     private double overdraft;
+    private String city;
     private Set<Account> accounts = new HashSet<Account>();
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
 
     public Set<Account> getAccounts() {
         return Collections.unmodifiableSet(accounts);
@@ -140,6 +149,5 @@ public class Client {
         }
 
     }
-
 
 }

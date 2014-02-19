@@ -3,7 +3,7 @@ package com.luxoft.bankapp.domain.bank;
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 
 //4th exercise
-public class SavingAccount extends AbstractAccount {
+public class SavingAccount extends AbstractAccount implements Comparable {
     private double balance;
 
 
@@ -62,5 +62,15 @@ public class SavingAccount extends AbstractAccount {
     @Override
     public double decimalValue() {
         return Math.round(balance);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Account other = (Account) o;
+        int result;
+        Double thisBalance = this.getBalance();
+        Double thatBalance = other.getBalance();
+        result = thisBalance.compareTo(thatBalance);
+        return result;
     }
 }
