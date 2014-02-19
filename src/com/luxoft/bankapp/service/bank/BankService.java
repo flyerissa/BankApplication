@@ -3,20 +3,17 @@ package com.luxoft.bankapp.service.bank;
 import com.luxoft.bankapp.domain.bank.Account;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
-import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 
-import java.util.Scanner;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 //3d exercise
 public class BankService {
-    public static void addClient(Bank bank, Client client) throws ClientExistsException {
+    /*public static void addClient(Bank bank, Client client) throws ClientExistsException {
         int size = bank.getClients().size();
         String nextName = client.getFullName();
-        Set<Client> list = bank.getClients();
+        Map<String, Client> list = bank.getClients();
 
         if (size > 0) {
             for (Client existingClient : list) {
@@ -31,14 +28,14 @@ public class BankService {
             list.add(client);
     }
 
-
+*/
     public static void printMaximumAmountToWithdraw(Bank b) {
-        for (Client c : b.getClients()) {
+        for (Client c : b.getClients().values()) {
             System.out.println(c.getActiveAccount().maximumAmountToWithdraw());
         }
     }
 
-    public static Client findClientByName(Bank bank) {
+    /*public static Client findClientByName(Bank bank) {
         System.out.println("Enter client name to continue: ");
         Scanner sc = new Scanner(System.in);
         String client = sc.nextLine();
@@ -63,7 +60,7 @@ public class BankService {
 
         return foundClient;
     }
-
+*/
     public static void getAccount(Client client) {
         Account account = client.getActiveAccount();
         double balance = account.getBalance();
@@ -105,4 +102,10 @@ public class BankService {
         Matcher matcher = VALID_PHONE_NUMBER_REGEX.matcher(phoneString);
         return matcher.find();
     }
+
+
+    public static Client getClient(Bank bank, String clientName) {
+        return bank.getClients().get(clientName);
+    }
+
 }

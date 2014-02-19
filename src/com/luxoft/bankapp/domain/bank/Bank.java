@@ -7,7 +7,8 @@ import java.util.*;
 //5th exercise
 public class Bank {
     //private List<Client> clients = new ArrayList<Client>();
-    private Set<Client> clients = new HashSet<Client>();
+    //private Set<Client> clients = new HashSet<Client>();
+    private Map<String, Client> clients = new HashMap<String, Client>();
 
     private String name;
     private List<ClientRegistrationListener> listeners = new ArrayList<ClientRegistrationListener>();
@@ -25,32 +26,18 @@ public class Bank {
         this.name = name;
     }
 
-    public Set<Client> getClients() {
-        return Collections.unmodifiableSet(clients);
+    public Map<String, Client> getClients() {
+        return Collections.unmodifiableMap(clients);
     }
 
     public void addClient(Client c) throws ClientExistsException {
-        if (clients.size() > 0) {
-            for (Client client : clients) {
-                if (c.equals(client)) {
-                    throw new ClientExistsException();
-                } else {
-                    clients.add(c);
-                    for (ClientRegistrationListener clientListener : listeners) {
-                        clientListener.onClientAdded(c);
-                    }
-                }
-            }
-
-        } else {
-            clients.add(c);
-            for (ClientRegistrationListener clientListener : listeners) {
-                clientListener.onClientAdded(c);
-            }
+        clients.put(c.getFullName(), c);
+        for (ClientRegistrationListener clientListener : listeners) {
+            clientListener.onClientAdded(c);
         }
 
-
     }
+
 
     public static void main(String[] args) {
         Bank bank = new Bank();

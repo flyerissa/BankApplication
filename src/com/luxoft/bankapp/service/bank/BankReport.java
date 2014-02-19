@@ -16,15 +16,17 @@ public class BankReport {
 
     public int getAccountsNumber(Bank bank) {
         int result = 0;
-        for (Client client : bank.getClients()) {
+
+        for (Client client : bank.getClients().values()) {
             result += client.getAccounts().size();
         }
+
         return result;
     }
 
     public Set<Client> getClientsSorted(Bank bank) {
         SortedSet<Client> sorted = new TreeSet<Client>();
-        for (Client client : bank.getClients()) {
+        for (Client client : bank.getClients().values()) {
             sorted.add(client);
         }
         return sorted;
@@ -32,7 +34,7 @@ public class BankReport {
 
     public double getBankCreditSum(Bank bank) {
         int result = 0;
-        for (Client client : bank.getClients()) {
+        for (Client client : bank.getClients().values()) {
             for (Account account : client.getAccounts()) {
                 if (account.getBalance() < 0) {
                     result += account.getBalance();
@@ -44,7 +46,7 @@ public class BankReport {
 
     public Map<String, List<String>> getClientsByCity(Bank bank) {
         Map<String, List<String>> cityList = new HashMap<String, List<String>>();
-        for (Client client : bank.getClients()) {
+        for (Client client : bank.getClients().values()) {
             if (!cityList.containsKey(client.getCity())) {
                 List<String> set = new ArrayList<String>();
                 set.add(client.getCity());
