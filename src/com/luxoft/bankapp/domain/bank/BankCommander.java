@@ -51,5 +51,14 @@ public class BankCommander {
             }
         }
     }
+
+    public static void registerCommand(String name, Command command) {
+        mapCommands.put(name, command);
+    }
+
+    public static void removeCommand(String name) {
+        mapCommands.remove(name);
+    }
+
 }
 
