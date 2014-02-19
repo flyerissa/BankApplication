@@ -7,7 +7,6 @@ public class CheckingAccount extends AbstractAccount {
     private double overdraft;
     private double balance;
     private double amount;
-    private long id;
 
     @Override
     public String toString() {
@@ -19,19 +18,13 @@ public class CheckingAccount extends AbstractAccount {
                 '}';
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public CheckingAccount(double balance, double overdraft) {
         if (balance >= 0 && overdraft >= 0) {
             this.balance = balance;
             this.overdraft = overdraft;
             maximumAmountToWithdraw();
+            id++;
         } else throw new IllegalArgumentException();
     }
 

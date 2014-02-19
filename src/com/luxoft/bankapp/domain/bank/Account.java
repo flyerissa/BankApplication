@@ -14,4 +14,5 @@ public interface Account {
     double maximumAmountToWithdraw();
 
     double decimalValue();
+
 }

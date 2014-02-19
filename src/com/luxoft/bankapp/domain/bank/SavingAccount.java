@@ -5,11 +5,7 @@ import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 //4th exercise
 public class SavingAccount extends AbstractAccount {
     private double balance;
-    private long id;
 
-    public long getId() {
-        return id;
-    }
 
     @Override
     public String toString() {
@@ -36,12 +32,10 @@ public class SavingAccount extends AbstractAccount {
         return (int) (id ^ (id >>> 32));
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public SavingAccount(double balance) {
         this.balance = balance;
+        id++;
     }
 
     public double getBalance() {

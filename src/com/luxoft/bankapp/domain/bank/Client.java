@@ -2,6 +2,10 @@ package com.luxoft.bankapp.domain.bank;
 
 import com.luxoft.bankapp.service.bank.BankService;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 //4th exercise
 public class Client {
     //private String name;
@@ -12,6 +16,11 @@ public class Client {
     private String fullName;
     private String phone;
     private double overdraft;
+    private Set<Account> accounts = new HashSet<Account>();
+
+    public Set<Account> getAccounts() {
+        return Collections.unmodifiableSet(accounts);
+    }
 
     public String getFullName() {
         return fullName;
@@ -106,6 +115,18 @@ public class Client {
             System.out.println("Enter C  - for checking account or S - for saving");
 
         return activeAccount;
+    }
+
+    public void addAccountToSet(Account account) {
+        if (accounts.size() > 0) {
+            for (Account existingAccount : accounts) {
+                if (existingAccount.equals(account)) {
+                    System.out.println("There is an account in the set already!");
+                } else {
+                    accounts.add(account);
+                }
+            }
+        } else accounts.add(account);
     }
 
     public void getClientSalutation() {

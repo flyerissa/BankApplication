@@ -30,14 +30,22 @@ public class Bank {
     }
 
     public void addClient(Client c) throws ClientExistsException {
-        for (Client client : clients) {
-            if (c.equals(client)) {
-                throw new ClientExistsException();
-            } else {
-                clients.add(c);
-                for (ClientRegistrationListener clientListener : listeners) {
-                    clientListener.onClientAdded(c);
+        if (clients.size() > 0) {
+            for (Client client : clients) {
+                if (c.equals(client)) {
+                    throw new ClientExistsException();
+                } else {
+                    clients.add(c);
+                    for (ClientRegistrationListener clientListener : listeners) {
+                        clientListener.onClientAdded(c);
+                    }
                 }
+            }
+
+        } else {
+            clients.add(c);
+            for (ClientRegistrationListener clientListener : listeners) {
+                clientListener.onClientAdded(c);
             }
         }
 
@@ -52,12 +60,10 @@ public class Bank {
         Client cl3 = new Client("HH JJ", Gender.MALE);
         try {
             bank.addClient(cl1);
-            System.out.println("client added");
             bank.addClient(cl2);
-            System.out.println("cl2 added");
             bank.addClient(cl3);
         } catch (ClientExistsException e) {
-            e.printStackTrace();
+            System.out.println("Client alrady exists!");
         }
     }
 
