@@ -1,12 +1,31 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.exceptions.OverdraftLimitExceededException;
 
-import com.luxoft.bankapp.service.bank.OverdraftLimitExceededException;
-
+//4th exercise
 public class CheckingAccount extends AbstractAccount {
     private double overdraft;
     private double balance;
     private double amount;
+    private long id;
+
+    @Override
+    public String toString() {
+        return "CheckingAccount{" +
+                "id=" + id +
+                ", balance=" + balance +
+                ", amount=" + amount +
+                ", overdraft=" + overdraft +
+                '}';
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public CheckingAccount(double balance, double overdraft) {
         if (balance >= 0 && overdraft >= 0) {
@@ -14,6 +33,23 @@ public class CheckingAccount extends AbstractAccount {
             this.overdraft = overdraft;
             maximumAmountToWithdraw();
         } else throw new IllegalArgumentException();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CheckingAccount)) return false;
+
+        CheckingAccount that = (CheckingAccount) o;
+
+        if (id != that.id) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
     }
 
     public void setOverdraft(double x) {
@@ -38,7 +74,7 @@ public class CheckingAccount extends AbstractAccount {
         if (withdraw >= overdraft) {
             balance = withdraw;
         } else
-            throw new OverdraftLimitExceededException(this, balance, amount);
+            throw new OverdraftLimitExceededException(balance, amount);
     }
 
     @Override
@@ -50,6 +86,11 @@ public class CheckingAccount extends AbstractAccount {
             amount = overdraft;
         }
         return amount;
+    }
+
+    @Override
+    public double decimalValue() {
+        return Math.round(balance);
     }
 
 }

@@ -1,11 +1,11 @@
 package com.luxoft.bankapp.domain.bank;
 
-import com.luxoft.bankapp.service.bank.ClientExistsException;
-import com.luxoft.bankapp.service.bank.ClientRegistrationListener;
+import com.luxoft.bankapp.exceptions.ClientExistsException;
 
 import java.util.ArrayList;
 import java.util.List;
 
+//3d exercise
 public class Bank {
     private List<Client> clients = new ArrayList<Client>();
     private String name;
@@ -30,7 +30,7 @@ public class Bank {
 
     public void addClient(Client c) throws ClientExistsException {
         for (Client client : clients) {
-            if (c.getName().equals(client.getName())) {
+            if (c.getFullName().equals(client.getFullName())) {
                 throw new ClientExistsException();
             } else {
                 clients.add(c);

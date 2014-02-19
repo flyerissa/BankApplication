@@ -1,22 +1,92 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.service.bank.BankService;
+
+//4th exercise
 public class Client {
-    private String name;
+    //private String name;
+    //private String surname;
     private Gender gender;
     private Account activeAccount;
+    private String email;
+    private String fullName;
+    private String phone;
+    private double overdraft;
 
-    public Client(String name, Gender gender) {
-        this.name = name;
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullname) {
+        this.fullName = fullname;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        if (BankService.validateEmail(email)) {
+            this.email = email;
+        }
+
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        if (BankService.validatePhone(phone)) {
+            this.phone = phone;
+        }
+    }
+
+    public double getOverdraft() {
+        return overdraft;
+    }
+
+    public void setOverdraft(double overdraft) {
+        this.overdraft = overdraft;
+    }
+
+
+    public Client(String fullName, Gender gender) {
+        this.fullName = fullName;
         this.gender = gender;
     }
 
-    public String getName() {
-        return name;
+
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "name='" + fullName + '\'' +
+                ", activeAccount=" + activeAccount +
+                '}';
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Client)) return false;
+
+        Client client = (Client) o;
+
+        if (gender != client.gender) return false;
+        if (!fullName.equals(client.fullName)) return false;
+
+        return true;
     }
+
+    @Override
+    public int hashCode() {
+        int result = fullName.hashCode();
+        result = 31 * result + gender.hashCode();
+        return result;
+    }
+
+
 
     public Account getActiveAccount() {
         return activeAccount;
@@ -41,13 +111,14 @@ public class Client {
     public void getClientSalutation() {
         switch (gender) {
             case MALE:
-                System.out.println("MR " + name);
+                System.out.println("MR " + fullName);
                 break;
             case FEMALE:
-                System.out.println("Ms " + name);
+                System.out.println("Ms " + fullName);
                 break;
         }
 
     }
+
 
 }
