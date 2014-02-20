@@ -1,4 +1,4 @@
-package com.luxoft.bankapp.domain.bank;
+package com.luxoft.bankapp.commands;
 
 
 import com.luxoft.bankapp.exceptions.ClientExistsException;

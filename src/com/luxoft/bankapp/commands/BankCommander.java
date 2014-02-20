@@ -1,17 +1,17 @@
-package com.luxoft.bankapp.domain.bank;
+package com.luxoft.bankapp.commands;
 
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 /**
  * Created by User on 17.02.14.
  */
 public class BankCommander {
 
-    static Map<String, Command> mapCommands = new HashMap<String, Command>();
+    static Map<String, Command> mapCommands = new TreeMap<String, Command>();
 
     static {
         mapCommands.put("1", new AddClientCommand());
@@ -35,22 +35,19 @@ public class BankCommander {
 
 
     public static void main(String args[]) {
-        while (true) {
-            for (int i = 0; i < mapCommands.size(); i++) { // show menu
-                System.out.print(i + ") ");
-                mapCommands.get(i).printCommandInfo();
-            }
-            Scanner sc = new Scanner(System.in);
 
-            String commandString = sc.nextLine();
-            int command = Integer.parseInt(commandString); // initialize command with commandString
-            try {
-                mapCommands.get(command).execute();
-            } catch (ClientExistsException e) {
-                e.printStackTrace();
-            }
+        System.out.println("Enter number from 1 to 7 to choose command - add, find, getAccount, deposit, withdraw, transfer, exit");
+        Scanner sc = new Scanner(System.in);
+
+        String commandString = sc.nextLine();
+        //int command = Integer.parseInt(commandString); // initialize command with commandString
+        try {
+            mapCommands.get(commandString).execute();
+        } catch (ClientExistsException e) {
+            e.printStackTrace();
         }
     }
+
 
     public static void registerCommand(String name, Command command) {
         mapCommands.put(name, command);

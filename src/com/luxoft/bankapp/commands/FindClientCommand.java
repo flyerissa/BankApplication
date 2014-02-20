@@ -1,5 +1,8 @@
-package com.luxoft.bankapp.domain.bank;
+package com.luxoft.bankapp.commands;
 
+import com.luxoft.bankapp.domain.bank.Bank;
+import com.luxoft.bankapp.domain.bank.BankApplication;
+import com.luxoft.bankapp.domain.bank.Client;
 import com.luxoft.bankapp.service.bank.BankService;
 
 import java.util.ArrayList;
