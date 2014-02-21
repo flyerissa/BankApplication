@@ -1,6 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
-import com.luxoft.bankapp.service.bank.BankService;
+import com.luxoft.bankapp.service.bank.Validate;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -10,6 +10,7 @@ import java.util.Set;
 public class Client implements Comparable {
     //private String name;
     //private String surname;
+    private int id = 0;
     private Gender gender;
     private Account activeAccount;
     private String email;
@@ -19,6 +20,10 @@ public class Client implements Comparable {
     private String city;
     private Set<Account> accounts = new HashSet<Account>();
     private Double balance;
+
+    public int getId() {
+        return id;
+    }
 
     public String getCity() {
         return city;
@@ -53,7 +58,7 @@ public class Client implements Comparable {
     }
 
     public void setEmail(String email) {
-        if (BankService.validateEmail(email)) {
+        if (Validate.validateEmail(email)) {
             this.email = email;
         }
 
@@ -64,7 +69,7 @@ public class Client implements Comparable {
     }
 
     public void setPhone(String phone) {
-        if (BankService.validatePhone(phone)) {
+        if (Validate.validatePhone(phone)) {
             this.phone = phone;
         }
     }
@@ -79,6 +84,7 @@ public class Client implements Comparable {
 
 
     public Client(String fullName, Gender gender) {
+        id++;
         this.fullName = fullName;
         this.gender = gender;
     }

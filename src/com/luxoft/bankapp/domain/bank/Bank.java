@@ -8,12 +8,22 @@ import java.util.*;
 public class Bank {
     //private List<Client> clients = new ArrayList<Client>();
     //private Set<Client> clients = new HashSet<Client>();
+    private int id = 0;
     private Map<String, Client> clients = new HashMap<String, Client>();
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
 
     private String name;
     private List<ClientRegistrationListener> listeners = new ArrayList<ClientRegistrationListener>();
 
     public Bank() {
+        id++;
         listeners.add(new EmailNotificationListener());
         listeners.add(new PrintClientListener());
     }
