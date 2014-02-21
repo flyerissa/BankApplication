@@ -3,6 +3,7 @@ package com.luxoft.bankapp.DAO;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public interface ClientDAO {
      * @param name
      * @return
      */
-    Client findClientByName(Bank bank, String name);
+    Client findClientByName(Bank bank, String name) throws SQLException;
 
     /**
      * Returns the list of all clients of the Bank
@@ -25,7 +26,7 @@ public interface ClientDAO {
      * @param bankId
      * @return
      */
-    List<Client> getAllClients(Bank bankId);
+    List<Client> getAllClients(Bank bank) throws SQLException;
 
     /**
      * Method should insert new Client (if id==null)

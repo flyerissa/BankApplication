@@ -24,7 +24,7 @@ public class CheckingAccount extends AbstractAccount implements Comparable {
             this.balance = balance;
             this.overdraft = overdraft;
             maximumAmountToWithdraw();
-            id++;
+
         } else throw new IllegalArgumentException();
     }
 
@@ -85,6 +85,7 @@ public class CheckingAccount extends AbstractAccount implements Comparable {
     public double decimalValue() {
         return Math.round(balance);
     }
+
 
     @Override
     public int compareTo(Object o) {

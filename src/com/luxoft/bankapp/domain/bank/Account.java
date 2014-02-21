@@ -15,4 +15,8 @@ public interface Account {
 
     double decimalValue();
 
+    void setId(int id);
+
+    int getId();
+
 }

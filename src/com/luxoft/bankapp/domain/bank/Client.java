@@ -21,6 +21,20 @@ public class Client implements Comparable {
     private Set<Account> accounts = new HashSet<Account>();
     private Double balance;
 
+    public Client(String fullName, String gender) {
+
+        this.fullName = fullName;
+        this.gender = Gender.valueOf(gender);
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
+
     public int getId() {
         return id;
     }
@@ -83,13 +97,6 @@ public class Client implements Comparable {
     }
 
 
-    public Client(String fullName, Gender gender) {
-        id++;
-        this.fullName = fullName;
-        this.gender = gender;
-    }
-
-
     @Override
     public String toString() {
         return "Client{" +
@@ -127,7 +134,7 @@ public class Client implements Comparable {
         this.activeAccount = activeAccount;
     }
 
-    public Account addAccount(String accountType, double sum, double overdraft) {
+    /*public Account addAccount(String accountType, double sum, double overdraft) {
 
         if (accountType.equals("C")) {
             activeAccount = new CheckingAccount(sum, overdraft);
@@ -138,7 +145,7 @@ public class Client implements Comparable {
 
         return activeAccount;
     }
-
+*/
     public void addAccountToSet(Account account) {
         if (accounts.size() > 0) {
             for (Account existingAccount : accounts) {
