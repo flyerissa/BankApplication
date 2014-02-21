@@ -129,11 +129,12 @@ public class ClientDAOImpl implements ClientDAO {
      * @param client
      */
     @Override
-    public void save(Client client) {
+    public void save(Client client) throws SQLException {
         int id = client.getId();
-        final String sql = "INSERT INTO CLIENT VALUES()";
+        final String sql = "INSERT INTO CLIENT VALUES(?,?,?,?,?,?,?)";
         final PreparedStatement stmt = connection.prepareStatement(sql);
         if (id == 0) {
+            stmt.setString(1, client.getFullName());
 
 
         }
