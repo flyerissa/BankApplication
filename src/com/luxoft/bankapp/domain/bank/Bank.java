@@ -1,13 +1,24 @@
 package com.luxoft.bankapp.domain.bank;
 
-import com.luxoft.bankapp.service.bank.ClientExistsException;
-import com.luxoft.bankapp.service.bank.ClientRegistrationListener;
+import com.luxoft.bankapp.exceptions.ClientExistsException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+//5th exercise
 public class Bank {
-    private List<Client> clients = new ArrayList<Client>();
+    //private List<Client> clients = new ArrayList<Client>();
+    //private Set<Client> clients = new HashSet<Client>();
+    private Integer id;
+    private Map<Integer, Client> clients = new HashMap<Integer, Client>();
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
     private String name;
     private List<ClientRegistrationListener> listeners = new ArrayList<ClientRegistrationListener>();
 
@@ -24,23 +35,33 @@ public class Bank {
         this.name = name;
     }
 
-    public List<Client> getClients() {
-        return clients;
+    public Map<Integer, Client> getClients() {
+        return Collections.unmodifiableMap(clients);
     }
 
     public void addClient(Client c) throws ClientExistsException {
-        for (Client client : clients) {
-            if (c.getName().equals(client.getName())) {
-                throw new ClientExistsException();
-            } else {
-                clients.add(c);
-                for (ClientRegistrationListener clientListener : listeners) {
-                    clientListener.onClientAdded(c);
-                }
-            }
+        clients.put(c.getId(), c);
+        c.setBank(this);
+        for (ClientRegistrationListener clientListener : listeners) {
+            clientListener.onClientAdded(c);
         }
 
+    }
 
+
+    public static void main(String[] args) {
+        Bank bank = new Bank();
+        bank.setName("DDD");
+        Client cl1 = new Client("HH JJ", "male");
+        Client cl2 = new Client("LL JJ", "male");
+        Client cl3 = new Client("HH JJ", "female");
+        try {
+            bank.addClient(cl1);
+            bank.addClient(cl2);
+            bank.addClient(cl3);
+        } catch (ClientExistsException e) {
+            System.out.println("Client alrady exists!");
+        }
     }
 
     private class EmailNotificationListener implements ClientRegistrationListener {

@@ -1,12 +1,22 @@
 package com.luxoft.bankapp.domain.bank;
 
-import com.luxoft.bankapp.service.bank.NotEnoughFundsException;
+import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
+import com.luxoft.bankapp.exceptions.OverdraftLimitExceededException;
 
-public interface Account  {
+//3d exercise
+public interface Account {
     double getBalance();
-	void deposit(double x);
 
-    void withdraw(double x) throws NotEnoughFundsException;
+    void deposit(double x);
+
+    void withdraw(double x) throws OverdraftLimitExceededException, NotEnoughFundsException;
 
     double maximumAmountToWithdraw();
+
+    double decimalValue();
+
+    void setId(int id);
+
+    int getId();
+
 }
