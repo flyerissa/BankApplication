@@ -5,9 +5,6 @@ import com.luxoft.bankapp.domain.bank.Bank;
 
 import java.sql.*;
 
-/**
- * Created by User on 21.02.14.
- */
 public class BankDAOImpl implements BankDao {
     Connection connection;
 
@@ -50,8 +47,8 @@ public class BankDAOImpl implements BankDao {
                 int id = rs.getInt("id");
 
                 bank = new Bank();
-                    bank.setId(id);
-                    bank.setName(bankName);
+                bank.setId(id);
+                bank.setName(bankName);
 
             } else {
                 System.out.println("There is no such bank in DB!");

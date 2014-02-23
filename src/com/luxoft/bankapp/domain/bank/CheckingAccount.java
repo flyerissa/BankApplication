@@ -18,7 +18,6 @@ public class CheckingAccount extends AbstractAccount implements Comparable {
                 '}';
     }
 
-
     public CheckingAccount(double balance, double overdraft) {
         if (balance >= 0 && overdraft >= 0) {
             this.balance = balance;
@@ -85,7 +84,6 @@ public class CheckingAccount extends AbstractAccount implements Comparable {
     public double decimalValue() {
         return Math.round(balance);
     }
-
 
     @Override
     public int compareTo(Object o) {

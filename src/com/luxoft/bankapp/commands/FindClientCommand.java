@@ -10,28 +10,20 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by User on 17.02.14.
- */
 public class FindClientCommand implements Command {
 
     public Bank bank = null;
     public Client currentClient = null;
-
 
     @Override
     public void execute() {
         ArrayList<Bank> banklist = BankApplication.getListOfBanks();
         System.out.println("Enter name of the bank: ");
         Scanner sc = new Scanner(System.in);
-
         String bankName = sc.nextLine();
         Pattern pattern1 = Pattern.compile("^\\s*[A-Za-z]{3,}\\s*");
         Matcher matcher1 = pattern1.matcher(bankName);
-
-
         if (matcher1.matches()) {
-
             for (Bank existingBank : banklist) {
                 if (existingBank.getName().equals(bankName)) {
                     bank = existingBank;
@@ -46,7 +38,6 @@ public class FindClientCommand implements Command {
         String name = sc.nextLine();
         currentClient = BankService.getClient(bank, name);
         System.out.println("Current client is: " + currentClient);
-
     }
 
     @Override

@@ -6,8 +6,6 @@ import java.util.*;
 
 //5th exercise
 public class Bank {
-    //private List<Client> clients = new ArrayList<Client>();
-    //private Set<Client> clients = new HashSet<Client>();
     private Integer id;
     private Map<Integer, Client> clients = new HashMap<Integer, Client>();
 
@@ -45,15 +43,6 @@ public class Bank {
         for (ClientRegistrationListener clientListener : listeners) {
             clientListener.onClientAdded(c);
         }
-
-    }
-
-
-    public static void main(String[] args) {
-        Bank bank = new Bank();
-        bank.setName("DDD");
-
-
     }
 
     private class EmailNotificationListener implements ClientRegistrationListener {

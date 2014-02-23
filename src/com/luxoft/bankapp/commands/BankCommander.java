@@ -47,9 +47,7 @@ public class BankCommander {
         });
     }
 
-
     public static void main(String args[]) {
-
         DBSelectBankCommander.selectBank("Bank");
         DBSelectClientCommander.selectClient("JJ KK");
 
@@ -66,7 +64,6 @@ public class BankCommander {
         */
     }
 
-
     public static void registerCommand(String name, Command command) {
         mapCommands.put(name, command);
     }
@@ -74,6 +71,5 @@ public class BankCommander {
     public static void removeCommand(String name) {
         mapCommands.remove(name);
     }
-
 }
 

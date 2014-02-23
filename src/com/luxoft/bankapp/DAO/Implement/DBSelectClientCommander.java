@@ -13,7 +13,6 @@ import java.util.Scanner;
 public class DBSelectClientCommander {
     public static void selectClient(String name) {
         ClientDAOImpl clientDAO = new ClientDAOImpl();
-
         Bank currentBank = BankCommander.getActiveBank();
         if (!currentBank.equals(null)) {
             try {
@@ -22,7 +21,6 @@ public class DBSelectClientCommander {
                     BankCommander.activeClient = client;
                     System.out.println("Client" + client.getFullName() + " was selected");
                 }
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -33,8 +31,5 @@ public class DBSelectClientCommander {
             DBSelectBankCommander.selectBank(bankname);
             return;
         }
-
     }
-
-
 }

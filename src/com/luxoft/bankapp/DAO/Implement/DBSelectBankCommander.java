@@ -13,16 +13,12 @@ import java.sql.SQLException;
  * Created by aili on 23.02.14.
  */
 public class DBSelectBankCommander {
-
-
     public static void selectBank(String name) {
         BankDAOImpl bankDAO = new BankDAOImpl();
         try {
             Bank bank = bankDAO.getBankByName(name);
-
             if (!bank.equals(null)) {
                 BankCommander.activeBank = bank;
-
                 try {
                     final String sql = "SELECT c.id as client FROM CLIENT as c JOIN BANK as b ON c.bank_id = b.id " +
                             "WHERE b.id = ?";
@@ -42,12 +38,10 @@ public class DBSelectBankCommander {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 
 }

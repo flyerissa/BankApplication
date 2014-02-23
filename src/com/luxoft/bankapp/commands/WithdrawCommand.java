@@ -8,9 +8,6 @@ import com.luxoft.bankapp.service.bank.BankService;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-/**
- * Created by User on 17.02.14.
- */
 public class WithdrawCommand implements Command {
     @Override
     public void execute() {
@@ -21,7 +18,6 @@ public class WithdrawCommand implements Command {
         System.out.println("Enter sum to withdraw");
         Scanner sc1 = new Scanner(System.in);
         String input = sc1.nextLine();
-
         try {
             BankService.withdrawAccount(BankCommander.getActiveClient(), Double.parseDouble(input));
             ClientDAOImpl clientDAO = new ClientDAOImpl();
@@ -31,7 +27,6 @@ public class WithdrawCommand implements Command {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
         } catch (NotEnoughFundsException e) {
             e.printStackTrace();
         }

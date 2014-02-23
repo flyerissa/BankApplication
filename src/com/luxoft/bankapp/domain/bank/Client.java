@@ -8,8 +8,6 @@ import java.util.Set;
 
 //4th exercise
 public class Client implements Comparable {
-    //private String name;
-    //private String surname;
     private Integer id;
     private Gender gender;
     private Account activeAccount;
@@ -30,7 +28,6 @@ public class Client implements Comparable {
     }
 
     private Bank bank;
-
 
     public void setId(Integer id) {
         this.id = id;

@@ -10,9 +10,6 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by User on 17.02.14.
- */
 public class AddClientCommand implements Command {
     @Override
     public void execute() throws ClientExistsException {
@@ -24,7 +21,6 @@ public class AddClientCommand implements Command {
         Pattern pattern1 = Pattern.compile("^\\s*[A-Za-z]{3,}\\s*");
         Matcher matcher1 = pattern1.matcher(bankName);
 
-
         if (matcher1.matches()) {
             if (listofbanks.size() > 0) {
                 for (Bank existingBank : listofbanks) {
@@ -35,9 +31,7 @@ public class AddClientCommand implements Command {
             } else {
                 bank = new Bank();
                 bank.setName(bankName);
-                //listofbanks.add(bank);
                 BankApplication.addBank(bank);
-                listofbanks = BankApplication.getListOfBanks();
             }
 
         } else {

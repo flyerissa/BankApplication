@@ -6,9 +6,6 @@ import com.luxoft.bankapp.domain.bank.Client;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Created by User on 21.02.14.
- */
 public interface ClientDAO {
     /**
      * Return client by its name, initialize client accounts.

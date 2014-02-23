@@ -11,13 +11,10 @@ import java.util.List;
  * Created by User on 21.02.14.
  */
 public class ClientDAOImpl implements ClientDAO {
-
     Connection connection;
-
     public ClientDAOImpl() {
         openConnection();
     }
-
     public Connection openConnection() {
         try {
             Class.forName("org.h2.Driver"); // this is driver for H2
@@ -31,7 +28,6 @@ public class ClientDAOImpl implements ClientDAO {
         }
         return null;
     }
-
     public void closeConnection() {
         try {
             connection.close();
@@ -39,7 +35,6 @@ public class ClientDAOImpl implements ClientDAO {
             e.printStackTrace();
         }
     }
-
     @Override
     public Client findClientByName(Bank bank, String name) throws SQLException {
         Client client = null;
@@ -56,20 +51,14 @@ public class ClientDAOImpl implements ClientDAO {
             if (rs.next()) {
                 String clientName = rs.getString("name");
                 String bank_name = rs.getString("bank_name");
-
                 int client_id = rs.getInt("id");
-
-                //String gender = rs.getString("gender");
                 int account_id = rs.getInt("account_id");
                 double acc_balance = (double) rs.getInt("a_balance");
                 double overdraft = (double) rs.getInt("a_overdraft");
-                //double client_balance = (double) rs.getInt("client_balance");
                 String acc_type = rs.getString("acc_type");
-
                 client = new Client();
                 client.setId(client_id);
                 client.setFullName(clientName);
-                //client.setBalance(client_balance);
                 Account account;
                 if (acc_type.equals("checking")) {
                     account = new CheckingAccount(acc_balance, overdraft);
@@ -78,10 +67,7 @@ public class ClientDAOImpl implements ClientDAO {
                     account = new SavingAccount(acc_balance);
                     account.setId(account_id);
                 }
-
                 client.addAccountToSet(account);
-
-
             }
 
         } catch (SQLException e) {
@@ -121,21 +107,14 @@ public class ClientDAOImpl implements ClientDAO {
         return list;
     }
 
-    /**
-     * Method should insert new Client (if id==null)
-     * or update client in database
-     *
-     * @param client
-     */
+
     @Override
     public void save(Client client) throws SQLException {
-
         if (client.getId() != null) {
             final String sql = "UPDATE  CLIENT SET name = ?, bank_id = ?, gender = ?, phone = ?, city = ?, balance = ?," +
                     "overdraft = ? WHERE id = ?";
             final PreparedStatement stmt = connection.prepareStatement(sql);
             try {
-
                 stmt.setString(1, client.getFullName());
                 stmt.setInt(2, client.getBank().getId());
                 stmt.setString(3, client.getGender().toString());
@@ -150,7 +129,6 @@ public class ClientDAOImpl implements ClientDAO {
                 e.printStackTrace();
             }
         } else {
-
             final String sql = "INSERT INTO CLIENT (NAME,BANK_ID) VALUES (?,?)";
             final PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             try {
@@ -162,7 +140,6 @@ public class ClientDAOImpl implements ClientDAO {
                     Integer c_id = rs.getInt(1);
                     client.setId(c_id);
                 }
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -171,7 +148,6 @@ public class ClientDAOImpl implements ClientDAO {
 
     @Override
     public void remove(Client client) {
-
         final String sql = "DELETE FROM Account  WHERE client_id = ?";
         final String sql2 = "DELETE FROM CLIENT WHERE id = ?";
         try {
@@ -191,10 +167,7 @@ public class ClientDAOImpl implements ClientDAO {
         try {
             Bank bank = new BankDAOImpl().getBankByName("Bank");
             Client client = new ClientDAOImpl().findClientByName(bank, "JJ KK");
-
             new ClientDAOImpl().remove(client);
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

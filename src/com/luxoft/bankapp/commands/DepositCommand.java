@@ -7,9 +7,6 @@ import com.luxoft.bankapp.service.bank.BankService;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-/**
- * Created by User on 17.02.14.
- */
 public class DepositCommand implements Command {
     @Override
     public void execute() {
@@ -20,7 +17,6 @@ public class DepositCommand implements Command {
         System.out.println("Enter sum to deposit");
         Scanner sc1 = new Scanner(System.in);
         String input = sc1.nextLine();
-
         BankService.depositAccount(BankCommander.getActiveClient(), Double.parseDouble(input));
         ClientDAOImpl clientDAO = new ClientDAOImpl();
         try {
@@ -29,7 +25,6 @@ public class DepositCommand implements Command {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override

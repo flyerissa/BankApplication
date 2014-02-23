@@ -8,9 +8,6 @@ import com.luxoft.bankapp.service.bank.BankService;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-/**
- * Created by User on 17.02.14.
- */
 public class TransferCommand implements Command {
     @Override
     public void execute() {
@@ -18,11 +15,9 @@ public class TransferCommand implements Command {
         Scanner sc = new Scanner(System.in);
         String fromclient = sc.nextLine();
         DBSelectClientCommander.selectClient(fromclient);
-
         System.out.println("Enter sum to withdraw");
         Scanner sc1 = new Scanner(System.in);
         String input = sc1.nextLine();
-
         try {
             BankService.withdrawAccount(BankCommander.getActiveClient(), Double.parseDouble(input));
             ClientDAOImpl clientDAO = new ClientDAOImpl();
@@ -41,7 +36,6 @@ public class TransferCommand implements Command {
         Scanner sc2 = new Scanner(System.in);
         String toclient = sc2.nextLine();
         DBSelectClientCommander.selectClient(toclient);
-
         BankService.depositAccount(BankCommander.getActiveClient(), Double.parseDouble(input));
         ClientDAOImpl clientDAO = new ClientDAOImpl();
         try {
@@ -50,8 +44,6 @@ public class TransferCommand implements Command {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
