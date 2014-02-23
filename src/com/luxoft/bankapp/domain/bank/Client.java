@@ -10,7 +10,7 @@ import java.util.Set;
 public class Client implements Comparable {
     //private String name;
     //private String surname;
-    private Integer id = 0;
+    private Integer id;
     private Gender gender;
     private Account activeAccount;
     private String email;

@@ -1,10 +1,5 @@
 package com.luxoft.bankapp.domain.bank;
 
-import com.luxoft.bankapp.exceptions.ClientExistsException;
-import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
-import com.luxoft.bankapp.exceptions.OverdraftLimitExceededException;
-import com.luxoft.bankapp.service.bank.BankReport;
-
 import java.util.ArrayList;
 
 // 3d exercise
@@ -26,11 +21,11 @@ public class BankApplication {
         Bank bank = new Bank();
         bank.setName("Bank");
         listOfBanks.add(bank);
-        Client cl1 = new Client("JJ KK", Gender.MALE);
-        Client cl2 = new Client("JJ RR", Gender.FEMALE);
-        cl1.setCity("Kyiv");
-        cl2.setCity("London");
-        try {
+        //Client cl1 = new Client("JJ KK", Gender.MALE);
+        //Client cl2 = new Client("JJ RR", Gender.FEMALE);
+        //cl1.setCity("Kyiv");
+        // cl2.setCity("London");
+       /* try {
             cl1.addAccount("C", 2000, 200);
             cl2.addAccount("S", 1000, 0);
             bank.addClient(cl1);
@@ -50,8 +45,8 @@ public class BankApplication {
         BankReport.getClientsSorted(bank);
 
     }
-
-    private static void modifyBank(Bank bank) {
+*/
+    /*private static void modifyBank(Bank bank) {
         Client client3 = new Client("OOO", Gender.FEMALE);
         try {
             client3.addAccount("C", 5000, 1000);
@@ -77,4 +72,6 @@ public class BankApplication {
         }
     }
 */
+    }
 }
+

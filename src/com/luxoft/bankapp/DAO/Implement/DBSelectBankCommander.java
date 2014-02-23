@@ -28,7 +28,7 @@ public class DBSelectBankCommander {
                             "WHERE b.id = ?";
                     final PreparedStatement stmt = bankDAO.connection.prepareStatement(sql);
                     stmt.setInt(1, bank.getId());
-                    ResultSet rs = stmt.executeQuery(sql);
+                    ResultSet rs = stmt.executeQuery();
                     while (rs.next()) {
                         Integer client_id = rs.getInt("client");
                         Client client = new Client();
@@ -48,4 +48,6 @@ public class DBSelectBankCommander {
             e.printStackTrace();
         }
     }
+
+
 }

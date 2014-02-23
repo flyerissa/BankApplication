@@ -1,11 +1,12 @@
 package com.luxoft.bankapp.commands;
 
+import com.luxoft.bankapp.DAO.Implement.DBSelectBankCommander;
+import com.luxoft.bankapp.DAO.Implement.DBSelectClientCommander;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 
 import java.util.Map;
-import java.util.Scanner;
 import java.util.TreeMap;
 
 /**
@@ -49,7 +50,10 @@ public class BankCommander {
 
     public static void main(String args[]) {
 
-        System.out.println("Enter number from 1 to 7 to choose command - add, find, getAccount, deposit, withdraw, transfer, exit");
+        DBSelectBankCommander.selectBank("Bank");
+        DBSelectClientCommander.selectClient("JJ KK");
+
+        /*System.out.println("Enter number from 1 to 7 to choose command - add, find, getAccount, deposit, withdraw, transfer, exit");
         Scanner sc = new Scanner(System.in);
 
         String commandString = sc.nextLine();
@@ -59,6 +63,7 @@ public class BankCommander {
         } catch (ClientExistsException e) {
             e.printStackTrace();
         }
+        */
     }
 
 

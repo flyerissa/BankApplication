@@ -20,6 +20,7 @@ public class DBSelectClientCommander {
                 Client client = clientDAO.findClientByName(currentBank, name);
                 if (!client.equals(null)) {
                     BankCommander.activeClient = client;
+                    System.out.println("Client" + client.getFullName() + " was selected");
                 }
 
             } catch (SQLException e) {
@@ -34,4 +35,6 @@ public class DBSelectClientCommander {
         }
 
     }
+
+
 }

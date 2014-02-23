@@ -39,7 +39,7 @@ public class TransferCommand implements Command {
 
         System.out.println("Please enter the name of the client to transfer");
         Scanner sc2 = new Scanner(System.in);
-        String toclient = sc.nextLine();
+        String toclient = sc2.nextLine();
         DBSelectClientCommander.selectClient(toclient);
 
         BankService.depositAccount(BankCommander.getActiveClient(), Double.parseDouble(input));

@@ -52,16 +52,8 @@ public class Bank {
     public static void main(String[] args) {
         Bank bank = new Bank();
         bank.setName("DDD");
-        Client cl1 = new Client("HH JJ", "male");
-        Client cl2 = new Client("LL JJ", "male");
-        Client cl3 = new Client("HH JJ", "female");
-        try {
-            bank.addClient(cl1);
-            bank.addClient(cl2);
-            bank.addClient(cl3);
-        } catch (ClientExistsException e) {
-            System.out.println("Client alrady exists!");
-        }
+
+
     }
 
     private class EmailNotificationListener implements ClientRegistrationListener {

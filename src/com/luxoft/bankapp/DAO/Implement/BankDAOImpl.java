@@ -44,17 +44,17 @@ public class BankDAOImpl implements BankDao {
         final PreparedStatement stmt = connection.prepareStatement(sql);
         try {
             stmt.setString(1, name);
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
                 String bankName = rs.getString("NAME");
                 int id = rs.getInt("id");
-                if (name.equals(bankName)) {
-                    bank = new Bank();
+
+                bank = new Bank();
                     bank.setId(id);
                     bank.setName(bankName);
-                } else {
-                    System.out.println("There is no such bank in database!");
-                }
+
+            } else {
+                System.out.println("There is no such bank in DB!");
             }
 
         } catch (SQLException e) {
@@ -68,5 +68,14 @@ public class BankDAOImpl implements BankDao {
         }
         return bank;
 
+    }
+
+    public static void main(String[] args) {
+        try {
+            Bank bank = new BankDAOImpl().getBankByName("NN");
+            System.out.println(bank.getName());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
