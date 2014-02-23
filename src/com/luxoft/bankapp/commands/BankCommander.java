@@ -1,5 +1,7 @@
 package com.luxoft.bankapp.commands;
 
+import com.luxoft.bankapp.domain.bank.Bank;
+import com.luxoft.bankapp.domain.bank.Client;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 
 import java.util.Map;
@@ -10,6 +12,17 @@ import java.util.TreeMap;
  * Created by User on 17.02.14.
  */
 public class BankCommander {
+
+    public static Bank activeBank;
+    public static Client activeClient;
+
+    public static Bank getActiveBank() {
+        return activeBank;
+    }
+
+    public static Client getActiveClient() {
+        return activeClient;
+    }
 
     static Map<String, Command> mapCommands = new TreeMap<String, Command>();
 

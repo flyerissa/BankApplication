@@ -1,11 +1,10 @@
 package com.luxoft.bankapp.commands;
 
-import com.luxoft.bankapp.domain.bank.Bank;
-import com.luxoft.bankapp.domain.bank.BankApplication;
-import com.luxoft.bankapp.domain.bank.Client;
-import com.luxoft.bankapp.domain.bank.Gender;
+import com.luxoft.bankapp.DAO.Implement.ClientDAOImpl;
+import com.luxoft.bankapp.domain.bank.*;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -61,19 +60,34 @@ public class AddClientCommand implements Command {
         Matcher matcher2 = pattern2.matcher(gender);
         if (matcher.matches() && matcher2.matches()) {
             if (gender.equals("F")) {
-                client = new Client(clientName, Gender.FEMALE);
+                client.setGender(Gender.FEMALE);
             } else {
-                client = new Client(clientName, Gender.MALE);
+                client.setGender(Gender.MALE);
             }
 
             System.out.println("Add account to client, enter type C or S, balance and overdraft, like as C 2000 500");
             Scanner scanner = new Scanner(System.in);
             String account1 = scanner.nextLine();
             String[] account = account1.split(" ");
-            client.addAccount(account[0], Double.parseDouble(account[1]), Double.parseDouble(account[2]));
-        }
+            Account account2;
+            if (account[0].equals("C")) {
+                account2 = new CheckingAccount(Double.parseDouble(account[1]), Double.parseDouble(account[2]));
+            } else {
+                account2 = new SavingAccount(Double.parseDouble(account[1]));
+            }
+            client.addAccountToSet(account2);
+        } else return;
 
-        bank.addClient(client);
+        if (!client.equals(null)) {
+            bank.addClient(client);
+        }
+        ClientDAOImpl clientDAO = new ClientDAOImpl();
+        try {
+            clientDAO.save(client);
+            BankCommander.activeClient = client;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         System.out.println("Client " + client.getFullName() + " was added to bank " + bank.getName());
     }
 

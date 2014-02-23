@@ -10,7 +10,7 @@ import java.util.Set;
 public class Client implements Comparable {
     //private String name;
     //private String surname;
-    private int id = 0;
+    private Integer id = 0;
     private Gender gender;
     private Account activeAccount;
     private String email;
@@ -21,13 +21,18 @@ public class Client implements Comparable {
     private Set<Account> accounts = new HashSet<Account>();
     private Double balance;
 
-    public Client(String fullName, String gender) {
-
-        this.fullName = fullName;
-        this.gender = Gender.valueOf(gender);
+    public Bank getBank() {
+        return bank;
     }
 
-    public void setId(int id) {
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
+
+    private Bank bank;
+
+
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -35,7 +40,7 @@ public class Client implements Comparable {
         this.balance = balance;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -53,6 +58,14 @@ public class Client implements Comparable {
             result += account.getBalance();
         }
         return result;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public Set<Account> getAccounts() {
@@ -105,6 +118,7 @@ public class Client implements Comparable {
                 '}';
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -112,19 +126,20 @@ public class Client implements Comparable {
 
         Client client = (Client) o;
 
-        if (gender != client.gender) return false;
         if (!fullName.equals(client.fullName)) return false;
+        if (gender != client.gender) return false;
+        if (id != null ? !id.equals(client.id) : client.id != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = fullName.hashCode();
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + gender.hashCode();
+        result = 31 * result + fullName.hashCode();
         return result;
     }
-
 
     public Account getActiveAccount() {
         return activeAccount;

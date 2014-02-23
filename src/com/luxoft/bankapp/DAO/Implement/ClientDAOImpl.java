@@ -47,7 +47,7 @@ public class ClientDAOImpl implements ClientDAO {
                 ", a.type as acc_type b.name as bank_name" +
                 " FROM CLIENT as C JOIN BANK as  b ON c.bank_id = b.id" +
                 " JOIN ACCOUNT as a ON c.id = a.client_id" +
-                " WHERE bank_id = ? AND name = ?";
+                " WHERE bank_id = ? AND c.name = ?";
         final PreparedStatement stmt = connection.prepareStatement(sql);
         try {
             stmt.setInt(1, bank.getId());
@@ -58,14 +58,14 @@ public class ClientDAOImpl implements ClientDAO {
                 String bank_name = rs.getString("bank_name");
                 if (bank.getName().equals(bank_name) && name.equals(clientName)) {
                     int client_id = rs.getInt("id");
-                    String gender = rs.getString("gender");
+                    //String gender = rs.getString("gender");
                     int account_id = rs.getInt("account_id");
                     double acc_balance = (double) rs.getInt("a_balance");
                     double overdraft = (double) rs.getInt("a_overdraft");
                     double client_balance = (double) rs.getInt("client_balance");
                     String acc_type = rs.getString("acc_type");
 
-                    client = new Client(clientName, gender);
+                    client = new Client();
                     client.setId(client_id);
                     client.setBalance(client_balance);
                     Account account;
@@ -110,7 +110,7 @@ public class ClientDAOImpl implements ClientDAO {
                 String gender = rs.getString("gender");
                 int bank_id = rs.getInt("bank_id");
                 if (bank.getId() == bank_id) {
-                    Client client = new Client(name, gender);
+                    Client client = new Client();
                     list.add(client);
                 }
 
@@ -130,18 +130,59 @@ public class ClientDAOImpl implements ClientDAO {
      */
     @Override
     public void save(Client client) throws SQLException {
-        int id = client.getId();
-        final String sql = "INSERT INTO CLIENT VALUES(?,?,?,?,?,?,?)";
-        final PreparedStatement stmt = connection.prepareStatement(sql);
-        if (id == 0) {
-            stmt.setString(1, client.getFullName());
+        Integer client_id = client.getId();
 
+        if (client_id.equals(null)) {
+            final String sql = "INSERT INTO CLIENT VALUES(?,?,?,?,?,?,?)";
+            final PreparedStatement stmt = connection.prepareStatement(sql);
+            try {
+                stmt.setString(1, client.getFullName());
+                stmt.setInt(2, client.getBank().getId());
+                stmt.setString(3, client.getGender().toString());
+                stmt.setString(4, client.getPhone());
+                stmt.setString(5, client.getCity());
+                stmt.setDouble(6, client.getBalance());
+                stmt.setDouble(7, client.getOverdraft());
+                ResultSet rs = stmt.executeQuery(sql);
+                while (rs.next()) {
+                    Integer c_id = rs.getInt("id");
+                    client.setId(c_id);
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            final String sql = "UPDATE  CLIENT SET name = ?, bank_id = ?, gender = ?, phone = ?, city = ?, balance = ?," +
+                    "overdraft = ? WHERE id = client_id";
+            final PreparedStatement stmt = connection.prepareStatement(sql);
+            try {
+                stmt.setString(1, client.getFullName());
+                stmt.setInt(2, client.getBank().getId());
+                stmt.setString(3, client.getGender().toString());
+                stmt.setString(4, client.getPhone());
+                stmt.setString(5, client.getCity());
+                stmt.setDouble(6, client.getBalance());
+                stmt.setDouble(7, client.getOverdraft());
+
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
         }
     }
 
     @Override
     public void remove(Client client) {
+        Integer c_id = client.getId();
+        final String sql = "DELETE FROM CLIENT WHERE id = c_id";
+        try {
+            Statement stmt = connection.createStatement();
+            stmt.execute(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 }

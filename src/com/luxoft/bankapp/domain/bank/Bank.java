@@ -8,14 +8,14 @@ import java.util.*;
 public class Bank {
     //private List<Client> clients = new ArrayList<Client>();
     //private Set<Client> clients = new HashSet<Client>();
-    private int id = 0;
-    private Map<String, Client> clients = new HashMap<String, Client>();
+    private Integer id;
+    private Map<Integer, Client> clients = new HashMap<Integer, Client>();
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -23,7 +23,6 @@ public class Bank {
     private List<ClientRegistrationListener> listeners = new ArrayList<ClientRegistrationListener>();
 
     public Bank() {
-        id++;
         listeners.add(new EmailNotificationListener());
         listeners.add(new PrintClientListener());
     }
@@ -36,12 +35,13 @@ public class Bank {
         this.name = name;
     }
 
-    public Map<String, Client> getClients() {
+    public Map<Integer, Client> getClients() {
         return Collections.unmodifiableMap(clients);
     }
 
     public void addClient(Client c) throws ClientExistsException {
-        clients.put(c.getFullName(), c);
+        clients.put(c.getId(), c);
+        c.setBank(this);
         for (ClientRegistrationListener clientListener : listeners) {
             clientListener.onClientAdded(c);
         }
@@ -52,9 +52,9 @@ public class Bank {
     public static void main(String[] args) {
         Bank bank = new Bank();
         bank.setName("DDD");
-        Client cl1 = new Client("HH JJ", Gender.MALE);
-        Client cl2 = new Client("LL JJ", Gender.MALE);
-        Client cl3 = new Client("HH JJ", Gender.MALE);
+        Client cl1 = new Client("HH JJ", "male");
+        Client cl2 = new Client("LL JJ", "male");
+        Client cl3 = new Client("HH JJ", "female");
         try {
             bank.addClient(cl1);
             bank.addClient(cl2);
