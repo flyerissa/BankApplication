@@ -8,6 +8,10 @@ public class CheckingAccount extends AbstractAccount implements Comparable {
     private double balance;
     private double amount;
 
+    public double getOverdraft() {
+        return overdraft;
+    }
+
     @Override
     public String toString() {
         return "CheckingAccount{" +

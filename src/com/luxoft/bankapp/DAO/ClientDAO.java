@@ -38,5 +38,5 @@ public interface ClientDAO {
      *
      * @param client
      */
-    void remove(Client client);
+    void remove(Client client) throws SQLException;
 }

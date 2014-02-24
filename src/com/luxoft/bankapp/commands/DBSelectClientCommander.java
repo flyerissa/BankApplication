@@ -1,6 +1,6 @@
-package com.luxoft.bankapp.DAO.Implement;
+package com.luxoft.bankapp.commands;
 
-import com.luxoft.bankapp.commands.BankCommander;
+import com.luxoft.bankapp.DAO.Implement.ClientDAOImpl;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
 
@@ -14,11 +14,11 @@ public class DBSelectClientCommander {
     public static void selectClient(String name) {
         ClientDAOImpl clientDAO = new ClientDAOImpl();
         Bank currentBank = BankCommander.getActiveBank();
-        if (!currentBank.equals(null)) {
+        if (currentBank != null) {
             try {
                 Client client = clientDAO.findClientByName(currentBank, name);
-                if (!client.equals(null)) {
-                    BankCommander.activeClient = client;
+                if (client != null) {
+                    BankCommander.setActiveClient(client);
                     System.out.println("Client" + client.getFullName() + " was selected");
                 }
             } catch (SQLException e) {
@@ -29,7 +29,7 @@ public class DBSelectClientCommander {
             Scanner sc = new Scanner(System.in);
             String bankname = sc.nextLine();
             DBSelectBankCommander.selectBank(bankname);
-            return;
+
         }
     }
 }

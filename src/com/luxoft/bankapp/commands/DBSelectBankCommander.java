@@ -1,6 +1,6 @@
-package com.luxoft.bankapp.DAO.Implement;
+package com.luxoft.bankapp.commands;
 
-import com.luxoft.bankapp.commands.BankCommander;
+import com.luxoft.bankapp.DAO.Implement.BankDAOImpl;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
@@ -17,12 +17,12 @@ public class DBSelectBankCommander {
         BankDAOImpl bankDAO = new BankDAOImpl();
         try {
             Bank bank = bankDAO.getBankByName(name);
-            if (!bank.equals(null)) {
-                BankCommander.activeBank = bank;
+            if (bank != null) {
+                BankCommander.setActiveBank(bank);
+                final String sql = "SELECT c.id as client FROM CLIENT as c JOIN BANK as b ON c.bank_id = b.id " +
+                        "WHERE b.id = ?";
+                final PreparedStatement stmt = bankDAO.connection.prepareStatement(sql);
                 try {
-                    final String sql = "SELECT c.id as client FROM CLIENT as c JOIN BANK as b ON c.bank_id = b.id " +
-                            "WHERE b.id = ?";
-                    final PreparedStatement stmt = bankDAO.connection.prepareStatement(sql);
                     stmt.setInt(1, bank.getId());
                     ResultSet rs = stmt.executeQuery();
                     while (rs.next()) {
@@ -37,10 +37,14 @@ public class DBSelectBankCommander {
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
+                } finally {
+                    stmt.close();
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            bankDAO.closeConnection();
         }
     }
 

@@ -53,8 +53,8 @@ public class ClientDAOImpl implements ClientDAO {
                 String bank_name = rs.getString("bank_name");
                 int client_id = rs.getInt("id");
                 int account_id = rs.getInt("account_id");
-                double acc_balance = (double) rs.getInt("a_balance");
-                double overdraft = (double) rs.getInt("a_overdraft");
+                double acc_balance = rs.getDouble("a_balance");
+                double overdraft = rs.getDouble("a_overdraft");
                 String acc_type = rs.getString("acc_type");
                 client = new Client();
                 client.setId(client_id);
@@ -75,6 +75,7 @@ public class ClientDAOImpl implements ClientDAO {
         } finally {
             try {
                 stmt.close();
+                closeConnection();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -102,6 +103,13 @@ public class ClientDAOImpl implements ClientDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                stmt.close();
+                closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         return list;
@@ -114,6 +122,8 @@ public class ClientDAOImpl implements ClientDAO {
             final String sql = "UPDATE  CLIENT SET name = ?, bank_id = ?, gender = ?, phone = ?, city = ?, balance = ?," +
                     "overdraft = ? WHERE id = ?";
             final PreparedStatement stmt = connection.prepareStatement(sql);
+            final String sql2 = "UPDATE ACCOUNT SET client_id = ?, type  = ?, balance = ?, overdraft = ?";
+            final PreparedStatement statement = connection.prepareStatement(sql2);
             try {
                 stmt.setString(1, client.getFullName());
                 stmt.setInt(2, client.getBank().getId());
@@ -124,13 +134,35 @@ public class ClientDAOImpl implements ClientDAO {
                 stmt.setDouble(7, client.getOverdraft());
                 stmt.setInt(8, client.getId());
                 stmt.executeUpdate();
+                for (Account a : client.getAccounts()) {
+                    statement.setInt(1, client.getId());
+                    if (a instanceof CheckingAccount) {
+                        statement.setString(2, "checking");
+                        statement.setDouble(3, a.getBalance());
+                        statement.setDouble(4, ((CheckingAccount) a).getOverdraft());
+                    } else {
+                        statement.setString(2, "saving");
+                        statement.setDouble(3, a.getBalance());
+                        statement.setDouble(4, 0.00);
+                    }
+                }
+                statement.executeUpdate();
 
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    stmt.close();
+                    closeConnection();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
             final String sql = "INSERT INTO CLIENT (NAME,BANK_ID) VALUES (?,?)";
             final PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            final String sql2 = "INSERT INTO ACCOUNT (client_id,type,balance,overdraft)VALUES (?,?,?,?)";
+            final PreparedStatement statement = connection.prepareStatement(sql2);
             try {
                 stmt.setString(1, client.getFullName());
                 stmt.setInt(2, client.getBank().getId());
@@ -139,38 +171,56 @@ public class ClientDAOImpl implements ClientDAO {
                 if (rs != null && rs.next()) {
                     Integer c_id = rs.getInt(1);
                     client.setId(c_id);
+                    for (Account a : client.getAccounts()) {
+                        statement.setInt(1, c_id);
+                        if (a instanceof CheckingAccount) {
+                            statement.setString(2, "checking");
+                            statement.setDouble(3, a.getBalance());
+                            statement.setDouble(4, ((CheckingAccount) a).getOverdraft());
+                        } else {
+                            statement.setString(2, "saving");
+                            statement.setDouble(3, a.getBalance());
+                            statement.setDouble(4, 0.00);
+                        }
+                    }
+                    statement.executeUpdate();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
+            } finally {
+                try {
+                    stmt.close();
+                    closeConnection();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
 
     @Override
-    public void remove(Client client) {
+    public void remove(Client client) throws SQLException {
         final String sql = "DELETE FROM Account  WHERE client_id = ?";
         final String sql2 = "DELETE FROM CLIENT WHERE id = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, client.getId());
             statement.executeUpdate();
+            openConnection();
             PreparedStatement statement1 = connection.prepareStatement(sql2);
             statement1.setInt(1, client.getId());
             statement1.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+                closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
-    }
-
-    public static void main(String[] args) {
-        try {
-            Bank bank = new BankDAOImpl().getBankByName("Bank");
-            Client client = new ClientDAOImpl().findClientByName(bank, "JJ KK");
-            new ClientDAOImpl().remove(client);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
 }

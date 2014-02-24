@@ -2,11 +2,14 @@ package com.luxoft.bankapp.DAO.Implement;
 
 import com.luxoft.bankapp.DAO.BankDao;
 import com.luxoft.bankapp.domain.bank.Bank;
+import com.luxoft.bankapp.domain.bank.BankInfo;
+import com.luxoft.bankapp.domain.bank.Client;
 
 import java.sql.*;
+import java.util.*;
 
 public class BankDAOImpl implements BankDao {
-    Connection connection;
+    public Connection connection;
 
     public BankDAOImpl() {
         openConnection();
@@ -45,7 +48,6 @@ public class BankDAOImpl implements BankDao {
             if (rs.next()) {
                 String bankName = rs.getString("NAME");
                 int id = rs.getInt("id");
-
                 bank = new Bank();
                 bank.setId(id);
                 bank.setName(bankName);
@@ -59,6 +61,7 @@ public class BankDAOImpl implements BankDao {
         } finally {
             try {
                 stmt.close();
+                closeConnection();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -67,12 +70,88 @@ public class BankDAOImpl implements BankDao {
 
     }
 
-    public static void main(String[] args) {
+    @Override
+    public BankInfo getBankInfo() throws SQLException {
+        BankInfo bankInfo = null;
+        System.out.println("Enter name of the bank!");
+        Scanner sc = new Scanner(System.in);
+        String name = sc.nextLine();
+        Bank current = getBankByName(name);
+        final String sql = "select  count(c.id) as number_of_clients From Client as c " +
+                " Join Bank  on c.bank_id = ? ";
+        openConnection();
+        final PreparedStatement stmt = connection.prepareStatement(sql);
+
         try {
-            Bank bank = new BankDAOImpl().getBankByName("NN");
-            System.out.println(bank.getName());
+            stmt.setInt(1, current.getId());
+            ResultSet rs = stmt.executeQuery();
+            if (rs != null && rs.next()) {
+                bankInfo = new BankInfo();
+                bankInfo.setNumberOfClients(rs.getInt("number_of_clients"));
+
+            }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            stmt.close();
+            closeConnection();
         }
+
+        final String sql2 = "Select sum(c.balance) as total from client as c  where bank_id = ?";
+        openConnection();
+        final PreparedStatement stmt2 = connection.prepareStatement(sql2);
+        try {
+            stmt2.setInt(1, current.getId());
+            ResultSet rs2 = stmt2.executeQuery();
+            if (rs2 != null && rs2.next()) {
+                bankInfo.setTotalAccountSum(rs2.getDouble("total"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            stmt2.close();
+            closeConnection();
+        }
+
+        final String sql3 = "select city, name, id from client  where bank_id = ? order by city";
+        openConnection();
+        final PreparedStatement stmt3 = connection.prepareStatement(sql3);
+
+        try {
+            stmt3.setInt(1, current.getId());
+            ResultSet rs3 = stmt3.executeQuery();
+            List<Client> clients = new ArrayList<>();
+            while (rs3 != null && rs3.next()) {
+
+                Client client = new Client();
+                client.setId(rs3.getInt("id"));
+                client.setFullName(rs3.getString("name"));
+                client.setCity(rs3.getString("city"));
+                clients.add(client);
+
+            }
+
+            Map<String, List<Client>> sortedbycity = new TreeMap<String, List<Client>>();
+            for (Client client : clients) {
+                if (!sortedbycity.containsKey(client.getCity())) {
+                    List<Client> set = new ArrayList<>();
+                    set.add(client);
+                    sortedbycity.put(client.getCity(), set);
+                } else {
+                    List<Client> list = sortedbycity.get(client.getCity());
+                    list.add(client);
+
+                }
+            }
+            bankInfo.setClientsByCity(sortedbycity);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            stmt3.close();
+            closeConnection();
+        }
+        return bankInfo;
     }
+
 }

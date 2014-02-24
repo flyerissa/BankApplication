@@ -1,7 +1,6 @@
 package com.luxoft.bankapp.commands;
 
 import com.luxoft.bankapp.DAO.Implement.ClientDAOImpl;
-import com.luxoft.bankapp.DAO.Implement.DBSelectClientCommander;
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 import com.luxoft.bankapp.service.bank.BankService;
 
@@ -36,9 +35,9 @@ public class TransferCommand implements Command {
         Scanner sc2 = new Scanner(System.in);
         String toclient = sc2.nextLine();
         DBSelectClientCommander.selectClient(toclient);
-        BankService.depositAccount(BankCommander.getActiveClient(), Double.parseDouble(input));
-        ClientDAOImpl clientDAO = new ClientDAOImpl();
         try {
+            BankService.depositAccount(BankCommander.getActiveClient(), Double.parseDouble(input));
+            ClientDAOImpl clientDAO = new ClientDAOImpl();
             clientDAO.save(BankCommander.getActiveClient());
             System.out.println(input + " was deposited!");
         } catch (SQLException e) {

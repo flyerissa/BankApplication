@@ -1,7 +1,5 @@
 package com.luxoft.bankapp.commands;
 
-import com.luxoft.bankapp.DAO.Implement.DBSelectBankCommander;
-import com.luxoft.bankapp.DAO.Implement.DBSelectClientCommander;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
@@ -16,6 +14,14 @@ public class BankCommander {
 
     public static Bank activeBank;
     public static Client activeClient;
+
+    public static void setActiveBank(Bank activeBank) {
+        BankCommander.activeBank = activeBank;
+    }
+
+    public static void setActiveClient(Client activeClient) {
+        BankCommander.activeClient = activeClient;
+    }
 
     public static Bank getActiveBank() {
         return activeBank;
