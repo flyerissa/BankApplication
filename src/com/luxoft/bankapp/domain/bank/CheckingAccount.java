@@ -1,19 +1,51 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.exceptions.OverdraftLimitExceededException;
 
-import com.luxoft.bankapp.service.bank.OverdraftLimitExceededException;
-
-public class CheckingAccount extends AbstractAccount {
+//4th exercise
+public class CheckingAccount extends AbstractAccount implements Comparable {
     private double overdraft;
     private double balance;
     private double amount;
+
+    public double getOverdraft() {
+        return overdraft;
+    }
+
+    @Override
+    public String toString() {
+        return "CheckingAccount{" +
+                "id=" + id +
+                ", balance=" + balance +
+                ", amount=" + amount +
+                ", overdraft=" + overdraft +
+                '}';
+    }
 
     public CheckingAccount(double balance, double overdraft) {
         if (balance >= 0 && overdraft >= 0) {
             this.balance = balance;
             this.overdraft = overdraft;
             maximumAmountToWithdraw();
+
         } else throw new IllegalArgumentException();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CheckingAccount)) return false;
+
+        CheckingAccount that = (CheckingAccount) o;
+
+        if (id != that.id) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (id ^ (id >>> 32));
     }
 
     public void setOverdraft(double x) {
@@ -38,7 +70,7 @@ public class CheckingAccount extends AbstractAccount {
         if (withdraw >= overdraft) {
             balance = withdraw;
         } else
-            throw new OverdraftLimitExceededException(this, balance, amount);
+            throw new OverdraftLimitExceededException(balance, amount);
     }
 
     @Override
@@ -52,4 +84,18 @@ public class CheckingAccount extends AbstractAccount {
         return amount;
     }
 
+    @Override
+    public double decimalValue() {
+        return Math.round(balance);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Account other = (Account) o;
+        int result;
+        Double thisBalance = this.getBalance();
+        Double thatBalance = other.getBalance();
+        result = thisBalance.compareTo(thatBalance);
+        return result;
+    }
 }
