@@ -1,6 +1,7 @@
 package com.luxoft.bankapp.service.bank;
 
 import com.luxoft.bankapp.commands.BankCommander;
+import com.luxoft.bankapp.exceptions.ClientExistsException;
 
 import java.io.*;
 import java.util.HashMap;
@@ -33,6 +34,8 @@ public class BankDataLoaderService {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClientExistsException e) {
                     e.printStackTrace();
                 }
             }

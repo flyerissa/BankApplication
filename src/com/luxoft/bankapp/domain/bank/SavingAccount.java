@@ -38,7 +38,7 @@ public class SavingAccount extends AbstractAccount implements Comparable {
 
     }
 
-    public double getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
