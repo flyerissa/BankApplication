@@ -19,7 +19,7 @@ public class Client implements Comparable, Serializable {
     private double overdraft;
     private String city;
     private Set<Account> accounts = new HashSet<Account>();
-
+    private Bank bank;
 
     public Bank getBank() {
         return bank;
@@ -28,8 +28,6 @@ public class Client implements Comparable, Serializable {
     public void setBank(Bank bank) {
         this.bank = bank;
     }
-
-    private Bank bank;
 
     public void setId(Integer id) {
         this.id = id;

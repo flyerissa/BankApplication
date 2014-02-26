@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.UnknownHostException;
+import java.util.Scanner;
 
 /**
  * Created by User on 26.02.14.
@@ -28,8 +29,12 @@ public class BankRemoteOffice {
             // 3: Communicating with the server
             do {
                 try {
-                    sendMessage("Please display num");
-
+                    sendMessage("This is remote office");
+                    System.out.println("Please enter the bank's name");
+                    Scanner sc = new Scanner(System.in);
+                    String input = sc.nextLine();
+                    sendMessage(input);
+                    message = (String) in.readObject();
 
                     sendMessage("Hi my server");
                     message = "bye";

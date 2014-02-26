@@ -12,9 +12,11 @@ import java.util.List;
  */
 public class ClientDAOImpl implements ClientDAO {
     Connection connection;
+
     public ClientDAOImpl() {
         openConnection();
     }
+
     public Connection openConnection() {
         try {
             Class.forName("org.h2.Driver"); // this is driver for H2
@@ -28,6 +30,7 @@ public class ClientDAOImpl implements ClientDAO {
         }
         return null;
     }
+
     public void closeConnection() {
         try {
             connection.close();
@@ -35,6 +38,7 @@ public class ClientDAOImpl implements ClientDAO {
             e.printStackTrace();
         }
     }
+
     @Override
     public Client findClientByName(Bank bank, String name) throws SQLException {
         Client client = null;
@@ -63,10 +67,12 @@ public class ClientDAOImpl implements ClientDAO {
                 if (acc_type.equals("checking")) {
                     account = new CheckingAccount(acc_balance, overdraft);
                     account.setId(account_id);
+
                 } else {
                     account = new SavingAccount(acc_balance);
                     account.setId(account_id);
                 }
+                client.setActiveAccount(account);
                 client.addAccountToSet(account);
             }
 

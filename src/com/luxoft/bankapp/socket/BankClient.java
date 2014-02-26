@@ -29,6 +29,13 @@ public class BankClient {
             // 3: Communicating with the server
             do {
                 try {
+                    sendMessage("This is bankomat");
+                    message = (String) in.readObject();
+                    System.out.println("Please enter the name of the bank");
+                    Scanner scan = new Scanner(System.in);
+                    String bankname = scan.nextLine();
+                    sendMessage(bankname);
+
                     System.out.println("Please enter the name of the client");
                     Scanner sc = new Scanner(System.in);
                     String clientname = sc.nextLine();
@@ -45,17 +52,15 @@ public class BankClient {
                         String input = sc1.nextLine();
                         sendMessage(input);
 
-                        System.out.println("Do you want to review the balance?");
-                        Scanner sc3 = new Scanner(System.in);
-                        String input3 = sc3.nextLine();
-                        if (input3.equals("yes")) {
-                            sendMessage("Display balance");
-                        } else sendMessage("bye");
                     }
 
 
                     if (choice.equals("balance")) {
                         sendMessage("Display balance");
+                        message = (String) in.readObject();
+                        System.out.println("server " + message);
+                        sendMessage("bye");
+
                     }
 
                 } catch (ClassNotFoundException classNot) {
