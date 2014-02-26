@@ -3,9 +3,11 @@ package com.luxoft.bankapp.domain.bank;
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 import com.luxoft.bankapp.exceptions.OverdraftLimitExceededException;
 
+import java.util.Map;
+
 //3d exercise
 public interface Account {
-    double getBalance();
+    Double getBalance();
 
     void deposit(double x);
 
@@ -18,5 +20,9 @@ public interface Account {
     void setId(int id);
 
     int getId();
+
+    void parseFeed(Map<String, String> feed);
+
+    String getAccountType();
 
 }

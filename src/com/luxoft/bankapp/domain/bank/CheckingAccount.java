@@ -2,13 +2,15 @@ package com.luxoft.bankapp.domain.bank;
 
 import com.luxoft.bankapp.exceptions.OverdraftLimitExceededException;
 
+import java.util.Map;
+
 //4th exercise
 public class CheckingAccount extends AbstractAccount implements Comparable {
     private double overdraft;
     private double balance;
     private double amount;
 
-    public double getOverdraft() {
+    public Double getOverdraft() {
         return overdraft;
     }
 
@@ -55,7 +57,7 @@ public class CheckingAccount extends AbstractAccount implements Comparable {
         } else throw new IllegalArgumentException();
     }
 
-    public double getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
@@ -97,5 +99,11 @@ public class CheckingAccount extends AbstractAccount implements Comparable {
         Double thatBalance = other.getBalance();
         result = thisBalance.compareTo(thatBalance);
         return result;
+    }
+
+    public void parseFeed(Map<String, String> feed) {
+        Double overdraft = Double.parseDouble(feed.get("overdraft"));
+        this.setOverdraft(overdraft);
+
     }
 }

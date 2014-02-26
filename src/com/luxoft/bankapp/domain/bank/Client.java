@@ -2,12 +2,14 @@ package com.luxoft.bankapp.domain.bank;
 
 import com.luxoft.bankapp.service.bank.Validate;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 //4th exercise
-public class Client implements Comparable {
+public class Client implements Comparable, Serializable {
     private Integer id;
     private Gender gender;
     private Account activeAccount;
@@ -17,7 +19,7 @@ public class Client implements Comparable {
     private double overdraft;
     private String city;
     private Set<Account> accounts = new HashSet<Account>();
-    private Double balance;
+
 
     public Bank getBank() {
         return bank;
@@ -33,9 +35,6 @@ public class Client implements Comparable {
         this.id = id;
     }
 
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
 
     public Integer getId() {
         return id;
@@ -144,6 +143,46 @@ public class Client implements Comparable {
 
     public void setActiveAccount(Account activeAccount) {
         this.activeAccount = activeAccount;
+    }
+
+    private Account getAccount(String accountType) {
+        for (Account acc : accounts) {
+            if (acc.getAccountType().equals(accountType)) {
+                return acc;
+            }
+        }
+        return createAccount(accountType);
+    }
+
+    private Account createAccount(String accountType) {
+        Account acc;
+        if ("s".equals(accountType)) {
+            acc = new SavingAccount(getBalance());
+        } else if ("c".equals(accountType)) {
+            acc = new CheckingAccount(getBalance(), getOverdraft());
+        } else {
+            throw new FeedException("Account type not found " + accountType);
+        }
+        accounts.add(acc);
+        return acc;
+    }
+
+    public void parseFeed(Map<String, String> feed) {
+        String accountType = feed.get("accounttype");
+        Account acc = getAccount(accountType);
+        /**
+         * This method should read all account info from the feed.
+         * There will be different implementations for
+         * CheckingAccount and SavingAccount.
+         */
+        acc.parseFeed(feed);
+    }
+
+
+    class FeedException extends RuntimeException {
+        public FeedException(String message) {
+            super(message);
+        }
     }
 
     /*public Account addAccount(String accountType, double sum, double overdraft) {

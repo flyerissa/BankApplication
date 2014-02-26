@@ -1,5 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.commands.BankCommander;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 
 import java.util.*;
@@ -8,6 +9,28 @@ import java.util.*;
 public class Bank {
     private Integer id;
     private Map<Integer, Client> clients = new HashMap<Integer, Client>();
+    private Map<String, Client> clientsByName = new HashMap<String, Client>();
+
+    public void parseFeed(Map<String, String> feed) throws ClientExistsException {
+        String name = feed.get("name"); // client name
+        String gender = feed.get("gender");
+        Client client = clientsByName.get(name);
+        if (client == null) { // if no client then create it
+            client = new Client();
+            client.setFullName(name);
+            if (gender.equals("f")) client.setGender(Gender.FEMALE);
+            else if (gender.equals("m")) client.setGender(Gender.MALE);
+            addClient(client);
+            BankCommander.setActiveClient(client);
+            clientsByName.put(name, client);
+        }
+        /**
+         * This method should read all info
+         * about the client from the feed map
+         */
+        client.parseFeed(feed);
+    }
+
 
     public void setId(Integer id) {
         this.id = id;
