@@ -1,11 +1,21 @@
 package com.luxoft.bankapp.service.bank;
 
+import com.luxoft.bankapp.DAO.BankDAOImpl;
+import com.luxoft.bankapp.DAO.ClientDAOImpl;
+import com.luxoft.bankapp.commands.BankCommander;
 import com.luxoft.bankapp.domain.bank.Account;
 import com.luxoft.bankapp.domain.bank.Bank;
+import com.luxoft.bankapp.domain.bank.BankInfo;
 import com.luxoft.bankapp.domain.bank.Client;
+import com.luxoft.bankapp.exceptions.BankInfoException;
+import com.luxoft.bankapp.exceptions.BankNotFoundException;
+import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 
 import java.io.*;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Scanner;
 
 //3d exercise
 public class BankService {
@@ -66,32 +76,97 @@ public class BankService {
     }
 
 
-    /*public static Client findClientByName(Bank bank) {
+    public static Client findClientByName(Bank bank) throws ClientNotFoundException {
         System.out.println("Enter client name to continue: ");
         Scanner sc = new Scanner(System.in);
         String client = sc.nextLine();
-
-        Pattern pattern =
-                Pattern.compile(
-                        "^\\s*[A-Za-z]{2,}[ ]*[A-Za-z]{2,}\\s*$");
-        Matcher matcher = pattern.matcher(client);
-
         Client foundClient = null;
-        boolean matches = matcher.matches();
-
-        if (matches) {
-            for (Client existingClient : bank.getClients()) {
-                if (existingClient.getFullName().equals(client)) {
-                    foundClient = existingClient;
-                }
+        try {
+            foundClient = new ClientDAOImpl().findClientByName(bank, client);
+            if (foundClient == null) {
+                throw new ClientNotFoundException("There is no such client in DB! Please retry");
+            } else {
+                BankCommander.setActiveClient(foundClient);
             }
-        } else {
-            System.out.println("There is no such client!");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-
         return foundClient;
     }
-*/
+
+
+    public static List<Client> getAllClients(Bank bank) throws ClientNotFoundException {
+        List<Client> listClients = null;
+        try {
+            listClients = new ClientDAOImpl().getAllClients(bank);
+            if (listClients == null) {
+                throw new ClientNotFoundException("There isn't any client for bank " + bank.getName());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listClients;
+
+    }
+
+    public static void saveOrUpdateClientToDB(Client client) {
+        try {
+            new ClientDAOImpl().save(client);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void removeClientFromDB(Client client) {
+        try {
+            new ClientDAOImpl().remove(client);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Bank findBankByName(String name) throws BankNotFoundException {
+        Bank foundBank = null;
+        try {
+            foundBank = new BankDAOImpl().getBankByName(name);
+            if (foundBank == null) {
+                throw new BankNotFoundException("There is no such bank in DB! Please retry!");
+            } else {
+                BankCommander.setActiveBank(foundBank);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return foundBank;
+    }
+
+    public static BankInfo getBankInfo() throws BankInfoException {
+        BankInfo bankInfo = null;
+        try {
+            bankInfo = new BankDAOImpl().getBankInfo();
+            if (bankInfo == null) {
+                throw new BankInfoException("There is no info for the bank!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bankInfo;
+    }
+
+    public static BankInfo getBankInfoByBankName(String name) throws BankInfoException {
+        BankInfo bankInfo = null;
+        try {
+            bankInfo = new BankDAOImpl().getInfoByBankName(name);
+            if (bankInfo == null) {
+                throw new BankInfoException("There is no info for the bank!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return bankInfo;
+    }
+
+
     public static void getAccount(Client client) {
         Account account = client.getActiveAccount();
         double balance = account.getBalance();

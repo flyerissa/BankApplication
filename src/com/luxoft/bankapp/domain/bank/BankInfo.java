@@ -14,7 +14,7 @@ public class BankInfo {
     /**
      * The sum of all accounts of all clients
      */
-    double totalAccountSum;
+    Double totalAccountSum;
     /**
      * List of clients by the city
      */
@@ -28,11 +28,11 @@ public class BankInfo {
         this.numberOfClients = numberOfClients;
     }
 
-    public double getTotalAccountSum() {
+    public Double getTotalAccountSum() {
         return totalAccountSum;
     }
 
-    public void setTotalAccountSum(double totalAccountSum) {
+    public void setTotalAccountSum(Double totalAccountSum) {
         this.totalAccountSum = totalAccountSum;
     }
 

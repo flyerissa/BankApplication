@@ -27,7 +27,6 @@ public class BankClient {
             out = new ObjectOutputStream(requestSocket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(requestSocket.getInputStream());
-            //sendMessage("This is bankomat");
             // 3: Communicating with the server
             while (true) {
                 try {
@@ -54,6 +53,7 @@ public class BankClient {
             }
         }
     }
+
     void sendMessage(final String msg) {
         try {
             out.writeObject(msg);

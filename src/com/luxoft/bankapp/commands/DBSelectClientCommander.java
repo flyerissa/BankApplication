@@ -1,37 +1,34 @@
 package com.luxoft.bankapp.commands;
 
-import com.luxoft.bankapp.DAO.Implement.ClientDAOImpl;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
-
-import java.sql.SQLException;
-import java.util.Scanner;
+import com.luxoft.bankapp.exceptions.ClientExistsException;
+import com.luxoft.bankapp.exceptions.ClientNotFoundException;
+import com.luxoft.bankapp.service.bank.BankService;
 
 /**
  * Created by aili on 23.02.14.
  */
-public class DBSelectClientCommander {
-    public static void selectClient(String name) {
-        ClientDAOImpl clientDAO = new ClientDAOImpl();
+public class DBSelectClientCommander implements Command {
+
+    @Override
+    public void execute() throws ClientExistsException {
         Bank currentBank = BankCommander.getActiveBank();
         if (currentBank != null) {
             try {
-                Client client = clientDAO.findClientByName(currentBank, name);
-                if (client != null) {
-                    BankCommander.setActiveClient(client);
-                    System.out.println("Client" + client.getFullName() + " was selected");
-                }
-            } catch (SQLException e) {
+                Client client = BankService.findClientByName(currentBank);
+                System.out.println("Client" + client.getFullName() + " was selected");
+            } catch (ClientNotFoundException e) {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Please enter the name of the bank");
-            Scanner sc = new Scanner(System.in);
-            String bankname = sc.nextLine();
-            DBSelectBankCommander.selectBank(bankname);
-
+            new DBSelectBankCommander().execute();
         }
+    }
 
+    @Override
+    public void printCommandInfo() {
+        System.out.println("Select client by name");
     }
 }
 

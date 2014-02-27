@@ -1,6 +1,6 @@
 package com.luxoft.bankapp.commands;
 
-import com.luxoft.bankapp.DAO.Implement.BankDAOImpl;
+import com.luxoft.bankapp.DAO.BankDAOImpl;
 import com.luxoft.bankapp.domain.bank.BankInfo;
 import com.luxoft.bankapp.domain.bank.Client;
 
@@ -27,4 +27,7 @@ public class DBReportCommander {
         }
     }
 
+    public static void main(String[] args) {
+        printReport("Bank");
+    }
 }

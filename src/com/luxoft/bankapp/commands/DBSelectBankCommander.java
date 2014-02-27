@@ -1,51 +1,31 @@
 package com.luxoft.bankapp.commands;
 
-import com.luxoft.bankapp.DAO.Implement.BankDAOImpl;
 import com.luxoft.bankapp.domain.bank.Bank;
-import com.luxoft.bankapp.domain.bank.Client;
+import com.luxoft.bankapp.exceptions.BankNotFoundException;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
+import com.luxoft.bankapp.service.bank.BankService;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Scanner;
 
 /**
  * Created by aili on 23.02.14.
  */
-public class DBSelectBankCommander {
-    public static void selectBank(String name) {
-        BankDAOImpl bankDAO = new BankDAOImpl();
+public class DBSelectBankCommander implements Command {
+
+    @Override
+    public void execute() throws ClientExistsException {
+        System.out.println("Please enter the name of bank: ");
+        String name = new Scanner(System.in).nextLine();
         try {
-            Bank bank = bankDAO.getBankByName(name);
-            if (bank != null) {
-                BankCommander.setActiveBank(bank);
-                final String sql = "SELECT c.id as client FROM CLIENT as c JOIN BANK as b ON c.bank_id = b.id " +
-                        "WHERE b.id = ?";
-                final PreparedStatement stmt = bankDAO.connection.prepareStatement(sql);
-                try {
-                    stmt.setInt(1, bank.getId());
-                    ResultSet rs = stmt.executeQuery();
-                    while (rs.next()) {
-                        Integer client_id = rs.getInt("client");
-                        Client client = new Client();
-                        client.setId(client_id);
-                        try {
-                            bank.addClient(client);
-                        } catch (ClientExistsException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                } finally {
-                    stmt.close();
-                }
-            }
-        } catch (SQLException e) {
+            Bank current = BankService.findBankByName(name);
+            System.out.println("Bank " + current.getName() + " was chose.");
+        } catch (BankNotFoundException e) {
             e.printStackTrace();
-        } finally {
-            bankDAO.closeConnection();
         }
     }
 
+    @Override
+    public void printCommandInfo() {
+        System.out.println("Select bank by name");
+    }
 }

@@ -1,6 +1,6 @@
 package com.luxoft.bankapp.commands;
 
-import com.luxoft.bankapp.DAO.Implement.ClientDAOImpl;
+import com.luxoft.bankapp.DAO.ClientDAOImpl;
 import com.luxoft.bankapp.domain.bank.*;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 

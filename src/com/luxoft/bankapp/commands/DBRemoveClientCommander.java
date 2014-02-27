@@ -1,6 +1,6 @@
 package com.luxoft.bankapp.commands;
 
-import com.luxoft.bankapp.DAO.Implement.ClientDAOImpl;
+import com.luxoft.bankapp.DAO.ClientDAOImpl;
 
 import java.sql.SQLException;
 

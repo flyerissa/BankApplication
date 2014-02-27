@@ -1,6 +1,5 @@
-package com.luxoft.bankapp.DAO.Implement;
+package com.luxoft.bankapp.DAO;
 
-import com.luxoft.bankapp.DAO.ClientDAO;
 import com.luxoft.bankapp.domain.bank.*;
 
 import java.sql.*;

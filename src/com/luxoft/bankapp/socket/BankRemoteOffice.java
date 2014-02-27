@@ -16,6 +16,7 @@ public class BankRemoteOffice {
     ObjectInputStream in;
     String message;
     static final String SERVER = "localhost";
+    Scanner sc = new Scanner(System.in);
 
     void run() {
         try {
@@ -27,22 +28,19 @@ public class BankRemoteOffice {
             out.flush();
             in = new ObjectInputStream(requestSocket.getInputStream());
             // 3: Communicating with the server
-            do {
+            while (true) {
                 try {
-                    sendMessage("This is remote office");
-                    System.out.println("Please enter the bank's name");
-                    Scanner sc = new Scanner(System.in);
-                    String input = sc.nextLine();
-                    sendMessage(input);
                     message = (String) in.readObject();
-
-                    sendMessage("Hi my server");
-                    message = "bye";
+                    System.out.println("server > " + message);
+                    message = sc.nextLine();
                     sendMessage(message);
-                } catch (ClassNotFoundException classNot) {
-                    System.err.println("data received in unknown format");
+                    if (message.equals("bye")) break;
+                } catch (UnknownHostException e) {
+                    System.err.println("You are trying to connect to unknown host");
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-            } while (!message.equals("bye"));
+            }
         } catch (UnknownHostException unknownHost) {
             System.err.println("You are trying to connect to an unknown host!");
         } catch (IOException ioException) {
@@ -70,8 +68,9 @@ public class BankRemoteOffice {
     }
 
     public static void main(final String args[]) {
-        BankClient client = new BankClient();
-        client.run();
+        BankRemoteOffice office = new BankRemoteOffice();
+        office.run();
     }
+
 
 }
