@@ -133,7 +133,7 @@ public class ClientDAOImpl implements ClientDAO {
             try {
                 stmt.setString(1, client.getFullName());
                 stmt.setInt(2, client.getBank().getId());
-                stmt.setString(3, client.getGender().toString());
+                stmt.setString(3, String.valueOf(client.getGender()));
                 stmt.setString(4, client.getPhone());
                 stmt.setString(5, client.getCity());
                 stmt.setDouble(6, client.getBalance());
@@ -229,4 +229,14 @@ public class ClientDAOImpl implements ClientDAO {
 
     }
 
+    public static void main(String[] args) {
+
+        try {
+            Bank bank = new BankDAOImpl().getBankByName("Bank");
+            Client client = new ClientDAOImpl().findClientByName(bank, "JJFF KKFF");
+            System.out.println(client);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

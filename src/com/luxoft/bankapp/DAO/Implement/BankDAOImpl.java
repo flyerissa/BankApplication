@@ -154,4 +154,13 @@ public class BankDAOImpl implements BankDao {
         return bankInfo;
     }
 
+    public static void main(String[] args) {
+        try {
+            Bank bank = new BankDAOImpl().getBankByName("Bank");
+            System.out.println(bank.getName());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

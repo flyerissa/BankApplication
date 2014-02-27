@@ -16,6 +16,7 @@ public class BankClient {
     ObjectInputStream in;
     String message;
     static final String SERVER = "localhost";
+    Scanner sc = new Scanner(System.in);
 
     void run() {
         try {
@@ -26,63 +27,33 @@ public class BankClient {
             out = new ObjectOutputStream(requestSocket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(requestSocket.getInputStream());
+            //sendMessage("This is bankomat");
             // 3: Communicating with the server
-            do {
+            while (true) {
                 try {
-                    sendMessage("This is bankomat");
                     message = (String) in.readObject();
-                    System.out.println("Please enter the name of the bank");
-                    Scanner scan = new Scanner(System.in);
-                    String bankname = scan.nextLine();
-                    sendMessage(bankname);
-
-                    System.out.println("Please enter the name of the client");
-                    Scanner sc = new Scanner(System.in);
-                    String clientname = sc.nextLine();
-                    sendMessage(clientname);
-                    System.out.println("Do you want to withdraw or review the balance?");
-                    Scanner sc2 = new Scanner(System.in);
-                    String choice = sc2.nextLine();
-                    if (choice.equals("withdraw")) {
-                        sendMessage("Withdraw from client");
-                        message = (String) in.readObject();
-
-                        System.out.println("Enter sum to withdraw");
-                        Scanner sc1 = new Scanner(System.in);
-                        String input = sc1.nextLine();
-                        sendMessage(input);
-
-                    }
-
-
-                    if (choice.equals("balance")) {
-                        sendMessage("Display balance");
-                        message = (String) in.readObject();
-                        System.out.println("server " + message);
-                        sendMessage("bye");
-
-                    }
-
-                } catch (ClassNotFoundException classNot) {
-                    System.err.println("data received in unknown format");
+                    System.out.println("server > " + message);
+                    message = sc.nextLine();
+                    sendMessage(message);
+                    if (message.equals("bye")) break;
+                } catch (UnknownHostException e) {
+                    System.err.println("You are trying to connect to unknown host");
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
                 }
-            } while (!message.equals("bye"));
-        } catch (UnknownHostException unknownHost) {
-            System.err.println("You are trying to connect to an unknown host!");
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
-            // 4: Closing connection
             try {
-                in.close();
                 out.close();
+                in.close();
                 requestSocket.close();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
-
     void sendMessage(final String msg) {
         try {
             out.writeObject(msg);

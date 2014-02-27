@@ -2,19 +2,19 @@ package com.luxoft.bankapp.exceptions;
 
 //3d exercise
 public class NotEnoughFundsException extends BankException {
-    protected double amount;
-    protected double balance;
+    protected Double amount;
+    protected Double balance;
 
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public NotEnoughFundsException(double balance, double amount) {
+    public NotEnoughFundsException(Double balance, Double amount) {
         this.balance = balance;
         this.amount = amount;
     }
 
-    public double getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
