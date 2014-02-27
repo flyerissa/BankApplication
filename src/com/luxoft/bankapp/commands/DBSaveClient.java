@@ -3,17 +3,18 @@ package com.luxoft.bankapp.commands;
 import com.luxoft.bankapp.domain.bank.Client;
 import com.luxoft.bankapp.service.bank.BankService;
 
-
-public class DBRemoveClientCommander implements Command {
-
+/**
+ * Created by User on 27.02.14.
+ */
+public class DBSaveClient implements Command {
     @Override
     public void execute() {
         Client client = BankCommander.getActiveClient();
-        BankService.removeClientFromDB(client);
+        BankService.saveOrUpdateClientToDB(client);
     }
 
     @Override
     public void printCommandInfo() {
-        System.out.println("Remove client");
+        System.out.println("Save or update client");
     }
 }

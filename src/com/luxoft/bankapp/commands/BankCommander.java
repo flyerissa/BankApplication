@@ -2,7 +2,6 @@ package com.luxoft.bankapp.commands;
 
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
-import com.luxoft.bankapp.exceptions.ClientExistsException;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -42,7 +41,7 @@ public class BankCommander {
         mapCommands.put("6", new TransferCommand());
         mapCommands.put("7", new Command() {
             @Override
-            public void execute() throws ClientExistsException {
+            public void execute() {
                 System.exit(0);
             }
 
@@ -54,8 +53,7 @@ public class BankCommander {
     }
 
     public static void main(String args[]) {
-        DBSelectBankCommander.selectBank("Bank");
-        DBSelectClientCommander.selectClient("JJ KK");
+
 
         /*System.out.println("Enter number from 1 to 7 to choose command - add, find, getAccount, deposit, withdraw, transfer, exit");
         Scanner sc = new Scanner(System.in);

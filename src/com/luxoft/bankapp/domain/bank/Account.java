@@ -17,9 +17,9 @@ public interface Account {
 
     double decimalValue();
 
-    void setId(int id);
+    void setId(Integer id);
 
-    int getId();
+    Integer getId();
 
     void parseFeed(Map<String, String> feed);
 

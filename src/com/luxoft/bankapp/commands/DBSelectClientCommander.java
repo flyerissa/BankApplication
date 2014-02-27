@@ -2,7 +2,6 @@ package com.luxoft.bankapp.commands;
 
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
-import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.service.bank.BankService;
 
@@ -12,7 +11,7 @@ import com.luxoft.bankapp.service.bank.BankService;
 public class DBSelectClientCommander implements Command {
 
     @Override
-    public void execute() throws ClientExistsException {
+    public void execute() {
         Bank currentBank = BankCommander.getActiveBank();
         if (currentBank != null) {
             try {

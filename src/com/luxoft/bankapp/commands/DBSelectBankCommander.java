@@ -2,7 +2,6 @@ package com.luxoft.bankapp.commands;
 
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.exceptions.BankNotFoundException;
-import com.luxoft.bankapp.exceptions.ClientExistsException;
 import com.luxoft.bankapp.service.bank.BankService;
 
 import java.util.Scanner;
@@ -13,7 +12,7 @@ import java.util.Scanner;
 public class DBSelectBankCommander implements Command {
 
     @Override
-    public void execute() throws ClientExistsException {
+    public void execute() {
         System.out.println("Please enter the name of bank: ");
         String name = new Scanner(System.in).nextLine();
         try {

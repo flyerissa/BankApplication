@@ -10,7 +10,8 @@ import java.util.Scanner;
 public class TransferCommand implements Command {
     @Override
     public void execute() {
-        System.out.println("Please enter the name of the client");
+
+        System.out.println("Please enter the name of the client to withdraw");
         Scanner sc = new Scanner(System.in);
         String fromclient = sc.nextLine();
         DBSelectClientCommander.selectClient(fromclient);

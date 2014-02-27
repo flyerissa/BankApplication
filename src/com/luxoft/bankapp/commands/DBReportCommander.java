@@ -1,33 +1,30 @@
 package com.luxoft.bankapp.commands;
 
-import com.luxoft.bankapp.DAO.BankDAOImpl;
 import com.luxoft.bankapp.domain.bank.BankInfo;
-import com.luxoft.bankapp.domain.bank.Client;
-
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
+import com.luxoft.bankapp.exceptions.BankInfoException;
+import com.luxoft.bankapp.service.bank.BankService;
 
 /**
  * Created by aili on 24.02.14.
  */
-public class DBReportCommander {
-    public static void printReport(String name) {
+public class DBReportCommander implements Command {
+
+    @Override
+    public void execute() {
         try {
-            BankInfo bankInfo;
-            BankDAOImpl bankDAO = new BankDAOImpl();
-            bankInfo = bankDAO.getBankInfo();
-            Map<String, List<Client>> map;
-            map = bankInfo.getClientsByCity();
-            System.out.println("Info for bank " + name + ": " + "Number of clients is: " + bankInfo.getNumberOfClients()
-                    + ", total account sum is - " + bankInfo.getTotalAccountSum() +
-                    ", list of clients, sorted by city: " + map);
-        } catch (SQLException e) {
+            BankInfo bankInfo = BankService.getBankInfo();
+            System.out.println("Info for bank " + BankCommander.getActiveBank().getName() +
+                    "\n Number of clients is: " + bankInfo.getNumberOfClients()
+                    + "\n total account sum is - " + bankInfo.getTotalAccountSum() +
+                    "\n list of clients, sorted by city: " + bankInfo.getClientsByCity());
+        } catch (BankInfoException e) {
             e.printStackTrace();
         }
+
     }
 
-    public static void main(String[] args) {
-        printReport("Bank");
+    @Override
+    public void printCommandInfo() {
+        System.out.println("Print report with info about current bank");
     }
 }

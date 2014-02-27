@@ -92,6 +92,16 @@ public class CheckingAccount extends AbstractAccount implements Comparable {
     }
 
     @Override
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Override
+    public Integer getId() {
+        return id;
+    }
+
+    @Override
     public int compareTo(Object o) {
         Account other = (Account) o;
         int result;
