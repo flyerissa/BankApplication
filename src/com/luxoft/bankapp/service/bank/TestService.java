@@ -3,8 +3,8 @@ package com.luxoft.bankapp.service.bank;
 import com.luxoft.bankapp.annotations.NoDB;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+
 
 /**
  * Created by User on 28.02.14.
@@ -22,22 +22,27 @@ public class TestService {
         boolean result = false;
         Class c1 = o1.getClass();
         Class c2 = o2.getClass();
-        Field[] fields1 = c1.getFields();
-        Field[] fields2 = c2.getFields();
+        Field[] fields1 = c1.getDeclaredFields();
+        Field[] fields2 = c2.getDeclaredFields();
+
         for (Field f : fields1) {
+
             boolean isAnno = f.isAnnotationPresent(NoDB.class);
             Class type = f.getType();
             for (Field f1 : fields2) {
                 boolean isAnno2 = f1.isAnnotationPresent(NoDB.class);
                 if (!isAnno && !isAnno2) {
                     Class type2 = f1.getType();
-                    if (type.equals(type2)) {
-                        if (type.equals(List.class)) {
-                            List<?> list = new ArrayList<>();
-                            list.add(f);
-                        }
+                    try {
 
-                        result = true;
+                        if (type.equals(type2) && type.equals(Collection.class)) {
+
+                        } else if (type.equals(type2) && f.get(o1).equals(f1.get(o2))) {
+
+                            result = true;
+                        }
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -45,3 +50,5 @@ public class TestService {
         return result;
     }
 }
+
+
