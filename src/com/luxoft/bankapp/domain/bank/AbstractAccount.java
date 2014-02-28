@@ -1,10 +1,13 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.annotations.NoDB;
+
 import java.util.Map;
 
 //3d exercise
 public abstract class AbstractAccount implements Account {
     protected Integer id;
+    @NoDB
     protected String type;
     protected Double balance;
     protected Double overdraft;
@@ -41,5 +44,13 @@ public abstract class AbstractAccount implements Account {
 
     }
 
+    @Override
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
+    @Override
+    public Integer getId() {
+        return id;
+    }
 }

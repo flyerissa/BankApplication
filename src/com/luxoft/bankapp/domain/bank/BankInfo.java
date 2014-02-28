@@ -1,5 +1,7 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.annotations.NoDB;
+
 import java.util.List;
 import java.util.Map;
 
@@ -10,14 +12,17 @@ public class BankInfo {
     /**
      * Total number of clients of the bank
      */
+    @NoDB
     int numberOfClients;
     /**
      * The sum of all accounts of all clients
      */
+    @NoDB
     Double totalAccountSum;
     /**
      * List of clients by the city
      */
+    @NoDB
     Map<String, List<Client>> clientsByCity;
 
     public int getNumberOfClients() {

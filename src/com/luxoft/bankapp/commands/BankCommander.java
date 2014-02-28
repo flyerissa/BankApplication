@@ -33,8 +33,8 @@ public class BankCommander {
     static Map<String, Command> mapCommands = new TreeMap<String, Command>();
 
     static {
-        mapCommands.put("1", new AddClientCommand());
-        mapCommands.put("2", new FindClientCommand());
+        mapCommands.put("1", new DBSelectBankCommander());
+        mapCommands.put("2", new DBSelectClientCommander());
         mapCommands.put("3", new GetAccountsCommand());
         mapCommands.put("4", new DepositCommand());
         mapCommands.put("5", new WithdrawCommand());

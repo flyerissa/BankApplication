@@ -1,5 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.annotations.NoDB;
 import com.luxoft.bankapp.service.bank.Validate;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.Set;
 public class Client implements Comparable, Serializable {
     private Integer id;
     private Gender gender;
+    @NoDB
     private Account activeAccount;
     private String email;
     private String fullName;

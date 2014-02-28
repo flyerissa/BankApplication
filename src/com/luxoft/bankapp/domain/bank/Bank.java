@@ -1,5 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.annotations.NoDB;
 import com.luxoft.bankapp.commands.BankCommander;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
 
@@ -9,6 +10,7 @@ import java.util.*;
 public class Bank {
     private Integer id;
     private Map<Integer, Client> clients = new HashMap<Integer, Client>();
+    @NoDB
     private Map<String, Client> clientsByName = new HashMap<String, Client>();
 
     public void parseFeed(Map<String, String> feed) throws ClientExistsException {

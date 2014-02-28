@@ -1,5 +1,6 @@
 package com.luxoft.bankapp.domain.bank;
 
+import com.luxoft.bankapp.annotations.NoDB;
 import com.luxoft.bankapp.exceptions.OverdraftLimitExceededException;
 
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Map;
 public class CheckingAccount extends AbstractAccount implements Comparable {
     private double overdraft;
     private double balance;
+    @NoDB
     private double amount;
 
     public Double getOverdraft() {
@@ -91,15 +93,7 @@ public class CheckingAccount extends AbstractAccount implements Comparable {
         return Math.round(balance);
     }
 
-    @Override
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
-    @Override
-    public Integer getId() {
-        return id;
-    }
 
     @Override
     public int compareTo(Object o) {
