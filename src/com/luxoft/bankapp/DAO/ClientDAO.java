@@ -11,7 +11,7 @@ public interface ClientDAO {
      * Return client by its name, initialize client accounts.
      *
      * @param bank
-     * @param name
+     * @param nameOVERDRAFT
      * @return
      */
     Client findClientByName(Bank bank, String name) throws SQLException;

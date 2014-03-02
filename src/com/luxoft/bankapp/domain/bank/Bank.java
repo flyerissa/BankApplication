@@ -1,15 +1,20 @@
 package com.luxoft.bankapp.domain.bank;
 
 import com.luxoft.bankapp.annotations.NoDB;
-import com.luxoft.bankapp.commands.BankCommander;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
+import com.luxoft.bankapp.ui.BankCommander;
 
+import java.io.Serializable;
 import java.util.*;
 
 //5th exercise
-public class Bank {
+public class Bank implements Serializable {
+    @NoDB
     private Integer id;
     private Map<Integer, Client> clients = new HashMap<Integer, Client>();
+    private String name;
+    @NoDB
+    private List<ClientRegistrationListener> listeners = new ArrayList<ClientRegistrationListener>();
     @NoDB
     private Map<String, Client> clientsByName = new HashMap<String, Client>();
 
@@ -42,8 +47,6 @@ public class Bank {
         return id;
     }
 
-    private String name;
-    private List<ClientRegistrationListener> listeners = new ArrayList<ClientRegistrationListener>();
 
     public Bank() {
         listeners.add(new EmailNotificationListener());

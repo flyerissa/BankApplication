@@ -25,4 +25,9 @@ public interface Account {
 
     String getAccountType();
 
+    void setAccountType(String type);
+
+    void setClientID(Integer id);
+
+    Integer getClientID();
 }

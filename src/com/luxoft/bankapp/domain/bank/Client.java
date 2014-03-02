@@ -4,13 +4,13 @@ import com.luxoft.bankapp.annotations.NoDB;
 import com.luxoft.bankapp.service.bank.Validate;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 //4th exercise
 public class Client implements Comparable, Serializable {
+    @NoDB
     private Integer id;
     private Gender gender;
     @NoDB
@@ -20,21 +20,33 @@ public class Client implements Comparable, Serializable {
     private String phone;
     private double overdraft;
     private String city;
+    @NoDB
     private Set<Account> accounts = new HashSet<Account>();
+    @NoDB
     private Bank bank;
-
-    public Bank getBank() {
-        return bank;
-    }
-
-    public void setBank(Bank bank) {
-        this.bank = bank;
-    }
+    private Double balance;
 
     public void setId(Integer id) {
         this.id = id;
     }
 
+
+    public void setAccounts(Set<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
+
+    public Bank getBank() {
+        return bank;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
 
     public Integer getId() {
         return id;
@@ -49,11 +61,11 @@ public class Client implements Comparable, Serializable {
     }
 
     public Double getBalance() {
-        Double result = 0.00;
+        balance = 0.00;
         for (Account account : accounts) {
-            result += account.getBalance();
+            balance += account.getBalance();
         }
-        return result;
+        return balance;
     }
 
     public Gender getGender() {
@@ -65,7 +77,7 @@ public class Client implements Comparable, Serializable {
     }
 
     public Set<Account> getAccounts() {
-        return Collections.unmodifiableSet(accounts);
+        return accounts;
     }
 
     public String getFullName() {
@@ -185,7 +197,7 @@ public class Client implements Comparable, Serializable {
         }
     }
 
-    /*public Account addAccount(String accountType, double sum, double overdraft) {
+    public Account addAccount(String accountType, double sum, double overdraft) {
 
         if (accountType.equals("C")) {
             activeAccount = new CheckingAccount(sum, overdraft);
@@ -196,7 +208,7 @@ public class Client implements Comparable, Serializable {
 
         return activeAccount;
     }
-*/
+
     public void addAccountToSet(Account account) {
         if (accounts.size() > 0) {
             for (Account existingAccount : accounts) {

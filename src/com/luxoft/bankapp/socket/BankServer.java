@@ -1,24 +1,10 @@
 package com.luxoft.bankapp.socket;
 
-import com.luxoft.bankapp.DAO.BankDAOImpl;
-import com.luxoft.bankapp.DAO.ClientDAOImpl;
-import com.luxoft.bankapp.commands.BankCommander;
-import com.luxoft.bankapp.commands.DBSelectBankCommander;
-import com.luxoft.bankapp.commands.DBSelectClientCommander;
-import com.luxoft.bankapp.domain.bank.Bank;
-import com.luxoft.bankapp.domain.bank.BankInfo;
-import com.luxoft.bankapp.domain.bank.Client;
-import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
-import com.luxoft.bankapp.service.bank.BankService;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by User on 26.02.14.
@@ -46,7 +32,7 @@ public class BankServer {
 
             // 4. The two parts communicate via the input and output streams
 
-            try {
+           /* try {
                 sendMessage("Connected. Please introduce youself");
                 message = (String) in.readObject();
                 if (message.equalsIgnoreCase("Bankomat")) {
@@ -128,7 +114,7 @@ public class BankServer {
                 e.printStackTrace();
             }
 
-
+*/
         } catch (IOException ioException) {
             ioException.printStackTrace();
         } finally {

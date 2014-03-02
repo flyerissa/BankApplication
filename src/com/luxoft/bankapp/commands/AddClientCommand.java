@@ -1,10 +1,9 @@
 package com.luxoft.bankapp.commands;
 
-import com.luxoft.bankapp.DAO.ClientDAOImpl;
-import com.luxoft.bankapp.domain.bank.*;
-import com.luxoft.bankapp.exceptions.ClientExistsException;
+import com.luxoft.bankapp.domain.bank.Bank;
+import com.luxoft.bankapp.domain.bank.BankApplication;
+import com.luxoft.bankapp.domain.bank.Client;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -12,7 +11,7 @@ import java.util.regex.Pattern;
 
 public class AddClientCommand implements Command {
     @Override
-    public void execute() throws ClientExistsException {
+    public void execute() {
         System.out.println("Enter name of the bank:");
         Scanner sc = new Scanner(System.in);
         Bank bank = null;
@@ -52,9 +51,11 @@ public class AddClientCommand implements Command {
         String gender = sc2.nextLine();
         Pattern pattern2 = Pattern.compile("F|M");
         Matcher matcher2 = pattern2.matcher(gender);
-        if (matcher.matches() && matcher2.matches()) {
+        /*if (matcher.matches() && matcher2.matches()) {
             if (gender.equals("F")) {
-                client.setGender(Gender.FEMALE);
+                if (client != null) {
+                    client.setGender(Gender.FEMALE);
+                }
             } else {
                 client.setGender(Gender.MALE);
             }
@@ -84,10 +85,11 @@ public class AddClientCommand implements Command {
         }
         System.out.println("Client " + client.getFullName() + " was added to bank " + bank.getName());
     }
+*/
+    }
 
     @Override
     public void printCommandInfo() {
         System.out.println("Add client");
     }
-
 }

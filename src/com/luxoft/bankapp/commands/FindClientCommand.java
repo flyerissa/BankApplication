@@ -34,7 +34,6 @@ public class FindClientCommand implements Command {
             }
         }
         System.out.println("Enter clients name");
-        Scanner scanner = new Scanner(System.in);
         String name = sc.nextLine();
         currentClient = BankService.getClient(bank, name);
         System.out.println("Current client is: " + currentClient);

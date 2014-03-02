@@ -2,15 +2,29 @@ package com.luxoft.bankapp.domain.bank;
 
 import com.luxoft.bankapp.annotations.NoDB;
 
+import java.io.Serializable;
 import java.util.Map;
 
 //3d exercise
-public abstract class AbstractAccount implements Account {
+public abstract class AbstractAccount implements Account, Serializable {
+    @NoDB
     protected Integer id;
     @NoDB
     protected String type;
     protected Double balance;
     protected Double overdraft;
+    @NoDB
+    protected Integer client_id;
+
+    @Override
+    public void setClientID(Integer id) {
+        this.client_id = id;
+    }
+
+    @Override
+    public Integer getClientID() {
+        return client_id;
+    }
 
     public Double getBalance() {
         return balance;
@@ -35,6 +49,7 @@ public abstract class AbstractAccount implements Account {
     public void setAccountType(String type) {
         this.type = type;
     }
+
 
     public void parseFeed(Map<String, String> feed) {
         String accountType = feed.get("accounttype");

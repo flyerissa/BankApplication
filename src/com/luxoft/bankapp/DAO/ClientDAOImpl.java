@@ -1,10 +1,12 @@
 package com.luxoft.bankapp.DAO;
 
 import com.luxoft.bankapp.domain.bank.*;
+import com.luxoft.bankapp.exceptions.ImpossibleToSaveInDBException;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by User on 21.02.14.
@@ -41,10 +43,7 @@ public class ClientDAOImpl implements ClientDAO {
     @Override
     public Client findClientByName(Bank bank, String name) throws SQLException {
         Client client = null;
-        final String sql = "SELECT c.name, c.id, a.id as account_id, a.balance as a_balance, a.overdraft as a_overdraft" +
-                ", a.type as acc_type, b.name as bank_name" +
-                " FROM CLIENT as c JOIN BANK as b ON c.bank_id = b.id" +
-                " JOIN ACCOUNT as a ON c.id = a.client_id" +
+        final String sql = "SELECT c.name, c.id, c.balance  FROM CLIENT as c JOIN BANK as b ON c.bank_id = b.id" +
                 " WHERE bank_id = ? AND c.name = ?";
         final PreparedStatement stmt = connection.prepareStatement(sql);
         try {
@@ -53,26 +52,14 @@ public class ClientDAOImpl implements ClientDAO {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 String clientName = rs.getString("name");
-                String bank_name = rs.getString("bank_name");
                 int client_id = rs.getInt("id");
-                int account_id = rs.getInt("account_id");
-                double acc_balance = rs.getDouble("a_balance");
-                double overdraft = rs.getDouble("a_overdraft");
-                String acc_type = rs.getString("acc_type");
+                Double client_balance = rs.getDouble("balance");
                 client = new Client();
                 client.setId(client_id);
                 client.setFullName(clientName);
-                Account account;
-                if (acc_type.equals("checking")) {
-                    account = new CheckingAccount(acc_balance, overdraft);
-                    account.setId(account_id);
+                client.setBank(bank);
+                client.setBalance(client_balance);
 
-                } else {
-                    account = new SavingAccount(acc_balance);
-                    account.setId(account_id);
-                }
-                client.setActiveAccount(account);
-                client.addAccountToSet(account);
             }
 
         } catch (SQLException e) {
@@ -124,12 +111,18 @@ public class ClientDAOImpl implements ClientDAO {
     @Override
     public void save(Client client) throws SQLException {
         if (client.getId() != null) {
+            PreparedStatement stmt = null;
+            PreparedStatement statement = null;
             final String sql = "UPDATE  CLIENT SET name = ?, bank_id = ?, gender = ?, phone = ?, city = ?, balance = ?," +
                     "overdraft = ? WHERE id = ?";
-            final PreparedStatement stmt = connection.prepareStatement(sql);
+
             final String sql2 = "UPDATE ACCOUNT SET client_id = ?, type  = ?, balance = ?, overdraft = ?";
-            final PreparedStatement statement = connection.prepareStatement(sql2);
+
             try {
+
+                connection.setAutoCommit(false);
+                stmt = connection.prepareStatement(sql);
+                statement = connection.prepareStatement(sql2);
                 stmt.setString(1, client.getFullName());
                 stmt.setInt(2, client.getBank().getId());
                 stmt.setString(3, String.valueOf(client.getGender()));
@@ -138,7 +131,15 @@ public class ClientDAOImpl implements ClientDAO {
                 stmt.setDouble(6, client.getBalance());
                 stmt.setDouble(7, client.getOverdraft());
                 stmt.setInt(8, client.getId());
-                stmt.executeUpdate();
+                int result = stmt.executeUpdate();
+                if (result == 0) {
+                    try {
+                        connection.rollback();
+                        throw new ImpossibleToSaveInDBException("Impossible to save in DB! Transaction is being rolled back!");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
                 for (Account a : client.getAccounts()) {
                     statement.setInt(1, client.getId());
                     if (a instanceof CheckingAccount) {
@@ -152,26 +153,45 @@ public class ClientDAOImpl implements ClientDAO {
                     }
                 }
                 statement.executeUpdate();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    stmt.close();
-                    closeConnection();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                if (statement.executeUpdate() == 0) {
+                    try {
+                        connection.rollback();
+                        throw new ImpossibleToSaveInDBException("Impossible to save in DB! Transaction is being rolled back!");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
+
+            } finally {
+
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                connection.setAutoCommit(true);
             }
-        } else {
+        } else
+
+        {
             final String sql = "INSERT INTO CLIENT (NAME,BANK_ID) VALUES (?,?)";
-            final PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             final String sql2 = "INSERT INTO ACCOUNT (client_id,type,balance,overdraft)VALUES (?,?,?,?)";
+            connection.setAutoCommit(false);
+            final PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             final PreparedStatement statement = connection.prepareStatement(sql2);
             try {
                 stmt.setString(1, client.getFullName());
                 stmt.setInt(2, client.getBank().getId());
                 stmt.executeUpdate();
+                if (stmt.executeUpdate() == 0) {
+                    try {
+                        connection.rollback();
+                        throw new ImpossibleToSaveInDBException("Impossible to save in DB! Transaction is being rolled back!");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
                 ResultSet rs = stmt.getGeneratedKeys();
                 if (rs != null && rs.next()) {
                     Integer c_id = rs.getInt(1);
@@ -189,17 +209,35 @@ public class ClientDAOImpl implements ClientDAO {
                         }
                     }
                     statement.executeUpdate();
+                    if (statement.executeUpdate() == 0) {
+                        try {
+                            connection.rollback();
+                            throw new ImpossibleToSaveInDBException("Impossible to save in DB! Transaction is being rolled back!");
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    stmt.close();
-                    closeConnection();
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                if (connection != null) {
+                    try {
+                        System.err.print("Transaction is being rolled back");
+                        connection.rollback();
+                    } catch (SQLException excep) {
+                        e.printStackTrace();
+                    }
                 }
+            } finally {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                connection.setAutoCommit(true);
             }
+
         }
     }
 
@@ -207,35 +245,70 @@ public class ClientDAOImpl implements ClientDAO {
     public void remove(Client client) throws SQLException {
         final String sql = "DELETE FROM Account  WHERE client_id = ?";
         final String sql2 = "DELETE FROM CLIENT WHERE id = ?";
+        connection.setAutoCommit(false);
         PreparedStatement statement = connection.prepareStatement(sql);
+        PreparedStatement statement1 = connection.prepareStatement(sql2);
         try {
             statement.setInt(1, client.getId());
             statement.executeUpdate();
             openConnection();
-            PreparedStatement statement1 = connection.prepareStatement(sql2);
+
             statement1.setInt(1, client.getId());
             statement1.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+            if (connection != null) {
+                try {
+                    System.err.print("Transaction is being rolled back");
+                    connection.rollback();
+                } catch (SQLException excep) {
+                    e.printStackTrace();
+                }
+            }
         } finally {
-            try {
+            if (statement != null) {
                 statement.close();
-                closeConnection();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            }
+            if (statement1 != null) {
+                statement1.close();
+            }
+            connection.setAutoCommit(true);
+        }
+
+    }
+
+    public Set<Account> getAllAccounts(Client client) throws SQLException {
+
+        Account account;
+        final String getAccounts = "SELECT id, type, balance, overdraft from ACCOUNT where client_id = ?";
+        PreparedStatement statement = connection.prepareStatement(getAccounts);
+        statement.setInt(1, client.getId());
+
+        ResultSet rs = statement.executeQuery();
+        if (rs.next()) {
+            int acc_id = rs.getInt("id");
+            Double balance = rs.getDouble("balance");
+            Double overdraft = rs.getDouble("overdraft");
+            String type = rs.getString("type");
+            if (type.equals("checking")) {
+                account = new CheckingAccount(balance, overdraft);
+                account.setId(acc_id);
+                client.addAccountToSet(account);
+            } else {
+                account = new SavingAccount(balance);
+                account.setId(acc_id);
+
+                client.addAccountToSet(account);
             }
         }
 
+        return client.getAccounts();
+
     }
 
-    public static void main(String[] args) {
+    private void saveNewClient(Client client) {
 
-        try {
-            Bank bank = new BankDAOImpl().getBankByName("Bank");
-            Client client = new ClientDAOImpl().findClientByName(bank, "JJFF KKFF");
-            System.out.println(client);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
     }
+
 }

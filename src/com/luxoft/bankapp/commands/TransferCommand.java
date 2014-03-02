@@ -3,10 +3,12 @@ package com.luxoft.bankapp.commands;
 public class TransferCommand implements Command {
     @Override
     public void execute() {
-        new DBSelectClientCommander();
-        new WithdrawCommand();
-        new DBSelectClientCommander();
-        new DepositCommand();
+
+        new DBSelectClientCommander().execute();
+        new WithdrawCommand().execute();
+        new DBSelectClientCommander().execute();
+        new DepositCommand().execute();
+        System.out.println("Transfer was successful!");
     }
 
     @Override

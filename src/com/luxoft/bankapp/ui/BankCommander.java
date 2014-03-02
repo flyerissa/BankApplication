@@ -1,9 +1,11 @@
-package com.luxoft.bankapp.commands;
+package com.luxoft.bankapp.ui;
 
+import com.luxoft.bankapp.commands.*;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
 
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeMap;
 
 /**
@@ -35,7 +37,7 @@ public class BankCommander {
     static {
         mapCommands.put("1", new DBSelectBankCommander());
         mapCommands.put("2", new DBSelectClientCommander());
-        mapCommands.put("3", new GetAccountsCommand());
+        mapCommands.put("3", new GetClientAccountsCommand());
         mapCommands.put("4", new DepositCommand());
         mapCommands.put("5", new WithdrawCommand());
         mapCommands.put("6", new TransferCommand());
@@ -55,17 +57,17 @@ public class BankCommander {
     public static void main(String args[]) {
 
 
-        /*System.out.println("Enter number from 1 to 7 to choose command - add, find, getAccount, deposit, withdraw, transfer, exit");
-        Scanner sc = new Scanner(System.in);
+        System.out.println("1 - select bank \n 2 - select client \n 3 - get accounts \n 4 - deposit  \n 5 - withdraw  \n 6 - transfer  \n 7 - exit");
+        String commandString;
+        do {
+            Scanner sc = new Scanner(System.in);
 
-        String commandString = sc.nextLine();
-        //int command = Integer.parseInt(commandString); // initialize command with commandString
-        try {
+            commandString = sc.nextLine();
+            //int command = Integer.parseInt(commandString); // initialize command with commandString
+
             mapCommands.get(commandString).execute();
-        } catch (ClientExistsException e) {
-            e.printStackTrace();
-        }
-        */
+        } while (!commandString.equals("7"));
+
     }
 
     public static void registerCommand(String name, Command command) {

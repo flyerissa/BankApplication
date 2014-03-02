@@ -15,11 +15,12 @@ public class DBSelectBankCommander implements Command {
     public void execute() {
         System.out.println("Please enter the name of bank: ");
         String name = new Scanner(System.in).nextLine();
+        Bank current;
         try {
-            Bank current = BankService.findBankByName(name);
+            current = BankService.findBankByName(name);
             System.out.println("Bank " + current.getName() + " was chose.");
         } catch (BankNotFoundException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
     }
 

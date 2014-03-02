@@ -1,7 +1,7 @@
 package com.luxoft.bankapp.service.bank;
 
-import com.luxoft.bankapp.commands.BankCommander;
 import com.luxoft.bankapp.exceptions.ClientExistsException;
+import com.luxoft.bankapp.ui.BankCommander;
 
 import java.io.*;
 import java.util.HashMap;

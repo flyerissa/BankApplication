@@ -3,6 +3,7 @@ package com.luxoft.bankapp.commands;
 import com.luxoft.bankapp.domain.bank.BankInfo;
 import com.luxoft.bankapp.exceptions.BankInfoException;
 import com.luxoft.bankapp.service.bank.BankService;
+import com.luxoft.bankapp.ui.BankCommander;
 
 /**
  * Created by aili on 24.02.14.
@@ -18,9 +19,8 @@ public class DBReportCommander implements Command {
                     + "\n total account sum is - " + bankInfo.getTotalAccountSum() +
                     "\n list of clients, sorted by city: " + bankInfo.getClientsByCity());
         } catch (BankInfoException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
-
     }
 
     @Override

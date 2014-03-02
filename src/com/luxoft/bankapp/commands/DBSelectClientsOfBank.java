@@ -4,6 +4,7 @@ import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
 import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.service.bank.BankService;
+import com.luxoft.bankapp.ui.BankCommander;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class DBSelectClientsOfBank implements Command {
             List<Client> listClients = BankService.getAllClients(current);
             System.out.println(listClients);
         } catch (ClientNotFoundException e) {
-            e.printStackTrace();
+            e.getMessage();
         }
     }
 

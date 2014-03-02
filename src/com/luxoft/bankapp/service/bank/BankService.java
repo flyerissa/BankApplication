@@ -2,7 +2,6 @@ package com.luxoft.bankapp.service.bank;
 
 import com.luxoft.bankapp.DAO.BankDAOImpl;
 import com.luxoft.bankapp.DAO.ClientDAOImpl;
-import com.luxoft.bankapp.commands.BankCommander;
 import com.luxoft.bankapp.domain.bank.Account;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.BankInfo;
@@ -11,6 +10,7 @@ import com.luxoft.bankapp.exceptions.BankInfoException;
 import com.luxoft.bankapp.exceptions.BankNotFoundException;
 import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
+import com.luxoft.bankapp.ui.BankCommander;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -22,7 +22,7 @@ public class BankService {
 
     private static final String FILE_OBJECT_DATA = "client_serialize.data";
 
-    public void saveClient(Client c) {
+    public static void saveClient(Client c) {
         try {
             ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(FILE_OBJECT_DATA));
             oo.writeObject(c);
@@ -35,7 +35,7 @@ public class BankService {
     }
 
 
-    public Client loadClient() {
+    public static Client loadClient() {
         Client client = null;
         try {
             ObjectInputStream oi = new ObjectInputStream(new FileInputStream(FILE_OBJECT_DATA));
@@ -48,6 +48,33 @@ public class BankService {
             e.printStackTrace();
         }
         return client;
+    }
+
+    public static void saveBank(Bank bank) {
+        try {
+            ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(FILE_OBJECT_DATA));
+            oo.writeObject(bank);
+            oo.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Bank loadBank() {
+        Bank bank = null;
+        try {
+            ObjectInputStream oi = new ObjectInputStream(new FileInputStream(FILE_OBJECT_DATA));
+            bank = (Bank) oi.readObject();
+            oi.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return bank;
     }
 
     /*public static void addClient(Bank bank, Client client) throws ClientExistsException {
@@ -109,12 +136,8 @@ public class BankService {
 
     }
 
-    public static void saveOrUpdateClientToDB(Client client) {
-        try {
-            new ClientDAOImpl().save(client);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public static void saveOrUpdateClientToDB(Client client) throws SQLException {
+        new ClientDAOImpl().save(client);
     }
 
     public static void removeClientFromDB(Client client) {
@@ -167,10 +190,13 @@ public class BankService {
     }
 
 
-    public static void getAccount(Client client) {
-        Account account = client.getActiveAccount();
-        double balance = account.getBalance();
-        System.out.println(client + "Balance is: " + balance);
+    public static void getAllAccounts(Client client) {
+        try {
+            new ClientDAOImpl().getAllAccounts(client);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(client.getAccounts());
 
     }
 
