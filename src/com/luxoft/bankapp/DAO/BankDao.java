@@ -8,5 +8,5 @@ import java.sql.SQLException;
 public interface BankDao {
     Bank getBankByName(String name) throws SQLException;
 
-    BankInfo getBankInfo() throws SQLException;
+    BankInfo getBankInfo(String name) throws SQLException;
 }

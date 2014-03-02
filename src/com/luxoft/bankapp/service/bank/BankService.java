@@ -168,10 +168,10 @@ public class BankService {
         return foundBank;
     }
 
-    public static BankInfo getBankInfo() throws BankInfoException {
+    public static BankInfo getBankInfo(String name) throws BankInfoException {
         BankInfo bankInfo = null;
         try {
-            bankInfo = new BankDAOImpl().getBankInfo();
+            bankInfo = new BankDAOImpl().getBankInfo(name);
             if (bankInfo == null) {
                 throw new BankInfoException("There is no info for the bank!");
             }
@@ -184,7 +184,7 @@ public class BankService {
     public static BankInfo getBankInfoByBankName(String name) throws BankInfoException {
         BankInfo bankInfo = null;
         try {
-            bankInfo = new BankDAOImpl().getInfoByBankName(name);
+            bankInfo = new BankDAOImpl().getBankInfo(name);
             if (bankInfo == null) {
                 throw new BankInfoException("There is no info for the bank!");
             }

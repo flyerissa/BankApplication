@@ -76,42 +76,52 @@ public class ClientDAOImpl implements ClientDAO {
     }
 
     private void insertClient(Client client) throws SQLException {
-        final String sql = "INSERT INTO CLIENT (NAME,BANK_ID) VALUES (?,?)";
+        final String sql = "INSERT INTO CLIENT (NAME,BANK_ID, balance) VALUES (?,?, ?)";
         final String sql2 = "INSERT INTO ACCOUNT (client_id,type,balance,overdraft)VALUES (?,?,?,?)";
+
         dataSource.getConnection().setAutoCommit(false);
+        ResultSet rs;
+
+
         try (Connection connection = dataSource.getConnection();
-             final PreparedStatement stmt = connection.prepareStatement(sql);
-             final PreparedStatement statement = connection.prepareStatement(sql2);
+             final PreparedStatement stmt = connection.prepareStatement(sql)
+
         ) {
             stmt.setString(1, client.getFullName());
             stmt.setInt(2, client.getBank().getId());
+            stmt.setDouble(3, client.getBalance());
             stmt.executeUpdate();
             if (stmt.executeUpdate() == 0) {
                 dataSource.getConnection().rollback();
                 throw new SQLException("Impossible to save in DB! Transaction is being rolled back!");
             }
-            ResultSet rs = stmt.getGeneratedKeys();
+            rs = stmt.getGeneratedKeys();
             if (rs != null && rs.next()) {
-                Integer c_id = rs.getInt(1);
-                client.setId(c_id);
-                for (Account a : client.getAccounts()) {
-                    statement.setInt(1, c_id);
-                    if (a instanceof CheckingAccount) {
-                        statement.setString(2, "checking");
-                        statement.setDouble(3, a.getBalance());
-                        statement.setDouble(4, ((CheckingAccount) a).getOverdraft());
-                    } else {
-                        statement.setString(2, "saving");
-                        statement.setDouble(3, a.getBalance());
-                        statement.setDouble(4, 0.00);
-                    }
-                }
-                statement.executeUpdate();
-                if (statement.executeUpdate() == 0) {
-                    dataSource.getConnection().rollback();
-                    throw new SQLException("Impossible to save in DB! Transaction is being rolled back!");
+                Integer clientId = rs.getInt(1);
+                client.setId(clientId);
+            }
+        }
+        try (Connection connection = dataSource.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(sql2)) {
+
+            for (Account a : client.getAccounts()) {
+                statement.setInt(1, client.getId());
+                if (a instanceof CheckingAccount) {
+                    statement.setString(2, "checking");
+                    statement.setDouble(3, a.getBalance());
+                    statement.setDouble(4, ((CheckingAccount) a).getOverdraft());
+                } else {
+                    statement.setString(2, "saving");
+                    statement.setDouble(3, a.getBalance());
+                    statement.setDouble(4, 0.00);
                 }
             }
+            statement.executeUpdate();
+            if (statement.executeUpdate() == 0) {
+                dataSource.getConnection().rollback();
+                throw new SQLException("Impossible to save in DB! Transaction is being rolled back!");
+            }
+
 
         } finally {
             dataSource.getConnection().setAutoCommit(true);
@@ -167,26 +177,26 @@ public class ClientDAOImpl implements ClientDAO {
 
     @Override
     public void remove(Client client) throws SQLException {
-        final String sql = "DELETE FROM Account  WHERE client_id = ?";
-        final String sql2 = "DELETE FROM CLIENT WHERE id = ?";
+        final String deleteAccountSQL = "DELETE FROM Account  WHERE client_id = ?";
+        final String deleteClientSQL = "DELETE FROM CLIENT WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
-             final PreparedStatement statement = connection.prepareStatement(sql);
-             final PreparedStatement statement1 = connection.prepareStatement(sql2);) {
+             final PreparedStatement deleteAccountStmt = connection.prepareStatement(deleteAccountSQL);
+             final PreparedStatement deleteClientStmt = connection.prepareStatement(deleteClientSQL)) {
             dataSource.getConnection().setAutoCommit(false);
-            statement.setInt(1, client.getId());
-            statement.executeUpdate();
-            statement1.setInt(1, client.getId());
-            statement1.executeUpdate();
+            deleteAccountStmt.setInt(1, client.getId());
+            deleteAccountStmt.executeUpdate();
+            deleteClientStmt.setInt(1, client.getId());
+            deleteClientStmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            if (dataSource.getConnection() != null) {
-                try {
-                    System.err.print("Transaction is being rolled back");
-                    dataSource.getConnection().rollback();
-                } catch (SQLException excep) {
-                    e.printStackTrace();
-                }
+
+            try {
+                System.err.print("Transaction is being rolled back");
+                dataSource.getConnection().rollback();
+            } catch (SQLException excep) {
+                e.printStackTrace();
             }
+
         } finally {
             dataSource.getConnection().setAutoCommit(true);
         }
