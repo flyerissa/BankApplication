@@ -1,7 +1,6 @@
 package com.luxoft.bankapp.DAO;
 
 import com.luxoft.bankapp.domain.bank.*;
-import com.luxoft.bankapp.exceptions.ImpossibleToSaveInDBException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -133,12 +132,8 @@ public class ClientDAOImpl implements ClientDAO {
                 stmt.setInt(8, client.getId());
                 int result = stmt.executeUpdate();
                 if (result == 0) {
-                    try {
-                        connection.rollback();
-                        throw new ImpossibleToSaveInDBException("Impossible to save in DB! Transaction is being rolled back!");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    connection.rollback();
+                    throw new SQLException("Impossible to save in DB! Transaction is being rolled back!");
                 }
                 for (Account a : client.getAccounts()) {
                     statement.setInt(1, client.getId());
@@ -154,12 +149,8 @@ public class ClientDAOImpl implements ClientDAO {
                 }
                 statement.executeUpdate();
                 if (statement.executeUpdate() == 0) {
-                    try {
-                        connection.rollback();
-                        throw new ImpossibleToSaveInDBException("Impossible to save in DB! Transaction is being rolled back!");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    connection.rollback();
+                    throw new SQLException("Impossible to save in DB! Transaction is being rolled back!");
                 }
 
             } finally {
@@ -185,12 +176,8 @@ public class ClientDAOImpl implements ClientDAO {
                 stmt.setInt(2, client.getBank().getId());
                 stmt.executeUpdate();
                 if (stmt.executeUpdate() == 0) {
-                    try {
-                        connection.rollback();
-                        throw new ImpossibleToSaveInDBException("Impossible to save in DB! Transaction is being rolled back!");
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    connection.rollback();
+                    throw new SQLException("Impossible to save in DB! Transaction is being rolled back!");
                 }
                 ResultSet rs = stmt.getGeneratedKeys();
                 if (rs != null && rs.next()) {
@@ -210,24 +197,11 @@ public class ClientDAOImpl implements ClientDAO {
                     }
                     statement.executeUpdate();
                     if (statement.executeUpdate() == 0) {
-                        try {
-                            connection.rollback();
-                            throw new ImpossibleToSaveInDBException("Impossible to save in DB! Transaction is being rolled back!");
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                if (connection != null) {
-                    try {
-                        System.err.print("Transaction is being rolled back");
                         connection.rollback();
-                    } catch (SQLException excep) {
-                        e.printStackTrace();
+                        throw new SQLException("Impossible to save in DB! Transaction is being rolled back!");
                     }
                 }
+
             } finally {
                 if (stmt != null) {
                     stmt.close();
@@ -237,7 +211,6 @@ public class ClientDAOImpl implements ClientDAO {
                 }
                 connection.setAutoCommit(true);
             }
-
         }
     }
 

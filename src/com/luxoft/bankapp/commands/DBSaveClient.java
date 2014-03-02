@@ -4,6 +4,8 @@ import com.luxoft.bankapp.domain.bank.Client;
 import com.luxoft.bankapp.service.bank.BankService;
 import com.luxoft.bankapp.ui.BankCommander;
 
+import java.sql.SQLException;
+
 /**
  * Created by User on 27.02.14.
  */
@@ -11,7 +13,11 @@ public class DBSaveClient implements Command {
     @Override
     public void execute() {
         Client client = BankCommander.getActiveClient();
-        BankService.saveOrUpdateClientToDB(client);
+        try {
+            BankService.saveOrUpdateClientToDB(client);
+        } catch (SQLException e) {
+            e.getMessage();
+        }
     }
 
     @Override
