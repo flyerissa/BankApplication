@@ -22,6 +22,11 @@ public class BankService {
 
     private static final String FILE_OBJECT_DATA = "client_serialize.data";
 
+    private static ClientDAOImpl clientDAO = new ClientDAOImpl();
+
+    private static BankDAOImpl bankDAO = new BankDAOImpl();
+
+
     public static void saveClient(Client c) {
         try {
             ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(FILE_OBJECT_DATA));

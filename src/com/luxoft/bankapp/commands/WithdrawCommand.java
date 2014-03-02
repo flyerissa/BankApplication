@@ -6,6 +6,7 @@ import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 import com.luxoft.bankapp.service.bank.BankService;
 import com.luxoft.bankapp.ui.BankCommander;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -32,6 +33,8 @@ public class WithdrawCommand implements Command {
             BankService.saveOrUpdateClientToDB(current);
             System.out.println("Success!");
         } catch (NotEnoughFundsException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
