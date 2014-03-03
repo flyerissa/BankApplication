@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
-//3d exercise
+
 public class BankService {
 
     private static final String FILE_OBJECT_DATA = "client_serialize.data";
@@ -26,8 +26,20 @@ public class BankService {
 
     private static BankDAOImpl bankDAO = new BankDAOImpl();
 
+    private static BankService instance;
 
-    public static void saveClient(Client c) {
+    private BankService() {
+    }
+
+    public static BankService getInstance() {
+        if (instance == null) {
+            instance = new BankService();
+        }
+        return instance;
+    }
+
+
+    public void saveClient(Client c) {
         try {
             ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(FILE_OBJECT_DATA));
             oo.writeObject(c);
@@ -40,7 +52,7 @@ public class BankService {
     }
 
 
-    public static Client loadClient() {
+    public Client loadClient() {
         Client client = null;
         try {
             ObjectInputStream oi = new ObjectInputStream(new FileInputStream(FILE_OBJECT_DATA));
@@ -55,7 +67,7 @@ public class BankService {
         return client;
     }
 
-    public static void saveBank(Bank bank) {
+    public void saveBank(Bank bank) {
         try {
             ObjectOutputStream oo = new ObjectOutputStream(new FileOutputStream(FILE_OBJECT_DATA));
             oo.writeObject(bank);
@@ -67,7 +79,7 @@ public class BankService {
         }
     }
 
-    public static Bank loadBank() {
+    public Bank loadBank() {
         Bank bank = null;
         try {
             ObjectInputStream oi = new ObjectInputStream(new FileInputStream(FILE_OBJECT_DATA));
@@ -101,14 +113,14 @@ public class BankService {
     }
 
 */
-    public static void printMaximumAmountToWithdraw(Bank b) {
+    public void printMaximumAmountToWithdraw(Bank b) {
         for (Client c : b.getClients().values()) {
             System.out.println(c.getActiveAccount().maximumAmountToWithdraw());
         }
     }
 
 
-    public static Client findClientByName(Bank bank) throws ClientNotFoundException {
+    public Client findClientByName(Bank bank) throws ClientNotFoundException {
         System.out.println("Enter client name to continue: ");
         Scanner sc = new Scanner(System.in);
         String client = sc.nextLine();
@@ -127,7 +139,7 @@ public class BankService {
     }
 
 
-    public static List<Client> getAllClients(Bank bank) throws ClientNotFoundException {
+    public List<Client> getAllClients(Bank bank) throws ClientNotFoundException {
         List<Client> listClients = null;
         try {
             listClients = new ClientDAOImpl().getAllClients(bank);
@@ -141,11 +153,11 @@ public class BankService {
 
     }
 
-    public static void saveOrUpdateClientToDB(Client client) throws SQLException {
+    public void saveOrUpdateClientToDB(Client client) throws SQLException {
         new ClientDAOImpl().save(client);
     }
 
-    public static void removeClientFromDB(Client client) {
+    public void removeClientFromDB(Client client) {
         try {
             new ClientDAOImpl().remove(client);
         } catch (SQLException e) {
@@ -153,7 +165,7 @@ public class BankService {
         }
     }
 
-    public static Bank findBankByName(String name) throws BankNotFoundException {
+    public Bank findBankByName(String name) throws BankNotFoundException {
         Bank foundBank = null;
         try {
             foundBank = new BankDAOImpl().getBankByName(name);
@@ -168,7 +180,7 @@ public class BankService {
         return foundBank;
     }
 
-    public static BankInfo getBankInfo(String name) throws BankInfoException {
+    public BankInfo getBankInfo(String name) throws BankInfoException {
         BankInfo bankInfo = null;
         try {
             bankInfo = new BankDAOImpl().getBankInfo(name);
@@ -181,7 +193,7 @@ public class BankService {
         return bankInfo;
     }
 
-    public static BankInfo getBankInfoByBankName(String name) throws BankInfoException {
+    public BankInfo getBankInfoByBankName(String name) throws BankInfoException {
         BankInfo bankInfo = null;
         try {
             bankInfo = new BankDAOImpl().getBankInfo(name);
@@ -195,7 +207,7 @@ public class BankService {
     }
 
 
-    public static void getAllAccounts(Client client) {
+    public void getAllAccounts(Client client) {
         try {
             new ClientDAOImpl().getAllAccounts(client);
         } catch (SQLException e) {
@@ -205,18 +217,18 @@ public class BankService {
 
     }
 
-    public static void depositAccount(Client client, double sum) {
+    public void depositAccount(Client client, double sum) {
         Account account = client.getActiveAccount();
         account.deposit(sum);
 
     }
 
-    public static void withdrawAccount(Client client, double sum) throws NotEnoughFundsException {
+    public void withdrawAccount(Client client, double sum) throws NotEnoughFundsException {
         Account account = client.getActiveAccount();
         account.withdraw(sum);
     }
 
-    public static void transfer(Client from, double transfer, Client to) throws NotEnoughFundsException {
+    public void transfer(Client from, double transfer, Client to) throws NotEnoughFundsException {
         Account accountFrom = from.getActiveAccount();
         accountFrom.withdraw(transfer);
         Account accountTo = to.getActiveAccount();
@@ -225,7 +237,7 @@ public class BankService {
     }
 
 
-    public static Client getClient(Bank bank, String clientName) {
+    public Client getClient(Bank bank, String clientName) {
         return bank.getClients().get(clientName);
     }
 

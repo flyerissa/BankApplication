@@ -26,7 +26,7 @@ public class ClientDAOImpl implements ClientDAO {
         final String sql = "SELECT c.name, c.id, c.balance  FROM CLIENT as c JOIN BANK as b ON c.bank_id = b.id" +
                 " WHERE bank_id = ? AND c.name = ?";
         try (Connection connection = dataSource.getConnection();
-             final PreparedStatement stmt = connection.prepareStatement(sql);) {
+             final PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, bank.getId());
             stmt.setString(2, name);
             ResultSet rs = stmt.executeQuery();
