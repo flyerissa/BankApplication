@@ -9,12 +9,24 @@ import java.util.*;
 
 public class BankReport {
 
-    public static int getNumberOfClients(Bank bank) {
+    private static BankReport instance;
+
+    private BankReport() {
+    }
+
+    public static BankReport getInstance() {
+        if (instance == null) {
+            instance = new BankReport();
+        }
+        return instance;
+    }
+
+    public int getNumberOfClients(Bank bank) {
         return bank.getClients().size();
 
     }
 
-    public static int getAccountsNumber(Bank bank) {
+    public int getAccountsNumber(Bank bank) {
         int result = 0;
 
         for (Client client : bank.getClients().values()) {
@@ -24,7 +36,7 @@ public class BankReport {
         return result;
     }
 
-    public static Set<Client> getClientsSorted(Bank bank) {
+    public Set<Client> getClientsSorted(Bank bank) {
         SortedSet<Client> sorted = new TreeSet<Client>();
         for (Client client : bank.getClients().values()) {
             sorted.add(client);
@@ -32,7 +44,7 @@ public class BankReport {
         return sorted;
     }
 
-    public static double getBankCreditSum(Bank bank) {
+    public double getBankCreditSum(Bank bank) {
         int result = 0;
         for (Client client : bank.getClients().values()) {
             for (Account account : client.getAccounts()) {
@@ -44,7 +56,7 @@ public class BankReport {
         return result;
     }
 
-    public static Map<String, List<String>> getClientsByCity(Bank bank) {
+    public Map<String, List<String>> getClientsByCity(Bank bank) {
         Map<String, List<String>> cityList = new HashMap<String, List<String>>();
         for (Client client : bank.getClients().values()) {
             if (!cityList.containsKey(client.getCity())) {

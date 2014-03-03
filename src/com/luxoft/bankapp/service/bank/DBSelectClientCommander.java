@@ -19,7 +19,7 @@ public class DBSelectClientCommander implements Command {
             currentBank = BankCommander.getActiveBank();
         }
         try {
-            Client client = BankService.findClientByName(currentBank);
+            Client client = BankService.getInstance().findClientByName(currentBank);
             client.setBank(BankCommander.getActiveBank());
             System.out.println("Client" + client.getFullName() + " was selected");
         } catch (ClientNotFoundException e) {

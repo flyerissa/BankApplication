@@ -29,8 +29,8 @@ public class WithdrawCommand implements Command {
         System.out.println("Please enter sum to withdraw!");
         String sum = new Scanner(System.in).nextLine();
         try {
-            BankService.withdrawAccount(current, Double.parseDouble(sum));
-            BankService.saveOrUpdateClientToDB(current);
+            BankService.getInstance().withdrawAccount(current, Double.parseDouble(sum));
+            BankService.getInstance().saveOrUpdateClientToDB(current);
             System.out.println("Success!");
         } catch (NotEnoughFundsException e) {
             e.printStackTrace();

@@ -18,7 +18,7 @@ public class DBReportCommander implements Command {
             System.out.println("Enter name of the bank!");
             Scanner sc = new Scanner(System.in);
             String name = sc.nextLine();
-            BankInfo bankInfo = BankService.getBankInfo(name);
+            BankInfo bankInfo = BankService.getInstance().getBankInfo(name);
             System.out.println("Info for bank " + BankCommander.getActiveBank().getName() +
                     "\n Number of clients is: " + bankInfo.getNumberOfClients()
                     + "\n total account sum is - " + bankInfo.getTotalAccountSum() +

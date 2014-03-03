@@ -16,9 +16,9 @@ public class DepositCommand implements Command {
         if (currentAccount != null) {
             System.out.println("Please enter sum to deposit!");
             String sum = new Scanner(System.in).nextLine();
-            BankService.depositAccount(currentClient, Double.parseDouble(sum));
+            BankService.getInstance().depositAccount(currentClient, Double.parseDouble(sum));
             try {
-                BankService.saveOrUpdateClientToDB(currentClient);
+                BankService.getInstance().saveOrUpdateClientToDB(currentClient);
             } catch (SQLException e) {
                 e.getMessage();
             }

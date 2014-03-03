@@ -17,7 +17,7 @@ public class DBSelectBankCommander implements Command {
         String name = new Scanner(System.in).nextLine();
         Bank current;
         try {
-            current = BankService.findBankByName(name);
+            current = BankService.getInstance().findBankByName(name);
             System.out.println("Bank " + current.getName() + " was chose.");
         } catch (BankNotFoundException e) {
             e.getMessage();

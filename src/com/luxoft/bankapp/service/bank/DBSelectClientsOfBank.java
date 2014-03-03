@@ -17,7 +17,7 @@ public class DBSelectClientsOfBank implements Command {
         new DBSelectBankCommander().execute();
         Bank current = BankCommander.getActiveBank();
         try {
-            List<Client> listClients = BankService.getAllClients(current);
+            List<Client> listClients = BankService.getInstance().getAllClients(current);
             System.out.println(listClients);
         } catch (ClientNotFoundException e) {
             e.getMessage();

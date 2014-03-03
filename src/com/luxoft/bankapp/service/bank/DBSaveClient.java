@@ -14,7 +14,7 @@ public class DBSaveClient implements Command {
     public void execute() {
         Client client = BankCommander.getActiveClient();
         try {
-            BankService.saveOrUpdateClientToDB(client);
+            BankService.getInstance().saveOrUpdateClientToDB(client);
         } catch (SQLException e) {
             e.getMessage();
         }

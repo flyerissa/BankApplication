@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
+
 /**
  * Created by aili on 02.03.14.
  */
@@ -29,28 +30,23 @@ public class BankDAOTest {
 
     @Test
     public void testInsert() throws IllegalAccessException {
-        BankService.saveBank(bank);
-
-        Bank bank2 = BankService.loadBank();
-
+        BankService.getInstance().saveBank(bank);
+        Bank bank2 = BankService.getInstance().loadBank();
         assertTrue(TestService.isEquals(bank, bank2));
     }
 
 
     @Test
     public void testUpdate() throws ClientExistsException, IllegalAccessException {
-        BankService.saveBank(bank);
-
+        BankService.getInstance().saveBank(bank);
         // make changes to Bank
         Client client2 = new Client();
         client2.setFullName("Ivan Petrov");
         client2.setCity("New York");
         client2.addAccount("S", 5000, 0);
         bank.addClient(client2);
-        BankService.saveBank(bank);
-
-        Bank bank2 = BankService.loadBank();
-
+        BankService.getInstance().saveBank(bank);
+        Bank bank2 = BankService.getInstance().loadBank();
         assertTrue(TestService.isEquals(bank, bank2));
     }
 }

@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class GetClientAccountsCommand implements Command {
     @Override
     public void execute() {
-        BankService.getAllAccounts(BankCommander.getActiveClient());
+        BankService.getInstance().getAllAccounts(BankCommander.getActiveClient());
         System.out.println("Please choose active account by its id: ");
         Scanner sc = new Scanner(System.in);
         String result = sc.nextLine();

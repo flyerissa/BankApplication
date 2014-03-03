@@ -193,19 +193,6 @@ public class BankService {
         return bankInfo;
     }
 
-    public BankInfo getBankInfoByBankName(String name) throws BankInfoException {
-        BankInfo bankInfo = null;
-        try {
-            bankInfo = new BankDAOImpl().getBankInfo(name);
-            if (bankInfo == null) {
-                throw new BankInfoException("There is no info for the bank!");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return bankInfo;
-    }
-
 
     public void getAllAccounts(Client client) {
         try {
@@ -235,7 +222,6 @@ public class BankService {
         accountTo.deposit(transfer);
 
     }
-
 
     public Client getClient(Bank bank, String clientName) {
         return bank.getClients().get(clientName);

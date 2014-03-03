@@ -10,7 +10,7 @@ public class DBRemoveClientCommander implements Command {
     @Override
     public void execute() {
         Client client = BankCommander.getActiveClient();
-        BankService.removeClientFromDB(client);
+        BankService.getInstance().removeClientFromDB(client);
     }
 
     @Override
