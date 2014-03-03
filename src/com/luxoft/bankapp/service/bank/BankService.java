@@ -15,7 +15,6 @@ import com.luxoft.bankapp.ui.BankCommander;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
 
 public class BankService {
@@ -120,13 +119,14 @@ public class BankService {
     }
 
 
-    public Client findClientByName(Bank bank) throws ClientNotFoundException {
-        System.out.println("Enter client name to continue: ");
+    public Client findClientByName(Bank bank, String name) throws ClientNotFoundException {
+       /* System.out.println("Enter client name to continue: ");
         Scanner sc = new Scanner(System.in);
         String client = sc.nextLine();
+        */
         Client foundClient = null;
         try {
-            foundClient = new ClientDAOImpl().findClientByName(bank, client);
+            foundClient = new ClientDAOImpl().findClientByName(bank, name);
             if (foundClient == null) {
                 throw new ClientNotFoundException("There is no such client in DB! Please retry");
             } else {
