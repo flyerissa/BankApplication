@@ -1,4 +1,6 @@
-package com.luxoft.bankapp.commands;
+package com.luxoft.bankapp.service.bank;
+
+import com.luxoft.bankapp.commands.Command;
 
 public class TransferCommand implements Command {
     @Override

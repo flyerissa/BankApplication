@@ -1,8 +1,9 @@
 package com.luxoft.bankapp.ui;
 
-import com.luxoft.bankapp.commands.*;
+import com.luxoft.bankapp.commands.Command;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
+import com.luxoft.bankapp.service.bank.*;
 
 import java.util.Map;
 import java.util.Scanner;

@@ -1,8 +1,8 @@
-package com.luxoft.bankapp.commands;
+package com.luxoft.bankapp.service.bank;
 
+import com.luxoft.bankapp.commands.Command;
 import com.luxoft.bankapp.domain.bank.BankInfo;
 import com.luxoft.bankapp.exceptions.BankInfoException;
-import com.luxoft.bankapp.service.bank.BankService;
 import com.luxoft.bankapp.ui.BankCommander;
 
 import java.util.Scanner;
