@@ -44,7 +44,14 @@ public class Client implements Comparable, Serializable {
         return bank;
     }
 
-    public void setBalance(Double balance) {
+    public void setBalance() {
+        balance = 0.00;
+        for (Account account : accounts) {
+            balance += account.getBalance();
+        }
+    }
+
+    public void setBalanceFromDB(Double balance) {
         this.balance = balance;
     }
 
@@ -61,10 +68,7 @@ public class Client implements Comparable, Serializable {
     }
 
     public Double getBalance() {
-        balance = 0.00;
-        for (Account account : accounts) {
-            balance += account.getBalance();
-        }
+
         return balance;
     }
 

@@ -12,6 +12,7 @@ public class CheckingAccount extends AbstractAccount implements Comparable {
     @NoDB
     private double amount;
 
+
     public Double getOverdraft() {
         return overdraft;
     }
@@ -73,6 +74,7 @@ public class CheckingAccount extends AbstractAccount implements Comparable {
         double withdraw = balance - x;
         if (withdraw >= overdraft) {
             balance = withdraw;
+
         } else
             throw new OverdraftLimitExceededException(balance, amount);
     }

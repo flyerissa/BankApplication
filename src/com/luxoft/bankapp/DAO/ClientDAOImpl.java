@@ -38,7 +38,7 @@ public class ClientDAOImpl implements ClientDAO {
                 client.setId(client_id);
                 client.setFullName(clientName);
                 client.setBank(bank);
-                client.setBalance(client_balance);
+                client.setBalanceFromDB(client_balance);
             }
         }
         return client;
@@ -129,14 +129,14 @@ public class ClientDAOImpl implements ClientDAO {
     }
 
     private void updateClient(Client client) throws SQLException {
-        final String sql = "UPDATE  CLIENT SET name = ?, bank_id = ?, gender = ?, phone = ?, city = ?, balance = ?," +
+        final String sql2 = "UPDATE  CLIENT SET name = ?, bank_id = ?, gender = ?, phone = ?, city = ?, balance = ?," +
                 "overdraft = ? WHERE id = ?";
 
-        final String sql2 = "UPDATE ACCOUNT SET client_id = ?, type  = ?, balance = ?, overdraft = ?";
+        final String sql1 = "UPDATE ACCOUNT SET client_id = ?, type  = ?, balance = ?, overdraft = ?";
 
         try (Connection connection = dataSource.getConnection();
-             final PreparedStatement stmt = connection.prepareStatement(sql);
-             final PreparedStatement statement = connection.prepareStatement(sql2);
+             final PreparedStatement stmt = connection.prepareStatement(sql2);
+             final PreparedStatement statement = connection.prepareStatement(sql1)
         ) {
             connection.setAutoCommit(false);
             stmt.setString(1, client.getFullName());
@@ -228,5 +228,6 @@ public class ClientDAOImpl implements ClientDAO {
         }
         return client.getAccounts();
     }
+
 
 }
