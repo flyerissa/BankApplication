@@ -93,25 +93,7 @@ public class BankService {
         return bank;
     }
 
-    /*public static void addClient(Bank bank, Client client) throws ClientExistsException {
-        int size = bank.getClients().size();
-        String nextName = client.getFullName();
-        Map<String, Client> list = bank.getClients();
 
-        if (size > 0) {
-            for (Client existingClient : list) {
-                if (existingClient.getFullName().equals(nextName)) {
-                    throw new ClientExistsException();
-                }
-            }
-
-            list.add(client);
-
-        } else
-            list.add(client);
-    }
-
-*/
     public void printMaximumAmountToWithdraw(Bank b) {
         for (Client c : b.getClients().values()) {
             System.out.println(c.getActiveAccount().maximumAmountToWithdraw());
