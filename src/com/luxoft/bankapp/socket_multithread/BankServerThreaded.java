@@ -12,12 +12,15 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class BankServerThreaded {
     private final int PORT = 8080;
-    private final int POOL_SIZE = 5;
-    private final boolean running = true;
-    private AtomicInteger counter = new AtomicInteger(0);
+    private final int POOL_SIZE = 3;
 
     private final ServerSocket serverSocket;
     private final ExecutorService pool;
+    private static AtomicInteger counter = new AtomicInteger(0);
+
+    public static AtomicInteger getCounter() {
+        return counter;
+    }
 
     public BankServerThreaded() throws IOException {
         serverSocket = new ServerSocket(PORT);
@@ -25,16 +28,33 @@ public class BankServerThreaded {
     }
 
     public void serve() {
-        while (running) {
-            try {
-                Socket clientSocket = serverSocket.accept();
-                counter.incrementAndGet();
-                pool.execute(new ServerThread(clientSocket));
-                counter.decrementAndGet();
 
+        while (true) {
+            try {
+                Thread t = new Thread(new BankServerMonitor(this));
+                t.setDaemon(true);
+                t.start();
+                System.out.println("Waiting for connection");
+                Socket clientSocket = serverSocket.accept();
+                System.out.println(counter.incrementAndGet());
+                pool.execute(new ServerThread(clientSocket));
             } catch (IOException e) {
                 pool.shutdown();
             }
         }
+    }
+
+
+    public static void main(String[] args) {
+        try {
+            BankServerThreaded bankServerThreaded = new BankServerThreaded();
+
+            bankServerThreaded.serve();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

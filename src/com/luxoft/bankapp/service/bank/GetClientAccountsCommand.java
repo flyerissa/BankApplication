@@ -16,6 +16,7 @@ public class GetClientAccountsCommand implements Command {
         for (Account a : BankCommander.getActiveClient().getAccounts()) {
             if (a.getId().equals(Integer.parseInt(result))) {
                 BankCommander.getActiveClient().setActiveAccount(a);
+                System.out.println("Account " + result + " was selected");
             } else {
                 System.out.println("Incorrect id, please retry!");
                 return;

@@ -31,7 +31,7 @@ public class WithdrawCommand implements Command {
         try {
             BankService.getInstance().withdrawAccount(current, Double.parseDouble(sum));
             BankService.getInstance().saveOrUpdateClientToDB(current);
-            System.out.println("Success!");
+            System.out.println("Success!Balance is " + current.getActiveAccount().getBalance());
         } catch (NotEnoughFundsException e) {
             e.printStackTrace();
         } catch (SQLException e) {

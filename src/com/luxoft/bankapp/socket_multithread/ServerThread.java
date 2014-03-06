@@ -14,7 +14,6 @@ import com.luxoft.bankapp.ui.BankCommander;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 
@@ -22,7 +21,7 @@ import java.sql.SQLException;
  * Created by User on 06.03.14.
  */
 public class ServerThread implements Runnable {
-    ServerSocket providerSocket;
+    //ServerSocket providerSocket;
     ObjectOutputStream out;
     ObjectInputStream in;
     String message;
@@ -35,11 +34,6 @@ public class ServerThread implements Runnable {
     @Override
     public void run() {
         try {
-            // 1. creating a server socket
-            providerSocket = new ServerSocket(2004, 10);
-            // 2. Wait for connection
-            System.out.println("Waiting for connection");
-            clientSocket = providerSocket.accept();
             System.out.println("Connection received from "
                     + clientSocket.getInetAddress().getHostName());
             // 3. get Input and Output streams
@@ -50,6 +44,7 @@ public class ServerThread implements Runnable {
             // 4. The two parts communicate via the input and output streams
 
             try {
+                System.out.println(BankServerThreaded.getCounter().decrementAndGet());
                 sendMessage("Connected. Please introduce youself");
                 message = (String) in.readObject();
                 if (message.equalsIgnoreCase("Bankomat")) {
@@ -69,7 +64,7 @@ public class ServerThread implements Runnable {
             try {
                 in.close();
                 out.close();
-                providerSocket.close();
+                clientSocket.close();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

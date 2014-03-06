@@ -1,43 +1,54 @@
 package com.luxoft.bankapp.socket_multithread;
 
+import com.luxoft.bankapp.domain.bank.Bank;
+import com.luxoft.bankapp.domain.bank.Client;
+import com.luxoft.bankapp.exceptions.BankNotFoundException;
+import com.luxoft.bankapp.service.bank.BankService;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.rmi.UnknownHostException;
-import java.util.Scanner;
 
 /**
  * Created by User on 06.03.14.
  */
-public class BankClient2 {
+public class BankClientMock extends Thread {
+    private Client client;
+    private Bank bank;
+
     Socket requestSocket;
     ObjectOutputStream out;
     ObjectInputStream in;
     String message;
     static final String SERVER = "localhost";
-    Scanner sc = new Scanner(System.in);
 
-
-    void run() {
+    public void run() {
         try {
-            // 1. creating a socket to connect to the server
             requestSocket = new Socket(SERVER, 8080);
-            System.out.println("Connected to localhost in port 2004");
+            System.out.println("Connected to localhost in port 8080");
             // 2. get Input and Output streams
             out = new ObjectOutputStream(requestSocket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(requestSocket.getInputStream());
-            // 3: Communicating with the server
             while (true) {
                 try {
                     message = (String) in.readObject();
-                    System.out.println("server > " + message);
-                    message = sc.nextLine();
-                    sendMessage(message);
+                    sendMessage("Bankomat");
+                    message = (String) in.readObject();
+                    sendMessage(bank.getName());
+                    message = (String) in.readObject();
+                    sendMessage(client.getFullName());
+                    message = (String) in.readObject();
+                    sendMessage("3");
+                    message = (String) in.readObject();
+                    sendMessage("withdraw");
+                    message = (String) in.readObject();
+                    sendMessage("1000");
+                    message = (String) in.readObject();
+                    sendMessage("Bye");
+
                     if (message.equals("bye")) break;
-                } catch (UnknownHostException e) {
-                    System.err.println("You are trying to connect to unknown host");
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -52,11 +63,18 @@ public class BankClient2 {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
+
     }
 
-    public void runServer() {
-
+    public BankClientMock(Client client) {
+        this.client = client;
+        try {
+            bank = BankService.getInstance().findBankByName("Bank");
+        } catch (BankNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     void sendMessage(final String msg) {
@@ -67,10 +85,5 @@ public class BankClient2 {
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
-    }
-
-    public static void main(final String args[]) {
-        BankClient2 client = new BankClient2();
-        client.run();
     }
 }
