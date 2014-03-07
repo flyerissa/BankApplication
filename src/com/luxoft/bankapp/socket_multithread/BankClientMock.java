@@ -3,6 +3,7 @@ package com.luxoft.bankapp.socket_multithread;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
 import com.luxoft.bankapp.exceptions.BankNotFoundException;
+import com.luxoft.bankapp.exceptions.ClientNotFoundException;
 import com.luxoft.bankapp.service.bank.BankService;
 
 import java.io.IOException;
@@ -23,37 +24,45 @@ public class BankClientMock extends Thread {
     String message;
     static final String SERVER = "localhost";
 
+
     public void run() {
-        try {
+        synchronized (this) {
+            try {
             requestSocket = new Socket(SERVER, 8080);
             System.out.println("Connected to localhost in port 8080");
             // 2. get Input and Output streams
             out = new ObjectOutputStream(requestSocket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(requestSocket.getInputStream());
-            while (true) {
+
                 try {
                     message = (String) in.readObject();
+                    System.out.println(message);
                     sendMessage("Bankomat");
                     message = (String) in.readObject();
+                    System.out.println(message);
                     sendMessage(bank.getName());
                     message = (String) in.readObject();
+                    System.out.println(message);
                     sendMessage(client.getFullName());
                     message = (String) in.readObject();
+                    System.out.println(message);
                     sendMessage("3");
                     message = (String) in.readObject();
+                    System.out.println(message);
                     sendMessage("withdraw");
                     message = (String) in.readObject();
-                    sendMessage("1000");
+                    System.out.println(message);
+                    sendMessage("10");
                     message = (String) in.readObject();
+                    System.out.println(message);
                     sendMessage("Bye");
 
-                    if (message.equals("bye")) break;
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-            }
-        } catch (IOException e) {
+
+            } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -64,6 +73,7 @@ public class BankClientMock extends Thread {
                 e.printStackTrace();
             }
 
+        }
         }
 
     }
@@ -86,4 +96,10 @@ public class BankClientMock extends Thread {
             ioException.printStackTrace();
         }
     }
+
+    public static void main(String[] args) throws BankNotFoundException, ClientNotFoundException {
+        BankClientMock clientMock = new BankClientMock(BankService.getInstance().findClientByName(BankService.getInstance().findBankByName("Bank"), "JJ KK"));
+        clientMock.run();
+    }
+
 }

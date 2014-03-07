@@ -192,7 +192,7 @@ public class BankService {
 
     }
 
-    public void withdrawAccount(Client client, double sum) throws NotEnoughFundsException {
+    public synchronized void withdrawAccount(Client client, double sum) throws NotEnoughFundsException {
         Account account = client.getActiveAccount();
         account.withdraw(sum);
         client.setBalanceFromDB(client.getBalance() - sum);

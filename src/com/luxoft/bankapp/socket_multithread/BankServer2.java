@@ -31,7 +31,7 @@ public class BankServer2 {
     void run() {
         try {
             // 1. creating a server socket
-            providerSocket = new ServerSocket(2004, 10);
+            providerSocket = new ServerSocket(8080, 10);
             // 2. Wait for connection
             System.out.println("Waiting for connection");
             connection = providerSocket.accept();
