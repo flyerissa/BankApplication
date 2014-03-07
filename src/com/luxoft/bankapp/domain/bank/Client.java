@@ -26,6 +26,13 @@ public class Client implements Comparable, Serializable {
     private Bank bank;
     private Double balance;
 
+    public Client() {
+        balance = 0.00;
+        for (Account account : accounts) {
+            balance += account.getBalance();
+        }
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -42,13 +49,6 @@ public class Client implements Comparable, Serializable {
 
     public Bank getBank() {
         return bank;
-    }
-
-    public void setBalance() {
-        balance = 0.00;
-        for (Account account : accounts) {
-            balance += account.getBalance();
-        }
     }
 
     public void setBalanceFromDB(Double balance) {
@@ -180,6 +180,7 @@ public class Client implements Comparable, Serializable {
             throw new FeedException("Account type not found " + accountType);
         }
         accounts.add(acc);
+        balance += acc.getBalance();
         return acc;
     }
 
@@ -205,8 +206,10 @@ public class Client implements Comparable, Serializable {
 
         if (accountType.equals("C")) {
             activeAccount = new CheckingAccount(sum, overdraft);
+            balance += activeAccount.getBalance();
         } else if (accountType.equals("S")) {
             activeAccount = new SavingAccount(sum);
+            balance += activeAccount.getBalance();
         } else
             System.out.println("Enter C  - for checking account or S - for saving");
 

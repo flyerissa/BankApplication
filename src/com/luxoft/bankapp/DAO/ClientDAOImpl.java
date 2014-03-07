@@ -1,6 +1,7 @@
 package com.luxoft.bankapp.DAO;
 
 import com.luxoft.bankapp.domain.bank.*;
+import com.luxoft.bankapp.exceptions.ClientExistsException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -65,7 +66,6 @@ public class ClientDAOImpl implements ClientDAO {
         return list;
     }
 
-
     @Override
     public void save(Client client) throws SQLException {
         if (client.getId() != null) {
@@ -76,53 +76,55 @@ public class ClientDAOImpl implements ClientDAO {
     }
 
     private void insertClient(Client client) throws SQLException {
-        final String sql = "INSERT INTO CLIENT (NAME,BANK_ID, balance) VALUES (?,?, ?)";
+        final String sql = "INSERT INTO CLIENT (NAME,BANK_ID, balance) VALUES (?,?,?)";
         final String sql2 = "INSERT INTO ACCOUNT (client_id,type,balance,overdraft)VALUES (?,?,?,?)";
 
         dataSource.getConnection().setAutoCommit(false);
         ResultSet rs;
-
-
         try (Connection connection = dataSource.getConnection();
-             final PreparedStatement stmt = connection.prepareStatement(sql)
+             final PreparedStatement stmt = connection.prepareStatement(sql);
+             final PreparedStatement statement = connection.prepareStatement(sql2)
 
         ) {
             stmt.setString(1, client.getFullName());
             stmt.setInt(2, client.getBank().getId());
             stmt.setDouble(3, client.getBalance());
             stmt.executeUpdate();
+            //dataSource.getConnection().commit();
             if (stmt.executeUpdate() == 0) {
                 dataSource.getConnection().rollback();
-                throw new SQLException("Impossible to save in DB! Transaction is being rolled back!");
-            }
-            rs = stmt.getGeneratedKeys();
-            if (rs != null && rs.next()) {
-                Integer clientId = rs.getInt(1);
-                client.setId(clientId);
-            }
-        }
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement statement = connection.prepareStatement(sql2)) {
+                throw new SQLException("Impossible to save Client in DB! Transaction is being rolled back!");
+            } else {
+                rs = stmt.getGeneratedKeys();
 
-            for (Account a : client.getAccounts()) {
-                statement.setInt(1, client.getId());
-                if (a instanceof CheckingAccount) {
-                    statement.setString(2, "checking");
-                    statement.setDouble(3, a.getBalance());
-                    statement.setDouble(4, ((CheckingAccount) a).getOverdraft());
+                if (rs != null && rs.next()) {
+                    Integer clientId = rs.getInt(1);
+                    client.setId(clientId);
+                    //dataSource.getConnection().commit();
+                    for (Account a : client.getAccounts()) {
+                        statement.setInt(1, client.getId());
+                        if (a instanceof CheckingAccount) {
+                            statement.setString(2, "checking");
+                            statement.setDouble(3, a.getBalance());
+                            statement.setDouble(4, ((CheckingAccount) a).getOverdraft());
+                        } else {
+                            statement.setString(2, "saving");
+                            statement.setDouble(3, a.getBalance());
+                            statement.setDouble(4, 0.00);
+                        }
+                    }
+                    statement.executeUpdate();
+                    if (statement.executeUpdate() == 0) {
+                        dataSource.getConnection().rollback();
+                        throw new SQLException("Impossible to save account in DB! Transaction is being rolled back!");
+                    } else {
+                        dataSource.getConnection().commit();
+                    }
                 } else {
-                    statement.setString(2, "saving");
-                    statement.setDouble(3, a.getBalance());
-                    statement.setDouble(4, 0.00);
+                    dataSource.getConnection().rollback();
+                    throw new SQLException("Impossible to save in DB! Cant get clientID!");
                 }
             }
-            statement.executeUpdate();
-            if (statement.executeUpdate() == 0) {
-                dataSource.getConnection().rollback();
-                throw new SQLException("Impossible to save in DB! Transaction is being rolled back!");
-            }
-
-
         } finally {
             dataSource.getConnection().setAutoCommit(true);
         }
@@ -131,7 +133,6 @@ public class ClientDAOImpl implements ClientDAO {
     private void updateClient(Client client) throws SQLException {
         final String sql2 = "UPDATE  CLIENT SET name = ?, bank_id = ?, gender = ?, phone = ?, city = ?, balance = ?," +
                 "overdraft = ? WHERE id = ?";
-
         final String sql1 = "UPDATE ACCOUNT SET client_id = ?, type  = ?, balance = ?, overdraft = ?";
 
         try (Connection connection = dataSource.getConnection();
@@ -150,24 +151,28 @@ public class ClientDAOImpl implements ClientDAO {
             int result = stmt.executeUpdate();
             if (result == 0) {
                 connection.rollback();
-                throw new SQLException("Impossible to save in DB! Transaction is being rolled back!");
-            }
-            for (Account a : client.getAccounts()) {
-                statement.setInt(1, client.getId());
-                if (a instanceof CheckingAccount) {
-                    statement.setString(2, "checking");
-                    statement.setDouble(3, a.getBalance());
-                    statement.setDouble(4, ((CheckingAccount) a).getOverdraft());
-                } else {
-                    statement.setString(2, "saving");
-                    statement.setDouble(3, a.getBalance());
-                    statement.setDouble(4, 0.00);
+                throw new SQLException("Impossible to update client in DB! Transaction is being rolled back!");
+            } else {
+                dataSource.getConnection().commit();
+                for (Account a : client.getAccounts()) {
+                    statement.setInt(1, client.getId());
+                    if (a instanceof CheckingAccount) {
+                        statement.setString(2, "checking");
+                        statement.setDouble(3, a.getBalance());
+                        statement.setDouble(4, ((CheckingAccount) a).getOverdraft());
+                    } else {
+                        statement.setString(2, "saving");
+                        statement.setDouble(3, a.getBalance());
+                        statement.setDouble(4, 0.00);
+                    }
                 }
-            }
-            statement.executeUpdate();
-            if (statement.executeUpdate() == 0) {
-                connection.rollback();
-                throw new SQLException("Impossible to save in DB! Transaction is being rolled back!");
+                statement.executeUpdate();
+                if (statement.executeUpdate() == 0) {
+                    connection.rollback();
+                    throw new SQLException("Impossible to update account in DB! Transaction is being rolled back!");
+                } else {
+                    dataSource.getConnection().commit();
+                }
             }
 
         } finally {
@@ -185,17 +190,22 @@ public class ClientDAOImpl implements ClientDAO {
             dataSource.getConnection().setAutoCommit(false);
             deleteAccountStmt.setInt(1, client.getId());
             deleteAccountStmt.executeUpdate();
+            if (deleteAccountStmt.executeUpdate() == 0) {
+                connection.rollback();
+                throw new SQLException("Impossible to delete account from DB! Transaction is being rolled back!");
+            } else {
+                connection.commit();
+            }
             deleteClientStmt.setInt(1, client.getId());
             deleteClientStmt.executeUpdate();
+            if (deleteClientStmt.executeUpdate() == 0) {
+                connection.rollback();
+                throw new SQLException("Impossible to delete client from DB! Transaction is being rolled back!");
+            } else {
+                connection.commit();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-
-            try {
-                System.err.print("Transaction is being rolled back");
-                dataSource.getConnection().rollback();
-            } catch (SQLException excep) {
-                e.printStackTrace();
-            }
 
         } finally {
             dataSource.getConnection().setAutoCommit(true);
@@ -229,5 +239,24 @@ public class ClientDAOImpl implements ClientDAO {
         return client.getAccounts();
     }
 
+    public static void main(String[] args) throws ClientExistsException {
+        Client client = new Client();
+        Bank bank;
+        try {
+            bank = new BankDAOImpl().getBankByName("Bank");
+            bank.setName("Test bank");
+            client.setFullName("Test inserting");
+            Account account = client.addAccount("S", 5000, 0);
+            client.addAccountToSet(account);
+            bank.addClient(client);
+            System.out.println(client.getBalance());
+            new ClientDAOImpl().insertClient(client);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
 }

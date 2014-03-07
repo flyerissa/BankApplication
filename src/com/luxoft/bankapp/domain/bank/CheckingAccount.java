@@ -50,7 +50,8 @@ public class CheckingAccount extends AbstractAccount implements Comparable {
 
     @Override
     public int hashCode() {
-        return (int) (id ^ (id >>> 32));
+        long temp = Double.doubleToLongBits(balance);
+        return (int) (temp ^ (temp >>> 32));
     }
 
     public void setOverdraft(double x) {
