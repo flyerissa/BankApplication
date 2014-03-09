@@ -13,19 +13,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class BankDAOImpl implements BankDao {
-    private DataSource dataSource;
-
-    public BankDAOImpl() {
-        this.dataSource = new DataSource();
-    }
+//FIXME
+public class BankDAOImpl extends BaseDAO implements BankDao {
 
     @Override
     public Bank getBankByName(String name) throws SQLException {
         Bank bank = null;
         final String sql = "SELECT id, name FROM BANK WHERE name = ?";
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement stmt = connection.prepareStatement(sql);
+        Connection connection = getDataSource().getConnection();
+        try (
+                final PreparedStatement stmt = connection.prepareStatement(sql)
         ) {
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
@@ -46,35 +43,34 @@ public class BankDAOImpl implements BankDao {
     public BankInfo getBankInfo(String name) throws SQLException {
         BankInfo bankInfo = null;
         Bank current = getBankByName(name);
-        final String sql = "select  count(c.id) as number_of_clients From Client as c " +
+        final String numberClientsSQL = "select  count(c.id) as number_of_clients From Client as c " +
                 " Join Bank  on c.bank_id = ? ";
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement stmt = connection.prepareStatement(sql);
+        final String balanceSQL = "Select sum(c.balance) as total from client as c  where bank_id = ?";
+        final String orderClientsSQL = "select city, name, id from client  where bank_id = ? order by city";
+        Connection connection = getDataSource().getConnection();
+        try (
+                final PreparedStatement numberStmt = connection.prepareStatement(numberClientsSQL);
+                final PreparedStatement balanceStmt = connection.prepareStatement(balanceSQL);
+                final PreparedStatement cityStmt = connection.prepareStatement(orderClientsSQL)
         ) {
-            stmt.setInt(1, current.getId());
-            ResultSet rs = stmt.executeQuery();
-            if (rs != null && rs.next()) {
-                bankInfo = new BankInfo();
-                bankInfo.setNumberOfClients(rs.getInt("number_of_clients"));
+            numberStmt.setInt(1, current.getId());
+            ResultSet rs = numberStmt.executeQuery();
+            if (!rs.next()) {
+                throw new SQLException("Impossible get number of clients!");
             }
-        }
-        final String sql2 = "Select sum(c.balance) as total from client as c  where bank_id = ?";
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement stmt2 = connection.prepareStatement(sql2);) {
-            stmt2.setInt(1, current.getId());
-            ResultSet rs2 = stmt2.executeQuery();
-            if (rs2 != null && rs2.next()) {
-                bankInfo.setTotalAccountSum(rs2.getDouble("total"));
+            bankInfo = new BankInfo();
+            bankInfo.setNumberOfClients(rs.getInt("number_of_clients"));
+            balanceStmt.setInt(1, current.getId());
+            ResultSet rs2 = balanceStmt.executeQuery();
+            if (!rs2.next()) {
+                throw new SQLException("Impossible get balance!");
             }
+            bankInfo.setTotalAccountSum(rs2.getDouble("total"));
 
-        }
-        final String sql3 = "select city, name, id from client  where bank_id = ? order by city";
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement stmt3 = connection.prepareStatement(sql3);) {
-            stmt3.setInt(1, current.getId());
-            ResultSet rs3 = stmt3.executeQuery();
+            cityStmt.setInt(1, current.getId());
+            ResultSet rs3 = cityStmt.executeQuery();
             List<Client> clients = new ArrayList<>();
-            while (rs3 != null && rs3.next()) {
+            while (rs3.next()) {
                 Client client = new Client();
                 client.setId(rs3.getInt("id"));
                 client.setFullName(rs3.getString("name"));
@@ -97,6 +93,4 @@ public class BankDAOImpl implements BankDao {
         }
         return bankInfo;
     }
-
-
 }

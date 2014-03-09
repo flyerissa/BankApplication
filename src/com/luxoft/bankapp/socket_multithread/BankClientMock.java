@@ -28,12 +28,12 @@ public class BankClientMock extends Thread {
     public void run() {
         synchronized (this) {
             try {
-            requestSocket = new Socket(SERVER, 8080);
-            System.out.println("Connected to localhost in port 8080");
-            // 2. get Input and Output streams
-            out = new ObjectOutputStream(requestSocket.getOutputStream());
-            out.flush();
-            in = new ObjectInputStream(requestSocket.getInputStream());
+                requestSocket = new Socket(SERVER, 8080);
+                System.out.println("Connected to localhost in port 8080");
+                // 2. get Input and Output streams
+                out = new ObjectOutputStream(requestSocket.getOutputStream());
+                out.flush();
+                in = new ObjectInputStream(requestSocket.getInputStream());
 
                 try {
                     message = (String) in.readObject();
@@ -63,17 +63,17 @@ public class BankClientMock extends Thread {
                 }
 
             } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                out.close();
-                in.close();
-                requestSocket.close();
-            } catch (IOException e) {
                 e.printStackTrace();
-            }
+            } finally {
+                try {
+                    out.close();
+                    in.close();
+                    requestSocket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-        }
+            }
         }
 
     }
@@ -98,7 +98,7 @@ public class BankClientMock extends Thread {
     }
 
     public static void main(String[] args) throws BankNotFoundException, ClientNotFoundException {
-        BankClientMock clientMock = new BankClientMock(BankService.getInstance().findClientByName(BankService.getInstance().findBankByName("Bank"), "JJ KK"));
+        BankClientMock clientMock = new BankClientMock(BankService.getInstance().findClientByNameAsActive(BankService.getInstance().findBankByName("Bank"), "JJ KK"));
         clientMock.run();
     }
 

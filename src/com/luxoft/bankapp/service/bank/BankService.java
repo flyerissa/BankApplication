@@ -101,23 +101,33 @@ public class BankService {
     }
 
 
-    public Client findClientByName(Bank bank, String name) throws ClientNotFoundException {
-       /* System.out.println("Enter client name to continue: ");
-        Scanner sc = new Scanner(System.in);
-        String client = sc.nextLine();
-        */
+    public Client findClientByNameAsActive(Bank bank, String name) throws ClientNotFoundException {
+
         Client foundClient = null;
         try {
             foundClient = new ClientDAOImpl().findClientByName(bank, name);
             if (foundClient == null) {
                 throw new ClientNotFoundException("There is no such client in DB! Please retry");
-            } else {
-                BankCommander.setActiveClient(foundClient);
+            }
+            BankCommander.setActiveClient(foundClient);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return foundClient;
+    }
+
+    public Client selectClient(Bank bank, String name) throws ClientNotFoundException {
+        Client foundClient = null;
+        try {
+            foundClient = new ClientDAOImpl().findClientByName(bank, name);
+            if (foundClient == null) {
+                throw new ClientNotFoundException("There is no such client in DB! Please retry");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return foundClient;
+
     }
 
 
@@ -208,6 +218,16 @@ public class BankService {
 
     public Client getClient(Bank bank, String clientName) {
         return bank.getClients().get(clientName);
+    }
+
+    public Account findAccountById(Client client, Integer id) {
+
+        for (Account a : client.getAccounts()) {
+            if (id.equals(a.getId())) {
+                return a;
+            }
+        }
+        return null;
     }
 
 }

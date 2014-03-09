@@ -11,23 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by User on 21.02.14.
- */
-public class ClientDAOImpl implements ClientDAO {
-    private DataSource dataSource;
-
-    public ClientDAOImpl() {
-        this.dataSource = new DataSource();
-    }
+public class ClientDAOImpl extends BaseDAO implements ClientDAO {
 
     @Override
     public Client findClientByName(Bank bank, String name) throws SQLException {
         Client client = null;
         final String sql = "SELECT c.name, c.id, c.balance  FROM CLIENT as c JOIN BANK as b ON c.bank_id = b.id" +
                 " WHERE bank_id = ? AND c.name = ?";
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement stmt = connection.prepareStatement(sql)) {
+        Connection connection = getDataSource().getConnection();
+        try (final PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, bank.getId());
             stmt.setString(2, name);
             ResultSet rs = stmt.executeQuery();
@@ -50,10 +42,10 @@ public class ClientDAOImpl implements ClientDAO {
         List<Client> list = new ArrayList<>();
         final String sql = "SELECT c.id, c.name FROM CLIENT as c JOIN BANK as b" +
                 " ON b.id = c.bank_id WHERE b.id = ?";
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement stmt = connection.prepareStatement(sql)) {
+        Connection connection = getDataSource().getConnection();
+        try (final PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, bank.getId());
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();//TODO: close??
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String name = rs.getString("name");
@@ -78,8 +70,7 @@ public class ClientDAOImpl implements ClientDAO {
     private void insertClient(Client client) throws SQLException {
         final String clientSQL = "INSERT INTO CLIENT (NAME,BANK_ID, balance) VALUES (?,?,?)";
         final String accountSQL = "INSERT INTO ACCOUNT (client_id,type,balance,overdraft)VALUES (?,?,?,?)";
-        dataSource.getConnection().setAutoCommit(false);
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = getDataSource().getConnection();
              final PreparedStatement clientStmt = connection.prepareStatement(clientSQL);
              final PreparedStatement accountStmt = connection.prepareStatement(accountSQL)
 
@@ -90,7 +81,7 @@ public class ClientDAOImpl implements ClientDAO {
             if (clientStmt.executeUpdate() == 0) {
                 throw new SQLException("Impossible to save Client in DB! Transaction is being rolled back!");
             }
-            ResultSet rs = clientStmt.getGeneratedKeys();
+            ResultSet rs = clientStmt.getGeneratedKeys();//TODO close?
             if (rs == null || !rs.next()) {
                 throw new SQLException("Impossible to save in DB! Cant get clientID!");
             }
@@ -111,12 +102,6 @@ public class ClientDAOImpl implements ClientDAO {
             if (accountStmt.executeUpdate() == 0) {
                 throw new SQLException("Impossible to save account in DB! Transaction is being rolled back!");
             }
-            connection.commit();
-        } catch (SQLException e) {
-            dataSource.getConnection().rollback();
-            throw e;
-        } finally {
-            dataSource.getConnection().setAutoCommit(true);
         }
     }
 
@@ -125,12 +110,12 @@ public class ClientDAOImpl implements ClientDAO {
                 "overdraft = ? WHERE id = ?";
         final String accountUpdateSQL = "UPDATE ACCOUNT SET  type  = ?, balance = ?, overdraft = ? where id = ?";
         final String accountNewSQL = "INSERT INTO ACCOUNT (client_id,type,balance,overdraft)VALUES (?,?,?,?)";
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement clientStmt = connection.prepareStatement(clientSQL);
-             final PreparedStatement accountStmt = connection.prepareStatement(accountUpdateSQL);
-             final PreparedStatement accountNewStmt = connection.prepareStatement(accountNewSQL);
+        Connection connection = getDataSource().getConnection();
+        try (
+                final PreparedStatement clientStmt = connection.prepareStatement(clientSQL);
+                final PreparedStatement accountStmt = connection.prepareStatement(accountUpdateSQL);
+                final PreparedStatement accountNewStmt = connection.prepareStatement(accountNewSQL);
         ) {
-            connection.setAutoCommit(false);
             clientStmt.setString(1, client.getFullName());
             clientStmt.setInt(2, client.getBank().getId());
             clientStmt.setString(3, String.valueOf(client.getGender()));
@@ -173,12 +158,6 @@ public class ClientDAOImpl implements ClientDAO {
                     }
                 }
             }
-            dataSource.getConnection().commit();
-        } catch (SQLException e) {
-            dataSource.getConnection().rollback();
-            throw e;
-        } finally {
-            dataSource.getConnection().setAutoCommit(true);
         }
     }
 
@@ -186,10 +165,10 @@ public class ClientDAOImpl implements ClientDAO {
     public void remove(Client client) throws SQLException {
         final String deleteAccountSQL = "DELETE FROM Account  WHERE client_id = ?";
         final String deleteClientSQL = "DELETE FROM CLIENT WHERE id = ?";
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement deleteAccountStmt = connection.prepareStatement(deleteAccountSQL);
-             final PreparedStatement deleteClientStmt = connection.prepareStatement(deleteClientSQL)) {
-            dataSource.getConnection().setAutoCommit(false);
+        Connection connection = getDataSource().getConnection();
+        try (
+                final PreparedStatement deleteAccountStmt = connection.prepareStatement(deleteAccountSQL);
+                final PreparedStatement deleteClientStmt = connection.prepareStatement(deleteClientSQL)) {
             deleteAccountStmt.setInt(1, client.getId());
             if (deleteAccountStmt.executeUpdate() == 0) {
                 throw new SQLException("Impossible to delete account from DB! Transaction is being rolled back!");
@@ -198,20 +177,15 @@ public class ClientDAOImpl implements ClientDAO {
             if (deleteClientStmt.executeUpdate() == 0) {
                 throw new SQLException("Impossible to delete client from DB! Transaction is being rolled back!");
             }
-            connection.commit();
-        } catch (SQLException e) {
-            dataSource.getConnection().rollback();
-            throw e;
-        } finally {
-            dataSource.getConnection().setAutoCommit(true);
         }
     }
 
     public Set<Account> getAllAccounts(Client client) throws SQLException {
         Account account;
         final String getAccounts = "SELECT id, type, balance, overdraft from ACCOUNT where client_id = ?";
-        try (Connection connection = dataSource.getConnection();
-             final PreparedStatement statement = connection.prepareStatement(getAccounts)) {
+        Connection connection = getDataSource().getConnection();
+        try (
+                final PreparedStatement statement = connection.prepareStatement(getAccounts)) {
             statement.setInt(1, client.getId());
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
@@ -234,12 +208,12 @@ public class ClientDAOImpl implements ClientDAO {
     }
 
     public static void main(String[] args) throws ClientExistsException {
-        //Client client = new Client();
+        /*//Client client = new Client();
         Bank bank;
         try {
             bank = new BankDAOImpl().getBankByName("Bank");
             bank.setName("Test bank");
-            Client client = new ClientDAOImpl().findClientByName(bank, "Test inserting");
+            Client client = new ClientDAOImpl().findClientByNameAsActive(bank, "Test inserting");
             //client.setFullName("Test inserting");
             Account account = client.addAccount("S", 3000, 0);
             client.addAccountToSet(account);
@@ -250,7 +224,7 @@ public class ClientDAOImpl implements ClientDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+*/
 
     }
 

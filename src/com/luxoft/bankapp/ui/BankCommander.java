@@ -55,7 +55,7 @@ public class BankCommander {
         });
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws Exception {
 
 
         System.out.println("1 - select bank \n 2 - select client \n 3 - get accounts \n 4 - deposit  \n 5 - withdraw  \n 6 - transfer  \n 7 - exit");

@@ -99,7 +99,7 @@ public class BankServer {
                 sendMessage("Bank " + current.getName() + " was chose. Please enter name of the client");
                 message = (String) in.readObject();
                 try {
-                    Client client = instance.findClientByName(current, message);
+                    Client client = instance.findClientByNameAsActive(current, message);
                     client.setBank(BankCommander.getActiveBank());
                     instance.getAllAccounts(client);
                     sendMessage("Client" + client.getFullName() + " was selected. Please choose active account by its id: " + client.getAccounts());
@@ -154,7 +154,6 @@ public class BankServer {
     }
 
 
-
     private void selectBankForInfo() throws IOException, ClassNotFoundException {
         if (BankCommander.getActiveBank() == null) {
             sendMessage("Hello Office. Please enter name of the bank");
@@ -169,7 +168,7 @@ public class BankServer {
                         ", list of clients sorted by city: " + bankInfo.getClientsByCity() +
                         "\n Please enter the name of client to recieve the data: ");
                 message = (String) in.readObject();
-                Client client = BankService.getInstance().findClientByName(current, message);
+                Client client = BankService.getInstance().findClientByNameAsActive(current, message);
                 sendMessage("Info for client: " + client.getFullName() + ". Accounts: " + client.getAccounts() +
                         ". Total balance: " + client.getBalance());
             } catch (BankNotFoundException e) {

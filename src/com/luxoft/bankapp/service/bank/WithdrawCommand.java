@@ -1,19 +1,20 @@
 package com.luxoft.bankapp.service.bank;
 
+import com.luxoft.bankapp.DAO.TransactionManager;
 import com.luxoft.bankapp.commands.Command;
 import com.luxoft.bankapp.domain.bank.Account;
 import com.luxoft.bankapp.domain.bank.Client;
 import com.luxoft.bankapp.exceptions.NotEnoughFundsException;
 import com.luxoft.bankapp.ui.BankCommander;
 
-import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 public class WithdrawCommand implements Command {
     @Override
-    public void execute() {
-        Client current = BankCommander.getActiveClient();
+    public void execute() throws Exception {
+        final Client current = BankCommander.getActiveClient();
         Set<Account> accountSet = current.getAccounts();
         System.out.println(accountSet);
         System.out.println("Please enter account id to withdraw");
@@ -27,14 +28,19 @@ public class WithdrawCommand implements Command {
             }
         }
         System.out.println("Please enter sum to withdraw!");
-        String sum = new Scanner(System.in).nextLine();
+        final String sum = new Scanner(System.in).nextLine();
         try {
-            BankService.getInstance().withdrawAccount(current, Double.parseDouble(sum));
-            BankService.getInstance().saveOrUpdateClientToDB(current);
+            TransactionManager tm = TransactionManager.getInstance();
+            tm.doInTransaction(new Callable<Void>() {
+                @Override
+                public Void call() throws Exception {
+                    BankService.getInstance().withdrawAccount(current, Double.parseDouble(sum));
+                    BankService.getInstance().saveOrUpdateClientToDB(current);
+                    return null;
+                }
+            });
             System.out.println("Success!Balance is " + current.getBalance());
         } catch (NotEnoughFundsException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
