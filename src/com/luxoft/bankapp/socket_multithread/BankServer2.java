@@ -17,16 +17,19 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by User on 06.03.14.
  */
 public class BankServer2 {
-    ServerSocket providerSocket;
-    Socket connection = null;
-    ObjectOutputStream out;
-    ObjectInputStream in;
-    String message;
+    private ServerSocket providerSocket;
+    private Socket connection = null;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
+    private String message;
+    private static Logger log = Logger.getLogger(BankServer2.class.getName());
 
     void run() {
         try {
@@ -45,20 +48,34 @@ public class BankServer2 {
             // 4. The two parts communicate via the input and output streams
 
             try {
-                sendMessage("Connected. Please introduce youself");
+                sendMessage("Connected. Please introduce yourself");
                 message = (String) in.readObject();
                 if (message.equalsIgnoreCase("Bankomat")) {
-                    selectBank();
+                    bankScenario();
                 } else if (message.equalsIgnoreCase("Office")) {
                     selectBankForInfo();
                 }
 
             } catch (ClassNotFoundException classnot) {
-                System.err.println("Data received in unknown format");
+                log.log(Level.INFO, classnot.getMessage(), classnot);
+            } catch (BankNotFoundException e) {
+                log.log(Level.INFO, e.getMessage(), e);
+                sendMessage(e.getMessage());
+            } catch (ClientNotFoundException e) {
+                log.log(Level.INFO, e.getMessage(), e);
+                sendMessage(e.getMessage());
+            } catch (NotEnoughFundsException e) {
+                log.log(Level.INFO, e.getMessage(), e);
+                sendMessage(e.getMessage());
+            } catch (SQLException e) {
+                log.log(Level.INFO, e.getMessage(), e);
+            } catch (BankInfoException e) {
+                log.log(Level.INFO, e.getMessage(), e);
+                sendMessage(e.getMessage());
             }
 
         } catch (IOException ioException) {
-            ioException.printStackTrace();
+            log.log(Level.INFO, ioException.getMessage(), ioException);
         } finally {
             // 4: Closing connection
             try {
@@ -66,7 +83,7 @@ public class BankServer2 {
                 out.close();
                 providerSocket.close();
             } catch (IOException ioException) {
-                ioException.printStackTrace();
+                log.log(Level.INFO, ioException.getMessage(), ioException);
             }
         }
     }
@@ -77,9 +94,10 @@ public class BankServer2 {
             out.flush();
             System.out.println("server>" + msg);
         } catch (IOException ioException) {
-            ioException.printStackTrace();
+            log.log(Level.INFO, ioException.getMessage(), ioException);
         }
     }
+
 
     public static void main(final String args[]) {
         BankServer2 server = new BankServer2();
@@ -89,98 +107,92 @@ public class BankServer2 {
     }
 
     //FIXME transactonal
-    private void selectBank() throws IOException, ClassNotFoundException {
-        if (BankCommander.getActiveBank() == null) {
-            sendMessage("Hello Bankomat. Please enter name of the bank");
-            message = (String) in.readObject();
-            Bank current;
-            try {
-                BankService instance = BankService.getInstance();
-                current = instance.findBankByName(message);
-                sendMessage("Bank " + current.getName() + " was chose. Please enter name of the client");
-                message = (String) in.readObject();
-                try {
-                    Client client = instance.findClientByNameAsActive(current, message);
-                    client.setBank(BankCommander.getActiveBank());
-                    instance.getAllAccounts(client);
-                    sendMessage("Client" + client.getFullName() + " was selected. Please choose active account by its id: " + client.getAccounts());
-                    message = (String) in.readObject();
-                    for (Account a : client.getAccounts()) {
-                        if (a.getId().equals(Integer.parseInt(message))) {
-                            BankCommander.getActiveClient().setActiveAccount(a);
-                            sendMessage("Account " + a.getId() + " was selected. Please choose the operation - withdraw or balance");
-                            message = (String) in.readObject();
-
-                            if (message.equalsIgnoreCase("withdraw")) {
-                                sendMessage("Please enter the sum to withdraw");
-                                message = (String) in.readObject();
-                                try {
-                                    instance.withdrawAccount(client, Double.parseDouble(message));
-                                    instance.saveOrUpdateClientToDB(client);
-                                    sendMessage(message + " was withdrawen! Current balance is " + client.getActiveAccount().getBalance()
-                                            + ". Enter bye to exit");
-                                    message = (String) in.readObject();
-
-                                } catch (NotEnoughFundsException e) {
-                                    e.printStackTrace();
-                                } catch (SQLException e) {
-                                    sendMessage(e.getMessage());
-                                }
-
-                            } else if (message.equalsIgnoreCase("balance")) {
-
-                                sendMessage("Balance is: " + client.getBalance());
-
-                            } else if (message.equals("bye")) {
-                                sendMessage(message);
-
-
-                            } else {
-                                sendMessage("Please enter correct command!");
-                            }
-
-                        } else {
-                            sendMessage("Incorrect id, please retry!");
-                            return;
-                        }
-                    }
-
-                } catch (ClientNotFoundException e) {
-                    sendMessage(e.getMessage());
-                }
-            } catch (BankNotFoundException e) {
-                e.getMessage();
-            }
-        }
+    private void bankScenario() throws IOException, ClassNotFoundException, SQLException, NotEnoughFundsException, BankNotFoundException, ClientNotFoundException {
+        new ServerSide().selectBank();
+        new ServerSide().selectClient();
+        new ServerSide().processAccount();
     }
 
 
-    private void selectBankForInfo() throws IOException, ClassNotFoundException {
+    private void selectBankForInfo() throws IOException, ClassNotFoundException, BankNotFoundException, BankInfoException, ClientNotFoundException {
         if (BankCommander.getActiveBank() == null) {
             sendMessage("Hello Office. Please enter name of the bank");
             message = (String) in.readObject();
             Bank current;
-            try {
-                current = BankService.getInstance().findBankByName(message);
-                BankInfo bankInfo = BankService.getInstance().getBankInfo(message);
-                sendMessage("Bank " + current.getName() + " was chosen." +
-                        " Number of clients is: " + bankInfo.getNumberOfClients() +
-                        ", total account sum is - " + bankInfo.getTotalAccountSum() +
-                        ", list of clients sorted by city: " + bankInfo.getClientsByCity() +
-                        "\n Please enter the name of client to recieve the data: ");
-                message = (String) in.readObject();
-                Client client = BankService.getInstance().findClientByNameAsActive(current, message);
-                sendMessage("Info for client: " + client.getFullName() + ". Accounts: " + client.getAccounts() +
-                        ". Total balance: " + client.getBalance());
-            } catch (BankNotFoundException e) {
-                e.getMessage();
-            } catch (BankInfoException e) {
-                e.printStackTrace();
-            } catch (ClientNotFoundException e) {
-                e.printStackTrace();
-            }
 
+            current = BankService.getInstance().findBankByName(message);
+            BankInfo bankInfo = BankService.getInstance().getBankInfo(message);
+            sendMessage("Bank " + current.getName() + " was chosen." +
+                    " Number of clients is: " + bankInfo.getNumberOfClients() +
+                    ", total account sum is - " + bankInfo.getTotalAccountSum() +
+                    ", list of clients sorted by city: " + bankInfo.getClientsByCity() +
+                    "\n Please enter the name of client to recieve the data: ");
+            message = (String) in.readObject();
+            Client client = BankService.getInstance().findClientByNameAsActive(current, message);
+            sendMessage("Info for client: " + client.getFullName() + ". Accounts: " + client.getAccounts() +
+                    ". Total balance: " + client.getBalance());
         }
     }
 
+    private class ServerSide {
+        private Bank bank;
+        private Client client;
+        private Account currentAccount;
+        private BankService instance;
+
+        private void selectBank() throws IOException, ClassNotFoundException, BankNotFoundException {
+            sendMessage("Hello Bankomat. Please enter name of the bank");
+            message = (String) in.readObject();
+            instance = BankService.getInstance();
+            bank = instance.findBankByName(message);
+            if (bank != null) {
+                sendMessage("Bank " + bank.getName() + " was chosen. Please enter name of the client");
+            } else {
+                throw new BankNotFoundException("There is no such bank! Please retry!");//TODO: request new bank or exit
+            }
+        }
+
+        private void selectClient() throws IOException, ClassNotFoundException, ClientNotFoundException {
+            message = (String) in.readObject();
+            client = instance.findClientByNameAsActive(bank, message);
+            if (client != null) {
+                client.setBank(bank);
+                instance.getAllAccounts(client);
+                sendMessage("Client" + client.getFullName() + " was selected. Please choose active account by its id: " + client.getAccounts());
+            } else {
+                throw new ClientNotFoundException("There is no such client in DB!");//TODO: retry or exit
+            }
+        }
+
+        private void processAccount() throws IOException, ClassNotFoundException, NotEnoughFundsException, SQLException {
+            message = (String) in.readObject();
+            currentAccount = instance.findAccountById(client, Integer.parseInt(message));
+            if (currentAccount == null) {
+                sendMessage("Incorrect account id or account is not found. please retry!");
+                return;
+            }
+            client.setActiveAccount(currentAccount);
+            sendMessage("Account " + currentAccount.getId() + " was selected. Please choose the operation - withdraw or balance ");
+            message = (String) in.readObject();
+            if (message.equalsIgnoreCase("withdraw")) {
+                sendMessage("Please enter the sum to withdraw");
+                message = (String) in.readObject();
+                instance.withdrawAccount(client, Double.parseDouble(message));
+                instance.saveOrUpdateClientToDB(client);
+                sendMessage(message + " was withdrawen! Current balance is " + currentAccount.getBalance()
+                        + ". Enter bye to exit");
+                message = (String) in.readObject();
+                if (message.equalsIgnoreCase("bye")) {
+                    sendMessage(message);
+                }
+            } else if (message.equalsIgnoreCase("balance")) {
+                sendMessage("Balance is: " + currentAccount.getBalance());
+            } else {
+                sendMessage("Please enter correct command!");
+            }
+        }
+
+    }
 }
+
+

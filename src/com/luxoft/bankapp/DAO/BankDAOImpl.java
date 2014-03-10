@@ -12,14 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 //FIXME
 public class BankDAOImpl extends BaseDAO implements BankDao {
+    private static Logger log = Logger.getLogger(BankDAOImpl.class.getName());
 
     @Override
     public Bank getBankByName(String name) throws SQLException {
         Bank bank = null;
         final String sql = "SELECT id, name FROM BANK WHERE name = ?";
+        log.log(Level.INFO, "Getting bank");
         Connection connection = getDataSource().getConnection();
         try (
                 final PreparedStatement stmt = connection.prepareStatement(sql)
@@ -32,7 +36,9 @@ public class BankDAOImpl extends BaseDAO implements BankDao {
                 bank = new Bank();
                 bank.setId(id);
                 bank.setName(bankName);
+                log.log(Level.INFO, "Bank " + bankName + " was found");
             } else {
+                log.log(Level.INFO, "Bank " + name + " was not found");
                 System.out.println("There is no such bank in DB!");
             }
         }
@@ -47,6 +53,7 @@ public class BankDAOImpl extends BaseDAO implements BankDao {
                 " Join Bank  on c.bank_id = ? ";
         final String balanceSQL = "Select sum(c.balance) as total from client as c  where bank_id = ?";
         final String orderClientsSQL = "select city, name, id from client  where bank_id = ? order by city";
+        log.log(Level.INFO, "Getting bankInfo for " + name);
         Connection connection = getDataSource().getConnection();
         try (
                 final PreparedStatement numberStmt = connection.prepareStatement(numberClientsSQL);
@@ -56,16 +63,20 @@ public class BankDAOImpl extends BaseDAO implements BankDao {
             numberStmt.setInt(1, current.getId());
             ResultSet rs = numberStmt.executeQuery();
             if (!rs.next()) {
+                log.log(Level.INFO, "Cant get number of clients");
                 throw new SQLException("Impossible get number of clients!");
             }
+            log.log(Level.INFO, "Number of clients was found");
             bankInfo = new BankInfo();
             bankInfo.setNumberOfClients(rs.getInt("number_of_clients"));
             balanceStmt.setInt(1, current.getId());
             ResultSet rs2 = balanceStmt.executeQuery();
             if (!rs2.next()) {
+                log.log(Level.INFO, "Cant get balance");
                 throw new SQLException("Impossible get balance!");
             }
             bankInfo.setTotalAccountSum(rs2.getDouble("total"));
+            log.log(Level.INFO, "Total balance was found");
 
             cityStmt.setInt(1, current.getId());
             ResultSet rs3 = cityStmt.executeQuery();
@@ -90,6 +101,7 @@ public class BankDAOImpl extends BaseDAO implements BankDao {
                 }
             }
             bankInfo.setClientsByCity(sortedbycity);
+            log.log(Level.INFO, "Sorted list by city was generated");
         }
         return bankInfo;
     }

@@ -17,8 +17,6 @@ public class BankServerThreadedTest {
             Client client1 = BankService.getInstance().findClientByNameAsActive(bank, "JJ KK");
             double balance = client1.getBalance();
             BankClientMock clientMock = null;
-            //BankClientMock clientMock = new BankClientMock(client1);
-            //System.out.println(Thread.currentThread().getState());
             for (int i = 0; i < 5; i++) {
                 clientMock = new BankClientMock(client1);
                 clientMock.start();

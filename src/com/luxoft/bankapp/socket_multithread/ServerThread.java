@@ -27,6 +27,7 @@ public class ServerThread implements Runnable {
     String message;
     Socket clientSocket = null;
 
+
     public ServerThread(Socket client) {
         clientSocket = client;
     }
