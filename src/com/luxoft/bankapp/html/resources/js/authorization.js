@@ -18,8 +18,6 @@ function checkName() {
         alert("sending..");
         return true;
     } else {
-
-        
         return false;
     }
 }
