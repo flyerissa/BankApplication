@@ -1,5 +1,6 @@
 package com.luxoft.bankapp.socket_multithread;
 
+import com.luxoft.bankapp.DAO.TransactionManager;
 import com.luxoft.bankapp.domain.bank.Account;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.BankInfo;
@@ -17,6 +18,7 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -189,9 +191,16 @@ public class BankServer2 {
         }
 
         public void runScenario() throws Exception {
-            selectBank();
-            selectClient();
-            processAccount();
+            TransactionManager tm = TransactionManager.getInstance();
+            tm.doInTransaction(new Callable<Void>() {
+                @Override
+                public Void call() throws Exception {
+                    selectBank();
+                    selectClient();
+                    processAccount();
+                    return null;
+                }
+            });
         }
 
     }
