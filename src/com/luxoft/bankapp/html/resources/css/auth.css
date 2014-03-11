@@ -1,11 +1,11 @@
 body {
     margin: auto;
     width: 700px;
-    background: red;
+
     position: relative;
 }
 
-#form {
+.form {
     top: 50px;
     position: relative;
     background: white;
@@ -15,4 +15,5 @@ body {
 .button {
     padding: 10px;
     border: 1 solid black;
+    width: 100px;
 }

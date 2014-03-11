@@ -21,6 +21,21 @@ function checkName() {
         return false;
     }
 }
+function checkSum() {
+    var sum = $("#sum").val();
+    var result = true;
+    if (sum < 0) {
+        $("#sumError").html("Sum should be greater then zero!");
+        result = false;
+    }
+    if (result) {
+        alert("Withdraw..");
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
 
 
