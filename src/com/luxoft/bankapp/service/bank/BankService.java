@@ -15,6 +15,7 @@ import com.luxoft.bankapp.ui.BankCommander;
 import java.io.*;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 
 public class BankService {
@@ -157,17 +158,22 @@ public class BankService {
         }
     }
 
-    public Bank findBankByName(String name) throws BankNotFoundException {
+    public Bank findBankByNameAndSetActive(String name) throws BankNotFoundException, SQLException {
         Bank foundBank = null;
-        try {
-            foundBank = new BankDAOImpl().getBankByName(name);
-            if (foundBank == null) {
-                throw new BankNotFoundException("There is no such bank in DB! Please retry!");
-            } else {
-                BankCommander.setActiveBank(foundBank);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        foundBank = new BankDAOImpl().getBankByName(name);
+        if (foundBank == null) {
+            throw new BankNotFoundException("There is no such bank in DB! Please retry!");
+        } else {
+            BankCommander.setActiveBank(foundBank);
+        }
+        return foundBank;
+    }
+
+    public Bank selectBank(String name) throws SQLException, BankNotFoundException {
+        Bank foundBank = null;
+        foundBank = new BankDAOImpl().getBankByName(name);
+        if (foundBank == null) {
+            throw new BankNotFoundException("There is no such bank in DB! Please retry!");
         }
         return foundBank;
     }
@@ -230,4 +236,16 @@ public class BankService {
         return null;
     }
 
+    public Account findAccountFromDB(Client client, Integer id) throws Exception {
+        Set<Account> set = new ClientDAOImpl().getAllAccounts(client);
+        if (set == null) {
+            throw new Exception("No accounts were found!");
+        }
+        for (Account account : set) {
+            if (account.getId().equals(id)) {
+                return account;
+            }
+        }
+        return null;
+    }
 }

@@ -23,7 +23,7 @@ public class DBSelectBankCommander implements Command {
             current = tm.doInTransaction(new Callable<Bank>() {
                 @Override
                 public Bank call() throws Exception {
-                    return BankService.getInstance().findBankByName(name);
+                    return BankService.getInstance().findBankByNameAndSetActive(name);
                 }
             });
             System.out.println("Bank " + current.getName() + " was chose.");

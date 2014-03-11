@@ -55,6 +55,8 @@ public class BankServer {
 
             } catch (ClassNotFoundException classnot) {
                 System.err.println("Data received in unknown format");
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
 
         } catch (IOException ioException) {
@@ -88,14 +90,14 @@ public class BankServer {
         }
     }
 
-    private void selectBank() throws IOException, ClassNotFoundException {
+    private void selectBank() throws IOException, ClassNotFoundException, SQLException {
         if (BankCommander.getActiveBank() == null) {
             sendMessage("Hello Bankomat. Please enter name of the bank");
             message = (String) in.readObject();
             Bank current;
             try {
                 BankService instance = BankService.getInstance();
-                current = instance.findBankByName(message);
+                current = instance.findBankByNameAndSetActive(message);
                 sendMessage("Bank " + current.getName() + " was chose. Please enter name of the client");
                 message = (String) in.readObject();
                 try {
@@ -154,13 +156,13 @@ public class BankServer {
     }
 
 
-    private void selectBankForInfo() throws IOException, ClassNotFoundException {
+    private void selectBankForInfo() throws IOException, ClassNotFoundException, SQLException {
         if (BankCommander.getActiveBank() == null) {
             sendMessage("Hello Office. Please enter name of the bank");
             message = (String) in.readObject();
             Bank current;
             try {
-                current = BankService.getInstance().findBankByName(message);
+                current = BankService.getInstance().findBankByNameAndSetActive(message);
                 BankInfo bankInfo = BankService.getInstance().getBankInfo(message);
                 sendMessage("Bank " + current.getName() + " was chosen." +
                         " Number of clients is: " + bankInfo.getNumberOfClients() +

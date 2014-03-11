@@ -89,14 +89,14 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
             clientStmt.setInt(2, client.getBank().getId());
             clientStmt.setDouble(3, client.getBalance());
             if (clientStmt.executeUpdate() == 0) {
-                log.log(Level.INFO, "Cant insert client");
+                log.log(Level.SEVERE, "Cant insert client");
                 throw new SQLException("Impossible to save Client in DB! Transaction is being rolled back!");
 
             }
             log.log(Level.INFO, "Client was inserted");
             ResultSet rs = clientStmt.getGeneratedKeys();//TODO close?
             if (rs == null || !rs.next()) {
-                log.log(Level.INFO, "Cant get clients id");
+                log.log(Level.SEVERE, "Cant get clients id");
                 throw new SQLException("Impossible to save in DB! Cant get clientID!");
             }
             Integer clientId = rs.getInt(1);
@@ -114,7 +114,7 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
                 }
             }
             if (accountStmt.executeUpdate() == 0) {
-                log.log(Level.INFO, "Cant insert account");
+                log.log(Level.SEVERE, "Cant insert account");
                 throw new SQLException("Impossible to save account in DB! Transaction is being rolled back!");
             }
         }
@@ -141,7 +141,7 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
             clientStmt.setDouble(7, client.getOverdraft());
             clientStmt.setInt(8, client.getId());
             if (clientStmt.executeUpdate() == 0) {
-                log.log(Level.INFO, "Cant update client");
+                log.log(Level.SEVERE, "Cant update client");
                 throw new SQLException("Impossible to update client in DB! Transaction is being rolled back!");
             }
             log.log(Level.INFO, "Client updated. Begin to update accounts");
@@ -158,7 +158,7 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
                         accountNewStmt.setDouble(4, 0.00);
                     }
                     if (accountNewStmt.executeUpdate() == 0) {
-                        log.log(Level.INFO, "Cant insert accounts");
+                        log.log(Level.SEVERE, "Cant insert accounts");
                         throw new SQLException("Impossible to update account in DB! Transaction is being rolled back!");
                     }
                 } else {
@@ -173,7 +173,7 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
                     }
                     accountStmt.setInt(4, a.getId());
                     if (accountStmt.executeUpdate() == 0) {
-                        log.log(Level.INFO, "Cant update accounts");
+                        log.log(Level.SEVERE, "Cant update accounts");
                         throw new SQLException("Impossible to update account in DB! Transaction is being rolled back!");
                     }
                     log.log(Level.INFO, "Accounts updated");
@@ -193,13 +193,13 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
                 final PreparedStatement deleteClientStmt = connection.prepareStatement(deleteClientSQL)) {
             deleteAccountStmt.setInt(1, client.getId());
             if (deleteAccountStmt.executeUpdate() == 0) {
-                log.log(Level.INFO, "Cant delete accounts");
+                log.log(Level.SEVERE, "Cant delete accounts");
                 throw new SQLException("Impossible to delete account from DB! Transaction is being rolled back!");
             }
             log.log(Level.INFO, "Accounts were deleted");
             deleteClientStmt.setInt(1, client.getId());
             if (deleteClientStmt.executeUpdate() == 0) {
-                log.log(Level.INFO, "Cant delete client");
+                log.log(Level.SEVERE, "Cant delete client");
                 throw new SQLException("Impossible to delete client from DB! Transaction is being rolled back!");
             }
             log.log(Level.INFO, "Client was deleted");

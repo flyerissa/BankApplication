@@ -51,31 +51,34 @@ public class BankServer2 {
                 sendMessage("Connected. Please introduce yourself");
                 message = (String) in.readObject();
                 if (message.equalsIgnoreCase("Bankomat")) {
-                    bankScenario();
+                    BankScenario bankScenario = new BankScenario();
+                    bankScenario.runScenario();//FIXME: transactional
                 } else if (message.equalsIgnoreCase("Office")) {
                     selectBankForInfo();
                 }
 
             } catch (ClassNotFoundException classnot) {
-                log.log(Level.INFO, classnot.getMessage(), classnot);
+                log.log(Level.SEVERE, classnot.getMessage(), classnot);
             } catch (BankNotFoundException e) {
-                log.log(Level.INFO, e.getMessage(), e);
+                log.log(Level.WARNING, e.getMessage(), e);
                 sendMessage(e.getMessage());
             } catch (ClientNotFoundException e) {
-                log.log(Level.INFO, e.getMessage(), e);
+                log.log(Level.WARNING, e.getMessage(), e);
                 sendMessage(e.getMessage());
             } catch (NotEnoughFundsException e) {
-                log.log(Level.INFO, e.getMessage(), e);
+                log.log(Level.WARNING, e.getMessage(), e);
                 sendMessage(e.getMessage());
             } catch (SQLException e) {
-                log.log(Level.INFO, e.getMessage(), e);
+                log.log(Level.SEVERE, e.getMessage(), e);
             } catch (BankInfoException e) {
-                log.log(Level.INFO, e.getMessage(), e);
+                log.log(Level.WARNING, e.getMessage(), e);
                 sendMessage(e.getMessage());
+            } catch (Exception e) {
+                log.log(Level.SEVERE, e.getMessage(), e);
             }
 
         } catch (IOException ioException) {
-            log.log(Level.INFO, ioException.getMessage(), ioException);
+            log.log(Level.SEVERE, ioException.getMessage(), ioException);
         } finally {
             // 4: Closing connection
             try {
@@ -83,7 +86,7 @@ public class BankServer2 {
                 out.close();
                 providerSocket.close();
             } catch (IOException ioException) {
-                log.log(Level.INFO, ioException.getMessage(), ioException);
+                log.log(Level.SEVERE, ioException.getMessage(), ioException);
             }
         }
     }
@@ -94,7 +97,7 @@ public class BankServer2 {
             out.flush();
             System.out.println("server>" + msg);
         } catch (IOException ioException) {
-            log.log(Level.INFO, ioException.getMessage(), ioException);
+            log.log(Level.SEVERE, ioException.getMessage(), ioException);
         }
     }
 
@@ -106,21 +109,13 @@ public class BankServer2 {
         }
     }
 
-    //FIXME transactonal
-    private void bankScenario() throws IOException, ClassNotFoundException, SQLException, NotEnoughFundsException, BankNotFoundException, ClientNotFoundException {
-        new ServerSide().selectBank();
-        new ServerSide().selectClient();
-        new ServerSide().processAccount();
-    }
-
-
-    private void selectBankForInfo() throws IOException, ClassNotFoundException, BankNotFoundException, BankInfoException, ClientNotFoundException {
+    private void selectBankForInfo() throws Exception {
         if (BankCommander.getActiveBank() == null) {
             sendMessage("Hello Office. Please enter name of the bank");
             message = (String) in.readObject();
             Bank current;
 
-            current = BankService.getInstance().findBankByName(message);
+            current = BankService.getInstance().findBankByNameAndSetActive(message);
             BankInfo bankInfo = BankService.getInstance().getBankInfo(message);
             sendMessage("Bank " + current.getName() + " was chosen." +
                     " Number of clients is: " + bankInfo.getNumberOfClients() +
@@ -134,26 +129,27 @@ public class BankServer2 {
         }
     }
 
-    private class ServerSide {
+    private class BankScenario {
         private Bank bank;
         private Client client;
         private Account currentAccount;
         private BankService instance;
 
-        private void selectBank() throws IOException, ClassNotFoundException, BankNotFoundException {
+        private void selectBank() throws Exception {
             sendMessage("Hello Bankomat. Please enter name of the bank");
             message = (String) in.readObject();
             instance = BankService.getInstance();
-            bank = instance.findBankByName(message);
+            bank = instance.findBankByNameAndSetActive(message);
             if (bank != null) {
                 sendMessage("Bank " + bank.getName() + " was chosen. Please enter name of the client");
+                message = (String) in.readObject();
             } else {
                 throw new BankNotFoundException("There is no such bank! Please retry!");//TODO: request new bank or exit
             }
         }
 
-        private void selectClient() throws IOException, ClassNotFoundException, ClientNotFoundException {
-            message = (String) in.readObject();
+        private void selectClient() throws Exception {
+
             client = instance.findClientByNameAsActive(bank, message);
             if (client != null) {
                 client.setBank(bank);
@@ -164,7 +160,7 @@ public class BankServer2 {
             }
         }
 
-        private void processAccount() throws IOException, ClassNotFoundException, NotEnoughFundsException, SQLException {
+        private void processAccount() throws Exception {
             message = (String) in.readObject();
             currentAccount = instance.findAccountById(client, Integer.parseInt(message));
             if (currentAccount == null) {
@@ -190,6 +186,12 @@ public class BankServer2 {
             } else {
                 sendMessage("Please enter correct command!");
             }
+        }
+
+        public void runScenario() throws Exception {
+            selectBank();
+            selectClient();
+            processAccount();
         }
 
     }

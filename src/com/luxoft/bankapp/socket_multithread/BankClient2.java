@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.rmi.UnknownHostException;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +28,7 @@ public class BankClient2 {
             // 1. creating a socket to connect to the server
             requestSocket = new Socket(SERVER, 8080);
             System.out.println("Connected to localhost in port 2004");
-            log.log(Level.INFO, String.valueOf(System.currentTimeMillis()));
+            log.log(Level.SEVERE, String.valueOf(new Date(System.currentTimeMillis())));
             // 2. get Input and Output streams
             out = new ObjectOutputStream(requestSocket.getOutputStream());
             out.flush();
@@ -42,20 +43,20 @@ public class BankClient2 {
                     if (message.equals("bye")) break;
                     log.log(Level.INFO, String.valueOf(System.currentTimeMillis()));
                 } catch (UnknownHostException e) {
-                    log.log(Level.INFO, e.getMessage(), e);
+                    log.log(Level.SEVERE, e.getMessage(), e);
                 } catch (ClassNotFoundException e) {
-                    log.log(Level.INFO, e.getMessage(), e);
+                    log.log(Level.SEVERE, e.getMessage(), e);
                 }
             }
         } catch (IOException e) {
-            log.log(Level.INFO, e.getMessage(), e);
+            log.log(Level.SEVERE, e.getMessage(), e);
         } finally {
             try {
                 out.close();
                 in.close();
                 requestSocket.close();
             } catch (IOException e) {
-                log.log(Level.INFO, e.getMessage(), e);
+                log.log(Level.SEVERE, e.getMessage(), e);
             }
         }
     }
@@ -67,7 +68,7 @@ public class BankClient2 {
             out.flush();
             System.out.println("client>" + msg);
         } catch (IOException ioException) {
-            log.log(Level.INFO, ioException.getMessage(), ioException);
+            log.log(Level.SEVERE, ioException.getMessage(), ioException);
         }
     }
 

@@ -14,7 +14,7 @@ public class TransferCommand implements Command {
         TransactionManager tm = TransactionManager.getInstance();
         System.out.println("Please enter the name of bank: ");
         final String name = new Scanner(System.in).nextLine();
-        final Bank current = BankService.getInstance().findBankByName(name);
+        final Bank current = BankService.getInstance().findBankByNameAndSetActive(name);
         System.out.println("Bank " + current.getName() + " was chose.");
         System.out.println("Please enter the client name to withdraw");
         final String client = new Scanner(System.in).nextLine();

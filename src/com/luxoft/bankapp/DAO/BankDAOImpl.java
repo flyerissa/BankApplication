@@ -31,7 +31,7 @@ public class BankDAOImpl extends BaseDAO implements BankDao {
             stmt.setString(1, name);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                String bankName = rs.getString("NAME");
+                String bankName = rs.getString("name");
                 int id = rs.getInt("id");
                 bank = new Bank();
                 bank.setId(id);
