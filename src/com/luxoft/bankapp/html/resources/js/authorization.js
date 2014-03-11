@@ -37,5 +37,21 @@ function checkSum() {
     }
 }
 
+function isNumeric() {
+    var input = $("#account").val();
+    var result = true;
+    if (!input.match(/^-{0,1}\d*\.{0,1}\d+$/)) {
+        $("#accountError").html("Only numbers are allowed!");
+        result = false;
+    }
+    if (result) {
+        alert("Withdraw..");
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 
 
