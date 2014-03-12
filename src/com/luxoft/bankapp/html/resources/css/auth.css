@@ -1,19 +1,50 @@
 body {
-    margin: auto;
-    width: 700px;
-
+    margin: 0px;
+    width: 100%;
     position: relative;
+    background: grey;
 }
 
 .form {
+    margin: auto;
+    width: 600px;
+    border: 1px solid black;
     top: 50px;
     position: relative;
     background: white;
     padding: 10px;
+    cursor: hand;
 }
 
 .button {
     padding: 10px;
     border: 1 solid black;
     width: 100px;
+}
+
+a:link, a:visited, a:hover {
+    text-decoration: none;
+    color: blue;
+
+}
+
+#clients, #sorted_clients {
+    width: 150px;
+}
+
+#statistic td {
+    border-bottom: 1px solid #EEE;
+}
+
+#find {
+    padding: 2px;
+    border: 1 solid black;
+    width: 70px;
+}
+
+#results td {
+    width: 200px;
+    border: 1px solid #AAA;
+    font-weight: bold;
+    padding: 3px;
 }

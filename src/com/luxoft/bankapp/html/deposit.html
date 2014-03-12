@@ -5,20 +5,26 @@
     <link rel="stylesheet" type="css" href="resources/css/auth.css">
     <script type="text/javascript" src="resources/js/jquery-2.1.0.js"></script>
     <script type="text/javascript" src="resources/js/authorization.js"></script>
-    <title>Balance</title>
+    <title>Withdraw</title>
 </head>
 <body>
 <div class="form">
-    <form action="http://luxoft-java.com:4730/form" method="post" target="_blank">
+    <form>
         <table>
             <tr>
-                <td colspan=2 style="font-weight:bold;">Balance</td>
+                <td colspan=2 style="font-weight:bold;">Enter sum to deposit</td>
             </tr>
             <tr>
-                <td>Balance:</td>
-                <td><input type="text" name="bal" id="balance" value="123"/></td>
+                <td>Sum:</td>
+                <td><input type="text" name="deposit_sum" id="deposit_sum" class="numbers"/></td>
+                <td id="sumError" class="error"></td>
             </tr>
+
         </table>
+
+    </form>
+    <form action="balance.html">
+        <input class="button" type=submit value="Send" onclick="isNumeric()">
     </form>
     <form action="menu.html">
         <input class="button" type=submit value="Back" onclick="isNumeric()">

@@ -11,25 +11,29 @@
 
 <div class="form">
     <form action="http://luxoft-java.com:4730/form" method="post" target="_blank">
-        <table>
+        <table id="menu">
             <tr>
                 <td colspan=2 style="font-weight:bold;">Enter account id and operation</td>
             </tr>
             <tr>
                 <td>Account ID:</td>
-                <td><input type="text" name="account" id="account"/></td>
+                <td><input type="text" name="account" id="account" class="numbers"/></td>
                 <td id="accountError" class="error"></td>
             </tr>
-            <tr>
-
-
-            </tr>
         </table>
-        <input class="button" type="button" name="balance" id="balance" value="Balance" onclick="isNumeric()"/>
-        <input class="button" type="button" name="withdraw" id="withdraw" value="Withdraw" onclick="isNumeric()"/>
     </form>
-
+    <form action="withdraw.html">
+        <input class="button" type=submit value="Withdraw" onclick="isNumeric()">
+    </form>
+    <form action="deposit.html">
+        <input class="button" type=submit value="Deposit" onclick="isNumeric()">
+    </form>
+    <form action="balance.html">
+        <input class="button" type=submit value="Balance" onclick="isNumeric()">
+    </form>
+    <form action="authorization.html">
+        <input class="button" type=submit value="Exit">
+    </form>
 </div>
-
 </body>
 </html>

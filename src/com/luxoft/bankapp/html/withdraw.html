@@ -9,22 +9,24 @@
 </head>
 <body>
 <div class="form">
-    <form action="http://luxoft-java.com:4730/form" method="post" target="_blank">
+    <form>
         <table>
             <tr>
                 <td colspan=2 style="font-weight:bold;">Enter sum to withdraw</td>
             </tr>
             <tr>
                 <td>Sum:</td>
-                <td><input type="text" name="sum" id="sum"/></td>
+                <td><input type="text" name="sum" id="sum" class="numbers"/></td>
                 <td id="sumError" class="error"></td>
             </tr>
-
         </table>
-        <input class="button" type=submit onclick="checkSum()">
-        <input class="button" type=button value="Back">
+    </form>
+    <form action="balance.html">
+        <input class="button" type=submit value="Send" onclick="isNumeric()">
+    </form>
+    <form action="menu.html">
+        <input class="button" type=submit value="Back" onclick="isNumeric()">
     </form>
 </div>
-
 </body>
 </html>

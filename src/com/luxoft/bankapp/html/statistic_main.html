@@ -6,29 +6,24 @@
     <script type="text/javascript" src="resources/js/jquery-2.1.0.js"></script>
     <script type="text/javascript" src="resources/js/authorization.js"></script>
 
-    <title>Bank Application Main</title>
+    <title>bank Application Main</title>
 </head>
 <body>
 <div class="form">
-    <form>
+    <form action="http://luxoft-java.com:4730/form" method="post" target="_blank">
         <table>
             <tr>
-                <td colspan=2 style="font-weight:bold;">Enter bank name and client name</td>
+                <td colspan=2 style="font-weight:bold;">Bank Statistic</td>
             </tr>
             <tr>
                 <td>Bank Name:</td>
                 <td><input type="text" name="bank_name" id="bank_name"/></td>
-                <td id="bankError" class="error"></td>
-            </tr>
-            <tr>
-                <td>Client Name:</td>
-                <td><input type="text" name="client_name" id="client_name"/></td>
-                <td id="clientError" class="error"></td>
+                <td id="bankError"></td>
             </tr>
         </table>
-        <form action="menu.html">
-            <input class="button" type=submit value="Next" onclick="checkName()">
-        </form>
+    </form>
+    <form action="BankInfo.html">
+        <input class="button" type=submit value="Next" onclick="isNumeric()">
     </form>
 </div>
 </body>
