@@ -10,8 +10,8 @@
 </head>
 <body>
 <div class="form">
-    <form action="save" method="post" target="_blank">
-    <table id="statistic">
+    <form action="save" method="post" target="_blank" name="form">
+        <table id="statistic">
             <tr>
                 <td colspan=2 style="font-weight:bold;">Please fill form to add client</td>
             </tr>
@@ -50,7 +50,7 @@
         </table>
 
         <input class="button" id="add" type=submit value="Add client"
-               onclick="checkFieldsPresent();checkEmail();checkClientName()">
+               onclick="return checkFieldsPresent();return checkEmail();return checkClientName()">
 
     </form>
 </div>

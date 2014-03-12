@@ -90,5 +90,20 @@ function checkClientName() {
     return true;
 }
 
+function addClient() {
+
+    var client = {
+
+
+    }
+    checkFieldsPresent();
+    checkClientName();
+    checkEmail();
+    var name = $("#add_client_name").val();
+    var city = $("#city").val();
+    var sex = $("input[name='sex']:checked").val();
+    var mail = $("#mail").val();
+}
+
 
 
