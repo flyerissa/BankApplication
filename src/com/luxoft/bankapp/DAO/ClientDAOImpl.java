@@ -18,7 +18,7 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
     private static Logger log = Logger.getLogger(ClientDAOImpl.class.getName());
 
     @Override
-    public Client findClientByName(Bank bank, String name) throws SQLException {
+    public synchronized Client findClientByName(Bank bank, String name) throws SQLException {
         Client client = null;
         final String sql = "SELECT c.name, c.id, c.balance  FROM CLIENT as c JOIN BANK as b ON c.bank_id = b.id" +
                 " WHERE bank_id = ? AND c.name = ?";
@@ -45,7 +45,7 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
     }
 
     @Override
-    public List<Client> getAllClients(Bank bank) throws SQLException {
+    public synchronized List<Client> getAllClients(Bank bank) throws SQLException {
         List<Client> list = new ArrayList<>();
         final String sql = "SELECT c.id, c.name FROM CLIENT as c JOIN BANK as b" +
                 " ON b.id = c.bank_id WHERE b.id = ?";
@@ -68,7 +68,7 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
     }
 
     @Override
-    public void save(Client client) throws SQLException {
+    public synchronized void save(Client client) throws SQLException {
         if (client.getId() != null) {
             updateClient(client);
         } else {
@@ -183,7 +183,7 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
     }
 
     @Override
-    public void remove(Client client) throws SQLException {
+    public synchronized void remove(Client client) throws SQLException {
         final String deleteAccountSQL = "DELETE FROM Account  WHERE client_id = ?";
         final String deleteClientSQL = "DELETE FROM CLIENT WHERE id = ?";
         log.log(Level.INFO, "Delete client and his accounts");
@@ -206,7 +206,7 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
         }
     }
 
-    public Set<Account> getAllAccounts(Client client) throws SQLException {
+    public synchronized Set<Account> getAllAccounts(Client client) throws SQLException {
         Account account;
         final String getAccounts = "SELECT id, type, balance, overdraft from ACCOUNT where client_id = ?";
         log.log(Level.INFO, "Getting client's accounts");

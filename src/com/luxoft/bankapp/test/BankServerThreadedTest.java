@@ -33,12 +33,12 @@ public class BankServerThreadedTest {
     @Test
     public void testThreads() throws InterruptedException {
         BankClientMock bankClientMock = new BankClientMock(clientTest, bank, active);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             Thread thread = new Thread(bankClientMock);
             thread.start();
             threads.add(thread);
         }
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             threads.get(i).join();
         }
         double expected = active.getBalance();
