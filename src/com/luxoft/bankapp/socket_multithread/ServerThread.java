@@ -222,7 +222,7 @@ public class ServerThread implements Runnable {
             }
         }
 
-        public synchronized void runScenario() throws Exception {
+        public void runScenario() throws Exception {
             TransactionManager tm = TransactionManager.getInstance();
             tm.doInTransaction(new Callable<Void>() {
                 @Override
