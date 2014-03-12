@@ -28,8 +28,9 @@ public class BankServerThreaded {
     }
 
     public void serve() {
-        try {
-            Thread t = new Thread(new BankServerMonitor(this));
+        while (true) {
+            try {
+                Thread t = new Thread(new BankServerMonitor(this));
             t.setDaemon(true);
             t.start();
             System.out.println("Waiting for connection");
@@ -38,6 +39,7 @@ public class BankServerThreaded {
             pool.execute(new ServerThread(clientSocket));
         } catch (IOException e) {
             pool.shutdown();
+        }
         }
     }
 
