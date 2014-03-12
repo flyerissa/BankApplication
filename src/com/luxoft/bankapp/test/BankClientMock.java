@@ -97,7 +97,6 @@ public class BankClientMock extends Thread implements Callable {
         }
     }
 
-
     @Override
     public Object call() throws Exception {
         long start = System.currentTimeMillis();

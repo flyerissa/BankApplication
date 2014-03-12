@@ -202,7 +202,6 @@ public class BankServer2 {
                 }
             });
         }
-
     }
 }
 

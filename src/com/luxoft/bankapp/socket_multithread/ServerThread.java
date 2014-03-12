@@ -79,7 +79,7 @@ public class ServerThread implements Runnable {
 
                 //if (message.equalsIgnoreCase("Bankomat")) {
                 BankScenario bankScenario = new BankScenario();
-                    bankScenario.runScenario();//FIXME: transactional
+                bankScenario.runScenario();//FIXME: transactional
                 // } else if (message.equalsIgnoreCase("Office")) {
                 //   selectBankForInfo();
 
@@ -131,7 +131,6 @@ public class ServerThread implements Runnable {
             log.log(Level.SEVERE, ioException.getMessage(), ioException);
         }
     }
-
 
     private void selectBankForInfo() throws IOException, ClassNotFoundException, SQLException {
         if (BankCommander.getActiveBank() == null) {

@@ -30,6 +30,7 @@ public class BankServerThreadedTest {
         actual = active.getBalance();
     }
 
+    
     @Test
     public void testThreads() throws InterruptedException {
         BankClientMock bankClientMock = new BankClientMock(clientTest, bank, active);

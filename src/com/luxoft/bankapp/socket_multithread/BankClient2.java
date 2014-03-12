@@ -61,7 +61,6 @@ public class BankClient2 {
         }
     }
 
-
     void sendMessage(final String msg) {
         try {
             out.writeObject(msg);

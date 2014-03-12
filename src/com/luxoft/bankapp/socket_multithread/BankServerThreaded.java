@@ -31,29 +31,24 @@ public class BankServerThreaded {
         while (true) {
             try {
                 Thread t = new Thread(new BankServerMonitor(this));
-            t.setDaemon(true);
-            t.start();
-            System.out.println("Waiting for connection");
-            Socket clientSocket = serverSocket.accept();
-            System.out.println(counter.incrementAndGet());
-            pool.execute(new ServerThread(clientSocket));
-        } catch (IOException e) {
-            pool.shutdown();
-        }
+                t.setDaemon(true);
+                t.start();
+                System.out.println("Waiting for connection");
+                Socket clientSocket = serverSocket.accept();
+                System.out.println(counter.incrementAndGet());
+                pool.execute(new ServerThread(clientSocket));
+            } catch (IOException e) {
+                pool.shutdown();
+            }
         }
     }
-
 
     public static void main(String[] args) {
         try {
             BankServerThreaded bankServerThreaded = new BankServerThreaded();
-
             bankServerThreaded.serve();
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }
