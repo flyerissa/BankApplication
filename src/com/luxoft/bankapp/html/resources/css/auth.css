@@ -20,6 +20,7 @@ body {
     padding: 10px;
     border: 1 solid black;
     width: 100px;
+
 }
 
 a:link, a:visited, a:hover {
@@ -47,4 +48,8 @@ a:link, a:visited, a:hover {
     border: 1px solid #AAA;
     font-weight: bold;
     padding: 3px;
+}
+
+.submit {
+    display: inline;
 }
