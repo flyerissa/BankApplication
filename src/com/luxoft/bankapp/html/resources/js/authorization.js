@@ -55,13 +55,14 @@ function checkFieldsPresent() {
     var email = $("#mail").val();
     var balance = $("#balance").val();
     var result = true;
-    if (client_name === null || city === null || email === null || balance === null) {
+    if (client_name === null || city == "" || email == "" || balance == "") {
         result = false;
     }
     if (result) {
-        alert("All fields should be filled");
+        alert("Sending..")
         return true;
     } else {
+        alert("All fields should be filled");
         return false;
     }
 

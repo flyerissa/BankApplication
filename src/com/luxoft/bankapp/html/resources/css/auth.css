@@ -13,13 +13,14 @@ body {
     position: relative;
     background: white;
     padding: 10px;
-    cursor: hand;
+
 }
 
 .button {
     padding: 10px;
-    border: 1 solid black;
+    border: 1px solid black;
     width: 100px;
+    cursor: pointer;
 
 }
 
