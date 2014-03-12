@@ -238,14 +238,15 @@ public class BankService {
 
     public Account findAccountFromDB(Client client, Integer id) throws Exception {
         Set<Account> set = new ClientDAOImpl().getAllAccounts(client);
+        Account current = null;
         if (set == null) {
             throw new Exception("No accounts were found!");
         }
         for (Account account : set) {
             if (account.getId().equals(id)) {
-                return account;
+                current = account;
             }
         }
-        return null;
+        return current;
     }
 }

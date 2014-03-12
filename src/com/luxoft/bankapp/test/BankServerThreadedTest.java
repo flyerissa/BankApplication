@@ -4,6 +4,11 @@ import com.luxoft.bankapp.domain.bank.Account;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.Client;
 import com.luxoft.bankapp.service.bank.BankService;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -11,23 +16,32 @@ import static junit.framework.Assert.assertEquals;
  * Created by User on 06.03.14.
  */
 public class BankServerThreadedTest {
-    public static void main(String[] args) throws Exception {
-        Bank bank = BankService.getInstance().selectBank("Bank");
-        Client clientTest = BankService.getInstance().selectClient(bank, "Test threads");
-        Account active = BankService.getInstance().findAccountFromDB(clientTest, 103);
+    private Bank bank;
+    private Client clientTest;
+    private Account active;
+    double actual;
+    List<Thread> threads = new ArrayList<Thread>();
 
-        double actual = active.getBalance();
-        BankClientMock clientMock = null;
-        for (int i = 0; i < 2; i++) {
-            clientMock = new BankClientMock(clientTest, bank, active);
-            clientMock.start();
-        }
-        for (int i = 0; i < 2; i++) {
-            clientMock.join();
-        }
-        BankService.getInstance().saveOrUpdateClientToDB(clientTest);
-        Double expected = active.getBalance();
-        assertEquals(actual - 20, expected, 0.1);
+    @Before
+    public void init() throws Exception {
+        bank = BankService.getInstance().selectBank("Bank");
+        clientTest = BankService.getInstance().selectClient(bank, "Test threads");
+        active = BankService.getInstance().findAccountFromDB(clientTest, 103);
+        actual = active.getBalance();
     }
 
+    @Test
+    public void testThreads() throws InterruptedException {
+        BankClientMock bankClientMock = new BankClientMock(clientTest, bank, active);
+        for (int i = 0; i < 1; i++) {
+            Thread thread = new Thread(bankClientMock);
+            thread.start();
+            threads.add(thread);
+        }
+        for (int i = 0; i < 1; i++) {
+            threads.get(i).join();
+        }
+        double expected = active.getBalance();
+        assertEquals(actual - 20, expected, 0.1);
+    }
 }

@@ -28,19 +28,16 @@ public class BankServerThreaded {
     }
 
     public void serve() {
-
-        while (true) {
-            try {
-                Thread t = new Thread(new BankServerMonitor(this));
-                t.setDaemon(true);
-                t.start();
-                System.out.println("Waiting for connection");
-                Socket clientSocket = serverSocket.accept();
-                System.out.println(counter.incrementAndGet());
-                pool.execute(new ServerThread(clientSocket));
-            } catch (IOException e) {
-                pool.shutdown();
-            }
+        try {
+            Thread t = new Thread(new BankServerMonitor(this));
+            t.setDaemon(true);
+            t.start();
+            System.out.println("Waiting for connection");
+            Socket clientSocket = serverSocket.accept();
+            System.out.println(counter.incrementAndGet());
+            pool.execute(new ServerThread(clientSocket));
+        } catch (IOException e) {
+            pool.shutdown();
         }
     }
 

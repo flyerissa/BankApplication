@@ -1,5 +1,6 @@
 package com.luxoft.bankapp.socket_multithread;
 
+import com.luxoft.bankapp.DAO.TransactionManager;
 import com.luxoft.bankapp.domain.bank.Account;
 import com.luxoft.bankapp.domain.bank.Bank;
 import com.luxoft.bankapp.domain.bank.BankInfo;
@@ -16,6 +17,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.concurrent.Callable;
 import java.util.logging.*;
 
 /**
@@ -28,6 +31,8 @@ public class ServerThread implements Runnable {
     private String message;
     private Socket connection = null;
     private static Logger log = Logger.getLogger(ServerThread.class.getName());
+    private long start;
+    private long end;
 
     static {
         try {
@@ -68,14 +73,16 @@ public class ServerThread implements Runnable {
             // 4. The two parts communicate via the input and output streams
 
             try {
-                sendMessage("Connected. Please introduce yourself");
-                message = (String) in.readObject();
-                if (message.equalsIgnoreCase("Bankomat")) {
-                    BankScenario bankScenario = new BankScenario();
+                start = Calendar.getInstance().getTimeInMillis();
+                log.info("Connected at " + Calendar.getInstance().getTime());
+                BankServerThreaded.getCounter().decrementAndGet();
+
+                //if (message.equalsIgnoreCase("Bankomat")) {
+                BankScenario bankScenario = new BankScenario();
                     bankScenario.runScenario();//FIXME: transactional
-                } else if (message.equalsIgnoreCase("Office")) {
-                    selectBankForInfo();
-                }
+                // } else if (message.equalsIgnoreCase("Office")) {
+                //   selectBankForInfo();
+
 
             } catch (ClassNotFoundException classnot) {
                 log.log(Level.SEVERE, classnot.getMessage(), classnot);
@@ -102,6 +109,10 @@ public class ServerThread implements Runnable {
         } finally {
             // 4: Closing connection
             try {
+                end = Calendar.getInstance().getTimeInMillis();
+                log.info(connection + " disconnected at " + Calendar.getInstance().getTime());
+                long last = (end - start) / 1000;
+                log.info("Connected time " + last + " seconds");
                 in.close();
                 out.close();
                 connection.close();
@@ -115,18 +126,12 @@ public class ServerThread implements Runnable {
         try {
             out.writeObject(msg);
             out.flush();
-            System.out.println("server>" + msg);
+
         } catch (IOException ioException) {
             log.log(Level.SEVERE, ioException.getMessage(), ioException);
         }
     }
 
-    public static void main(final String args[]) {
-        BankServer2 server = new BankServer2();
-        while (true) {
-            server.run();
-        }
-    }
 
     private void selectBankForInfo() throws IOException, ClassNotFoundException, SQLException {
         if (BankCommander.getActiveBank() == null) {
@@ -163,6 +168,8 @@ public class ServerThread implements Runnable {
         private BankService instance;
 
         private void selectBank() throws Exception {
+            sendMessage("Connected. Please introduce yourself");
+            message = (String) in.readObject();
             sendMessage("Hello Bankomat. Please enter name of the bank");
             message = (String) in.readObject();
             instance = BankService.getInstance();
@@ -216,9 +223,16 @@ public class ServerThread implements Runnable {
         }
 
         public void runScenario() throws Exception {
-            selectBank();
-            selectClient();
-            processAccount();
+            TransactionManager tm = TransactionManager.getInstance();
+            tm.doInTransaction(new Callable<Void>() {
+                @Override
+                public Void call() throws Exception {
+                    selectBank();
+                    selectClient();
+                    processAccount();
+                    return null;
+                }
+            });
         }
 
     }

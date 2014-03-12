@@ -40,36 +40,33 @@ public class BankClientMock extends Thread implements Callable {
                 out = new ObjectOutputStream(requestSocket.getOutputStream());
                 out.flush();
                 in = new ObjectInputStream(requestSocket.getInputStream());
+                message = (String) in.readObject();
+                System.out.println("server>" + message);
+                sendMessage("Bankomat");
+                message = (String) in.readObject();
+                System.out.println("server>" + message);
+                sendMessage(bank.getName());
+                message = (String) in.readObject();
+                System.out.println("server>" + message);
+                sendMessage(client.getFullName());
+                message = (String) in.readObject();
+                System.out.println("server>" + message);
+                sendMessage(account.getId().toString());
+                message = (String) in.readObject();
+                System.out.println("server>" + message);
+                sendMessage("withdraw");
+                message = (String) in.readObject();
+                System.out.println("server>" + message);
+                sendMessage("10");
+                message = (String) in.readObject();
+                System.out.println("server>" + message);
+                sendMessage("Bye");
 
-                try {
-                    message = (String) in.readObject();
-
-                    sendMessage("Bankomat");
-                    message = (String) in.readObject();
-
-                    sendMessage(bank.getName());
-                    message = (String) in.readObject();
-
-                    sendMessage(client.getFullName());
-                    message = (String) in.readObject();
-
-                    sendMessage(account.getId().toString());
-                    message = (String) in.readObject();
-
-                    sendMessage("withdraw");
-                    message = (String) in.readObject();
-
-                    sendMessage("10");
-                    message = (String) in.readObject();
-
-                    sendMessage("Bye");
-
-                } catch (ClassNotFoundException e) {
-                    log.log(Level.SEVERE, e.getMessage(), e);
-                }
 
             } catch (IOException e) {
                 log.log(Level.SEVERE, e.getMessage(), e);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             } finally {
                 try {
                     out.close();
