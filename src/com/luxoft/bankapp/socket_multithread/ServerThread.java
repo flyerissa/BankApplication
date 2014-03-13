@@ -33,6 +33,7 @@ public class ServerThread implements Runnable {
     private static Logger log = Logger.getLogger(ServerThread.class.getName());
     private long start;
     private long end;
+    Class sync = ServerThread.class;
 
     static {
         try {
@@ -61,8 +62,10 @@ public class ServerThread implements Runnable {
     }
 
     @Override
+
     public void run() {
-        try {
+        synchronized (sync) {
+            try {
             System.out.println("Connection received from "
                     + connection.getInetAddress().getHostName());
             // 3. get Input and Output streams
@@ -120,6 +123,7 @@ public class ServerThread implements Runnable {
                 log.log(Level.SEVERE, ioException.getMessage(), ioException);
             }
         }
+    }
     }
 
     void sendMessage(final String msg) {

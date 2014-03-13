@@ -32,52 +32,52 @@ public class BankClientMock extends Thread implements Callable {
 
 
     public void run() {
-        synchronized (this) {
+
+        try {
+            requestSocket = new Socket(SERVER, 8080);
+            System.out.println("Connected to localhost in port 8080");
+            // 2. get Input and Output streams
+            out = new ObjectOutputStream(requestSocket.getOutputStream());
+            out.flush();
+            in = new ObjectInputStream(requestSocket.getInputStream());
+            message = (String) in.readObject();
+            System.out.println("server>" + message);
+            sendMessage("Bankomat");
+            message = (String) in.readObject();
+            System.out.println("server>" + message);
+            sendMessage(bank.getName());
+            message = (String) in.readObject();
+            System.out.println("server>" + message);
+            sendMessage(client.getFullName());
+            message = (String) in.readObject();
+            System.out.println("server>" + message);
+            sendMessage(account.getId().toString());
+            message = (String) in.readObject();
+            System.out.println("server>" + message);
+            sendMessage("withdraw");
+            message = (String) in.readObject();
+            System.out.println("server>" + message);
+            sendMessage("10");
+            message = (String) in.readObject();
+            System.out.println("server>" + message);
+            sendMessage("Bye");
+
+
+        } catch (IOException e) {
+            log.log(Level.SEVERE, e.getMessage(), e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
             try {
-                requestSocket = new Socket(SERVER, 8080);
-                System.out.println("Connected to localhost in port 8080");
-                // 2. get Input and Output streams
-                out = new ObjectOutputStream(requestSocket.getOutputStream());
-                out.flush();
-                in = new ObjectInputStream(requestSocket.getInputStream());
-                message = (String) in.readObject();
-                System.out.println("server>" + message);
-                sendMessage("Bankomat");
-                message = (String) in.readObject();
-                System.out.println("server>" + message);
-                sendMessage(bank.getName());
-                message = (String) in.readObject();
-                System.out.println("server>" + message);
-                sendMessage(client.getFullName());
-                message = (String) in.readObject();
-                System.out.println("server>" + message);
-                sendMessage(account.getId().toString());
-                message = (String) in.readObject();
-                System.out.println("server>" + message);
-                sendMessage("withdraw");
-                message = (String) in.readObject();
-                System.out.println("server>" + message);
-                sendMessage("10");
-                message = (String) in.readObject();
-                System.out.println("server>" + message);
-                sendMessage("Bye");
-
-
+                out.close();
+                in.close();
+                requestSocket.close();
             } catch (IOException e) {
                 log.log(Level.SEVERE, e.getMessage(), e);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                    in.close();
-                    requestSocket.close();
-                } catch (IOException e) {
-                    log.log(Level.SEVERE, e.getMessage(), e);
-                }
-
             }
+
         }
+
 
     }
 
