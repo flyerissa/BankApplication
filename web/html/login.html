@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="css" href="../css/auth.css">
+    <script type="text/javascript" src="../js/jquery-2.1.0.js"></script>
+    <script type="text/javascript" src="../js/authorization.js"></script>
+
+    <title>Bank Application Main</title>
+</head>
+<body>
+<div class="form">
+    <form action="/login" method="post">
+        <table>
+            <tr>
+                <td colspan=2 style="font-weight:bold;">Enter bank name and client name</td>
+            </tr>
+            <tr>
+                <td>Bank Name:</td>
+                <td><input type="text" name="bank_name" id="bank_name"/></td>
+                <td id="bankError" class="error"></td>
+            </tr>
+            <tr>
+                <td>Client Name:</td>
+                <td><input type="text" name="client_name" class="client_name"/></td>
+                <td id="clientError" class="error"></td>
+            </tr>
+        </table>
+
+    </form>
+    <form action="menu.html">
+        <input class="button" type=submit value="Next" onclick="return checkBankName(); return checkClientName()">
+    </form>
+</div>
+</body>
+</html>

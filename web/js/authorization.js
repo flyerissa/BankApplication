@@ -1,7 +1,7 @@
 /**
  * Created by User on 11.03.14.
  */
-function checkName() {
+function checkBankName() {
     var bank_name = $("#bank_name").val();
     var client_name = $("#client_name").val();
     var checkResult = true;
@@ -9,11 +9,6 @@ function checkName() {
         $("#bankError").html("Please recheck name! It should contain 2 and more letters");
         checkResult = false;
     }
-    else if (client_name.length < 2) {
-        $("#clientError").html("Please recheck name! It should contain 2 and more letters");
-        checkResult = false;
-    }
-
 
     if (checkResult) {
         alert("sending..");
@@ -69,10 +64,10 @@ function checkFieldsPresent() {
 }
 
 function checkClientName() {
-    var client_name = $("#add_client_name").val();
+    var client_name = $(".client_name").val();
     var nameArr = name.split(" ");
     var result = true;
-    if (nameArr.length < 2) {
+    if (client_name.length < 2 || nameArr.length < 2) {
         $("#clientError").html("Please recheck name! It should contain name and surname");
         result = false;
     }
@@ -87,7 +82,13 @@ function checkClientName() {
 
         }
     }
-    return true;
+    if (result) {
+        alert("Sending..")
+        return true;
+    } else {
+        alert("Recheck client name");
+        return false;
+    }
 }
 
 function addClient() {
