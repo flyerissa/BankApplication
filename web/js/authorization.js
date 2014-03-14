@@ -1,12 +1,13 @@
 /**
  * Created by User on 11.03.14.
  */
-function checkBankName() {
-    var bank_name = $("#bank_name").val();
+function checkLogin() {
+
     var client_name = $("#client_name").val();
     var checkResult = true;
-    if (bank_name.length < 2) {
-        $("#bankError").html("Please recheck name! It should contain 2 and more letters");
+
+    if (client_name.length < 2) {
+        $("#clientError").html("Clients name should be > 2");
         checkResult = false;
     }
 

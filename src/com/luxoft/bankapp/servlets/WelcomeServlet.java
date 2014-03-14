@@ -14,7 +14,9 @@ public class WelcomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ServletOutputStream out = resp.getOutputStream();
+        out.println("<html><body>");
         out.println("Hello! Im ATM <br>");
-        out.println("<a href='login.html'>Login</a>");
+        out.println("<a href='/html/login.html'>Login</a>");
+        out.println("</body></html>");
     }
 }

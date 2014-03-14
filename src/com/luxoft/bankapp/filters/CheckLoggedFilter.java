@@ -21,11 +21,10 @@ public class CheckLoggedFilter implements Filter {
         String clientName = (String) session.getAttribute("clientName");
         String path = ((HttpServletRequest) servletRequest).getRequestURI();
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        if (path.startsWith("/html/login") || path.equals("/welcome") || path.startsWith("/css/") || path.startsWith("/js/") || path.equals("/") || clientName != null) {
-            filterChain.doFilter(servletRequest, servletResponse);
-        } else {
+        if (path.startsWith("/secure") && clientName == null) {
             response.sendRedirect("/html/login.html");
-
+        } else {
+            filterChain.doFilter(servletRequest, servletResponse);
         }
     }
 
