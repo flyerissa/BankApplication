@@ -64,8 +64,8 @@ public class ServerThread implements Runnable {
     @Override
 
     public void run() {
-        synchronized (sync) {
-            try {
+
+        try {
             System.out.println("Connection received from "
                     + connection.getInetAddress().getHostName());
             // 3. get Input and Output streams
@@ -124,7 +124,7 @@ public class ServerThread implements Runnable {
             }
         }
     }
-    }
+
 
     void sendMessage(final String msg) {
         try {
@@ -226,8 +226,8 @@ public class ServerThread implements Runnable {
         }
 
         public void runScenario() throws Exception {
-
-            TransactionManager tm = TransactionManager.getInstance();
+            synchronized (sync) {
+                TransactionManager tm = TransactionManager.getInstance();
             tm.doInTransaction(new Callable<Void>() {
                 @Override
                 public Void call() throws Exception {
@@ -237,6 +237,7 @@ public class ServerThread implements Runnable {
                     return null;
                 }
             });
+            }
         }
 
     }

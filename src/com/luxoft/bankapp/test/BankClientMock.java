@@ -30,7 +30,7 @@ public class BankClientMock extends Thread implements Callable {
 
     private Long timeWaiting;
 
-
+    
     public void run() {
 
         try {
@@ -71,7 +71,7 @@ public class BankClientMock extends Thread implements Callable {
             try {
                 out.close();
                 in.close();
-                requestSocket.close();
+                //requestSocket.close();
             } catch (IOException e) {
                 log.log(Level.SEVERE, e.getMessage(), e);
             }

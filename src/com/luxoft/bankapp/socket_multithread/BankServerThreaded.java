@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by User on 06.03.14.
  */
 public class BankServerThreaded {
-    private final int PORT = 8080;
+    //private final int PORT = 8080;
     private final int POOL_SIZE = 3;
 
     private final ServerSocket serverSocket;
@@ -23,13 +23,13 @@ public class BankServerThreaded {
     }
 
     public BankServerThreaded() throws IOException {
-        serverSocket = new ServerSocket(PORT);
+        serverSocket = new ServerSocket(2004, 10);
         pool = Executors.newFixedThreadPool(POOL_SIZE);
     }
 
     public void serve() {
-        while (true) {
-            try {
+
+        try {
                 Thread t = new Thread(new BankServerMonitor(this));
                 t.setDaemon(true);
                 t.start();
@@ -40,7 +40,7 @@ public class BankServerThreaded {
             } catch (IOException e) {
                 pool.shutdown();
             }
-        }
+
     }
 
     public static void main(String[] args) {
