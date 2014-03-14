@@ -28,6 +28,7 @@ public class SessionListener implements HttpSessionListener {
         synchronized (SessionListener.class) {
             Integer clientsConnected = (Integer) context.getAttribute("clientsConnected");
             clientsConnected--;
+
             context.setAttribute("clientsConnected", clientsConnected);
         }
     }

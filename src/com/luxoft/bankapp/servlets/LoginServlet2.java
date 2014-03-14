@@ -17,12 +17,19 @@ public class LoginServlet2 extends HttpServlet {
     @Override
     protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         final String clientName = req.getParameter("client_name");
+        final String bankName = req.getParameter("bank_name");
         if (clientName == null) {
             log.warning("Client not found!");
             throw new ServletException("No client specified.");
         }
+        if (bankName == null) {
+            log.warning("Bank not found!");
+            throw new ServletException("No bank specified.");
+        }
         req.getSession().setAttribute("clientName", clientName);
-        log.info("Client " + clientName + " logged into ATM.");
+        req.getSession().setAttribute("bankName", bankName);
+
+        log.info("Client " + clientName + " logged into ATM. Bank " + bankName + " was selected");
 
         resp.sendRedirect("/secure/menu.html");
     }

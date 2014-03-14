@@ -2,12 +2,17 @@
  * Created by User on 11.03.14.
  */
 function checkLogin() {
-
+    var bank = $("#bank_name").val();
     var client_name = $("#client_name").val();
     var checkResult = true;
 
     if (client_name.length < 2) {
         $("#clientError").html("Clients name should be > 2");
+        checkResult = false;
+    }
+
+    if (bank.length < 2) {
+        $("#bankError").html("Bank name should be > 2");
         checkResult = false;
     }
 
@@ -106,6 +111,9 @@ function addClient() {
     var sex = $("input[name='sex']:checked").val();
     var mail = $("#mail").val();
 }
+
+
+
 
 
 

@@ -13,19 +13,24 @@
     <form action="/login2" method="post">
         <table>
             <tr>
-                <td colspan=2 style="font-weight:bold;">Enter and client name</td>
+                <td colspan=2 style="font-weight:bold;">Enter Bank and Client name</td>
+            </tr>
+
+            <tr>
+                <td>Bank Name:</td>
+                <td><input type="text" name="bank_name" id="bank_name"/></td>
+                <td id="bankError" class="error"></td>
             </tr>
 
             <tr>
                 <td>Client Name:</td>
-                <td><input type="text" name="client_name"/></td>
+                <td><input type="text" name="client_name" id="client_name"/></td>
                 <td id="clientError" class="error"></td>
-                <td><input class="button" type=submit value="Next"></td>
-
             </tr>
         </table>
-
+        <input class="button" type=submit value="Next" onclick="return checkLogin()">
     </form>
+
 
 </div>
 </body>

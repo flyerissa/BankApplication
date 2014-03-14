@@ -32,7 +32,7 @@ public class DataSource {
     public Connection openConnection() throws SQLException {
         try {
             Class.forName("org.h2.Driver"); // this is driver for H2
-            Connection connection = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/bankapp",
+            Connection connection = DriverManager.getConnection("jdbc:h2:~/bankapp",
                     "sa", // login
                     "" // password
             );

@@ -12,7 +12,7 @@ import java.io.IOException;
  * Created by User on 14.03.14.
  */
 public class SessionAmountServlet extends HttpServlet {
-    protected void doPost(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest req, final HttpServletResponse resp) throws ServletException, IOException {
         ServletContext context = getServletContext();
         Integer amount = (Integer) context.getAttribute("clientsConnected");
         ServletOutputStream out = resp.getOutputStream();
