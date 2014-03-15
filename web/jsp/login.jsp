@@ -40,9 +40,14 @@
                 <td>Account ID:</td>
                 <td><input type="text" name="accountID" id="accountID"/></td>
                 <td id="accountError" class="error"></td>
-                <a href="secure/menu.jsp">
-                    <button>Next</button>
-                </a>
+
+            </tr>
+            <tr>
+                <td>
+                    <a href="/secure/menu.jsp">
+                        <button>Next</button>
+                    </a>
+                </td>
             </tr>
         </table>
 

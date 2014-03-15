@@ -85,6 +85,26 @@
         <url-pattern>/balance2</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>BankLoginServlet</servlet-name>
+        <servlet-class>com.luxoft.bankapp.servlets.BankLoginServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BankLoginServlet</servlet-name>
+        <url-pattern>/bankLogin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BankInfoServlet</servlet-name>
+        <servlet-class>com.luxoft.bankapp.servlets.BankInfoServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BankInfoServlet</servlet-name>
+        <url-pattern>/bankinfo</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>welcome</welcome-file>
     </welcome-file-list>

@@ -105,4 +105,33 @@ public class BankDAOImpl extends BaseDAO implements BankDao {
         }
         return bankInfo;
     }
+
+    public List<Client> findClientsByNameAndCity(Bank bank, String name, String city) throws SQLException {
+        List<Client> listOfClients = null;
+        Bank current = getBankByName(name);
+        final String findClients = "SELECT id, name, balance FROM CLIENT WHERE bank_id = ? AND city = ? AND name = ? ";
+        log.info("Getting clients..");
+        Connection connection = getDataSource().getConnection();
+        try (final PreparedStatement search = connection.prepareStatement(findClients)) {
+            search.setInt(1, current.getId());
+            search.setString(2, city);
+            search.setString(3, name);
+            ResultSet result = search.executeQuery();
+            if (!result.next()) {
+                throw new SQLException("There are no clients with  name " + name + ", from " + city + " in bank" + current.getName());
+            }
+            log.info("Clients were found");
+            listOfClients = new ArrayList<>();
+            while (result.next()) {
+                Client client = new Client();
+                client.setId(result.getInt("id"));
+                client.setFullName(result.getString("name"));
+                client.setCity(result.getString("city"));
+                client.setBalanceFromDB(result.getDouble("balance"));
+                listOfClients.add(client);
+            }
+        }
+        return listOfClients;
+
+    }
 }

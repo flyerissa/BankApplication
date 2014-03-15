@@ -178,6 +178,10 @@ public class BankService {
         return foundBank;
     }
 
+    public List<Client> findClientsByNameAndCity(Bank bank, String name, String city) throws SQLException {
+        return new BankDAOImpl().findClientsByNameAndCity(bank, name, city);
+    }
+
     public BankInfo getBankInfo(String name) throws BankInfoException {
         BankInfo bankInfo = null;
         try {
