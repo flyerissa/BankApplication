@@ -17,7 +17,7 @@ public class WelcomeServlet extends HttpServlet {
         out.println("<html><body>");
         out.println("Hello! Im ATM <br>");
         out.println("<a href='/jsp/login.jsp'>Login as bank's client</a>");
-        out.println("<a href='/jsp/login.jsp'>Login as remote office</a>");
+        out.println("<a href='/jsp/office_login.jsp'>Login as remote office</a>");
         out.println("</body></html>");
     }
 }

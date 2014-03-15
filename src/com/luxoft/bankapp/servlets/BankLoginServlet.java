@@ -35,7 +35,7 @@ public class BankLoginServlet extends HttpServlet {
             e.printStackTrace();
         }
         req.getSession().setAttribute("bankName", bankName);
-        resp.sendRedirect("");
+        resp.sendRedirect("/jsp/secure/bankInfo.jsp");
 
     }
 }
