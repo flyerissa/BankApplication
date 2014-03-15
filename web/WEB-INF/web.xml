@@ -42,7 +42,7 @@
 
     <servlet-mapping>
         <servlet-name>BalanceServlet</servlet-name>
-        <url-pattern>/account</url-pattern>
+        <url-pattern>/balance</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -52,7 +52,37 @@
 
     <servlet-mapping>
         <servlet-name>MenuServlet</servlet-name>
-        <url-pattern>/secure/processmenu</url-pattern>
+        <url-pattern>/test</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>WithdrawServlet</servlet-name>
+        <servlet-class>com.luxoft.bankapp.servlets.WithdrawServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>WithdrawServlet</servlet-name>
+        <url-pattern>/withdraw</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DepositServlet</servlet-name>
+        <servlet-class>com.luxoft.bankapp.servlets.DepositServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DepositServlet</servlet-name>
+        <url-pattern>/deposit</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BalanceJspServlet</servlet-name>
+        <servlet-class>com.luxoft.bankapp.servlets.BalanceJspServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>BalanceJspServlet</servlet-name>
+        <url-pattern>/balance2</url-pattern>
     </servlet-mapping>
 
     <welcome-file-list>

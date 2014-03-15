@@ -205,6 +205,7 @@ public class BankService {
     public void depositAccount(Client client, double sum) {
         Account account = client.getActiveAccount();
         account.deposit(sum);
+        client.setBalanceFromDB(client.getBalance() + sum);
 
     }
 

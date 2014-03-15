@@ -1,3 +1,11 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: aili
+  Date: 15.03.14
+  Time: 17:07
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,9 +35,18 @@
                 <td><input type="text" name="client_name" id="client_name"/></td>
                 <td id="clientError" class="error"></td>
             </tr>
+
+            <tr>
+                <td>Account ID:</td>
+                <td><input type="text" name="accountID" id="accountID"/></td>
+                <td id="accountError" class="error"></td>
+                <a href="secure/menu.jsp">
+                    <button>Next</button>
+                </a>
+            </tr>
         </table>
 
-        <input class="button" type=submit value="Next" onclick="return checkLogin()">
+
     </form>
 
 

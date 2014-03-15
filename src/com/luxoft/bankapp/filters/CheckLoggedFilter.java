@@ -21,8 +21,8 @@ public class CheckLoggedFilter implements Filter {
         String clientName = (String) session.getAttribute("clientName");
         String path = ((HttpServletRequest) servletRequest).getRequestURI();
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        if (path.startsWith("/secure") && clientName == null) {
-            response.sendRedirect("/html/login.html");
+        if (path.startsWith("/jsp/secure") && clientName == null) {
+            response.sendRedirect("jsp/login.jsp");
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }

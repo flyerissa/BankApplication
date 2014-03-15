@@ -30,7 +30,7 @@ public class BankClientMock extends Thread implements Callable {
 
     private Long timeWaiting;
 
-    
+
     public void run() {
 
         try {

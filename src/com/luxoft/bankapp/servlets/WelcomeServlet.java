@@ -16,7 +16,7 @@ public class WelcomeServlet extends HttpServlet {
         ServletOutputStream out = resp.getOutputStream();
         out.println("<html><body>");
         out.println("Hello! Im ATM <br>");
-        out.println("<a href='/html/login.html'>Login</a>");
+        out.println("<a href='/jsp/login.jsp'>Login</a>");
         out.println("</body></html>");
     }
 }
