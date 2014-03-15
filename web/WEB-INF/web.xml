@@ -105,6 +105,16 @@
         <url-pattern>/bankinfo</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>SearchClientsServlet</servlet-name>
+        <servlet-class>com.luxoft.bankapp.servlets.SearchClientsServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SearchClientsServlet</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>welcome</welcome-file>
     </welcome-file-list>

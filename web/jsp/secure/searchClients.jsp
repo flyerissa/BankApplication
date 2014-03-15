@@ -5,7 +5,8 @@
   Time: 20:24
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" pageEncoding="utf-8" contentType="text/html;charset=utf-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +18,7 @@
 </head>
 <body>
 <div class="form">
-    <form action="submit" method="post" target="_blank">
+    <form action="/search" method="post">
         <table id="search">
             <tr>
                 <td style="font-weight:bold;">Find Client</td>
@@ -33,22 +34,22 @@
             </tr>
         </table>
         <table id="results">
+            <thead>
             <tr>
-                <td style="font-weight:bold;">City</td>
-                <td style="font-weight:bold;">Client</td>
-                <td style="font-weight:bold;">Balance</td>
+                <th>City</th>
+                <th>Client</th>
+                <th>Balance</th>
             </tr>
-            <tr>
-                <td style="font-weight:bold;">London</td>
-                <td><p>Ivan Ivanov</p></td>
-                <td>5000</td>
-            </tr>
-            <tr>
-                <td style="font-weight:bold;">Paris</td>
-                <td><p>Ivan Petrov</p></td>
-                <td>8000</td>
-            </tr>
-
+            </thead>
+            <tbody>
+            <c:forEach var="client" items="${clients}">
+                <tr>
+                    <td><c:out value="${client.city}"/></td>
+                    <td><c:out value="${client.fullName}"/></td>
+                    <td><c:out value="${client.balance}"/></td>
+                </tr>
+            </c:forEach>
+            </tbody>
         </table>
     </form>
 </div>

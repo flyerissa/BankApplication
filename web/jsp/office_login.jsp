@@ -29,8 +29,8 @@
             </tr>
             <tr>
                 <td>
-                    <a href="/bankinfo">
-                        <button>Next</button>
+                    <a href="/secure/bankInfo.jsp">
+                    <button>Next</button>
                     </a>
                 </td>
             </tr>
