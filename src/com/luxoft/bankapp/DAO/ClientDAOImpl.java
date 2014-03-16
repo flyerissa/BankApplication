@@ -17,6 +17,39 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
 
     private static Logger log = Logger.getLogger(ClientDAOImpl.class.getName());
 
+    public Client findClientById(Integer id) throws SQLException {
+        Client client = null;
+        final String sql = "SELECT name, gender, phone, email, balance, city  FROM CLIENT where id = ?";
+        log.log(Level.INFO, "Select client");
+        Connection connection = getDataSource().getConnection();
+        try (final PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                String clientName = rs.getString("name");
+                log.log(Level.INFO, "Client was found " + clientName);
+                String gender = rs.getString("gender");
+                String phone = rs.getString("phone");
+                String email = rs.getString("email");
+                Double balance = rs.getDouble("balance");
+                String city = rs.getString("city");
+                client = new Client();
+                client.setId(id);
+                client.setFullName(clientName);
+                if (gender.equalsIgnoreCase("male")) {
+                    client.setGender(Gender.MALE);
+                } else {
+                    client.setGender(Gender.FEMALE);
+                }
+                client.setPhone(phone);
+                client.setEmail(email);
+                client.setBalanceFromDB(balance);
+                client.setCity(city);
+            }
+        }
+        return client;
+    }
+
     @Override
     public synchronized Client findClientByName(Bank bank, String name) throws SQLException {
         Client client = null;
@@ -255,5 +288,4 @@ public class ClientDAOImpl extends BaseDAO implements ClientDAO {
 */
 
     }
-
 }

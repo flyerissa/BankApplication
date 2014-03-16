@@ -49,7 +49,7 @@ public class BankDAOImpl extends BaseDAO implements BankDao {
     public BankInfo getBankInfo(String name) throws SQLException {
         BankInfo bankInfo = null;
         Bank current = getBankByName(name);
-        final String numberClientsSQL = "select  count(c.id) as number_of_clients From Client as c " +
+        final String numberClientsSQL = "select  count(distinct c.id) as number_of_clients From Client as c " +
                 " Join Bank  on c.bank_id = ? ";
         final String balanceSQL = "Select sum(c.balance) as total from client as c  where bank_id = ?";
         final String orderClientsSQL = "select city, name, id from client  where bank_id = ? order by city";
@@ -109,13 +109,13 @@ public class BankDAOImpl extends BaseDAO implements BankDao {
     public List<Client> findClientsByNameAndCity(Bank bank, String name, String city) throws SQLException {
         List<Client> listOfClients = null;
         Bank current = bank;
-        final String findClients = "SELECT id, name, balance, city FROM CLIENT WHERE bank_id = ? AND city = ? AND name = ? ";
+        final String findClients = "SELECT id, name, balance, city FROM CLIENT WHERE bank_id = ? AND city LIKE ? AND name LIKE ? ";
         log.info("Getting clients..");
         Connection connection = getDataSource().getConnection();
         try (final PreparedStatement search = connection.prepareStatement(findClients)) {
             search.setInt(1, current.getId());
-            search.setString(2, city);
-            search.setString(3, name);
+            search.setString(2, "%" + city + "%");
+            search.setString(3, "%" + name + "%");
             ResultSet result = search.executeQuery();
             log.info("Clients were found");
             listOfClients = new ArrayList<>();

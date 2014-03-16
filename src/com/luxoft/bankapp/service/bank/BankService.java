@@ -182,6 +182,10 @@ public class BankService {
         return new BankDAOImpl().findClientsByNameAndCity(bank, name, city);
     }
 
+    public Client findClientById(Integer id) throws SQLException {
+        return new ClientDAOImpl().findClientById(id);
+    }
+
     public BankInfo getBankInfo(String name) throws BankInfoException {
         BankInfo bankInfo = null;
         try {

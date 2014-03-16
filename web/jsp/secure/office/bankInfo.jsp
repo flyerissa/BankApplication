@@ -41,8 +41,8 @@
     <a href="/jsp/secure/office/searchClients.jsp">
     <button>Search clients</button>
     </a>
-    <a href="/addClient">
-        <button>Add client</button>
+    <a href="/jsp/secure/office/addClient.jsp">
+    <button>Add client</button>
     </a>
     <a href="/jsp/office_login.jsp">
         <button>Back</button>

@@ -31,7 +31,9 @@
                 <!--create objects in JS and fill table with data on pressing button search-->
 
                 <td><input class="button" id="find" type=submit value="Search"></td>
+
             </tr>
+
         </table>
         <table id="results">
             <thead>
@@ -45,13 +47,20 @@
             <c:forEach var="client" items="${clients}">
                 <tr>
                     <td><c:out value="${client.city}"/></td>
-                    <td><c:out value="${client.fullName}"/></td>
+                    <td><a href="/client?clientId=${client.id}"><c:out value="${client.fullName}"/></a></td>
                     <td><c:out value="${client.balance}"/></td>
                 </tr>
             </c:forEach>
             </tbody>
         </table>
     </form>
+
+    <a href="/bankinfo">
+        <button>Back</button>
+    </a>
+    <a href="/jsp/secure/office/addClient.jsp">
+        <button>Add client</button>
+    </a>
 </div>
 </body>
 </html>
