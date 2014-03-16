@@ -23,10 +23,10 @@
     <a href="/balance2">
         <button>Balance</button>
     </a>
-    <a href="/jsp/secure/withdraw.jsp">
+    <a href="/jsp/secure/client/withdraw.jsp">
         <button>Withdraw</button>
     </a>
-    <a href="/jsp/secure/deposit.jsp">
+    <a href="/jsp/secure/client/deposit.jsp">
         <button>Deposit</button>
     </a>
     <a href="/jsp/login.jsp">

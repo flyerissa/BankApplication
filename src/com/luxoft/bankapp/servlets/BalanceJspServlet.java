@@ -32,7 +32,7 @@ public class BalanceJspServlet extends HttpServlet {
             Account account = BankService.getInstance().findAccountFromDB(client, Integer.parseInt(accountId));
             Double balance = account.getBalance();
             req.getSession().setAttribute("balance", balance);
-            req.getRequestDispatcher("/jsp/secure/balance.jsp").forward(req, resp);
+            req.getRequestDispatcher("/jsp/secure/client/balance.jsp").forward(req, resp);
             //renderBalancePage(req, resp);
 
         } catch (BankNotFoundException e) {

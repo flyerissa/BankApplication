@@ -24,7 +24,7 @@ public class BankInfoServlet extends HttpServlet {
             Double totalAmount = info.getTotalAccountSum();
             req.getSession().setAttribute("numberOfClients", numberOfClients);
             req.getSession().setAttribute("totalSum", totalAmount);
-            req.getRequestDispatcher("/jsp/secure/bankInfo.jsp").forward(req, resp);
+            req.getRequestDispatcher("/jsp/secure/office/bankInfo.jsp").forward(req, resp);
         } catch (BankInfoException e) {
             e.printStackTrace();
         }

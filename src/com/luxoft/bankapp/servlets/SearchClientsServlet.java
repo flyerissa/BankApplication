@@ -30,9 +30,9 @@ public class SearchClientsServlet extends HttpServlet {
 
         try {
             Bank bank = BankService.getInstance().selectBank(bankName);
-            List<Client> clients = BankService.getInstance().findClientsByNameAndCity(bank, cityName, clientName);
+            List<Client> clients = BankService.getInstance().findClientsByNameAndCity(bank, clientName, cityName);
             req.getSession().setAttribute("clients", clients);
-            resp.sendRedirect("/jsp/secure/searchClients.jsp");
+            resp.sendRedirect("/jsp/secure/office/searchClients.jsp");
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (BankNotFoundException e) {

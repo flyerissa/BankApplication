@@ -30,7 +30,7 @@
             </tr>
             <tr>
                 <td><input class="button" type=submit value="Send"></td>
-                <td><a href="/jsp/secure/menu.jsp">Back to Menu</a></td>
+                <td><a href="/jsp/secure/client/menu.jsp">Back to Menu</a></td>
             </tr>
         </table>
     </form>

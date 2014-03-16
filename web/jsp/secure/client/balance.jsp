@@ -21,7 +21,7 @@
 
     <p><b>Balance: </b></p> <%=request.getSession().getAttribute("balance")%>
 
-    <a href="/jsp/secure/menu.jsp">
+    <a href="/jsp/secure/client/menu.jsp">
         <button>Back</button>
     </a>
 

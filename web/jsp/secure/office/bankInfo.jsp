@@ -19,7 +19,9 @@
     <form>
         <table id="statistic">
             <tr>
-                <td colspan=2 style="font-weight:bold;">Bank Statistic MyBank</td>
+                <td colspan=2 style="font-weight:bold;">Bank Statistic</td>
+                <td><%=session.getAttribute("bankName")%>
+                </td>
             </tr>
             <tr>
                 <td>Total amount of clients</td>
@@ -36,8 +38,8 @@
         </table>
     </form>
 
-    <a href="/search">
-        <button>Search clients</button>
+    <a href="/jsp/secure/office/searchClients.jsp">
+    <button>Search clients</button>
     </a>
     <a href="/addClient">
         <button>Add client</button>

@@ -44,7 +44,7 @@
             </tr>
             <tr>
                 <td>
-                    <a href="/secure/menu.jsp">
+                    <a href="/secure/client/menu.jsp">
                         <button>Next</button>
                     </a>
                 </td>

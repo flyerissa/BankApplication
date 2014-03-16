@@ -29,14 +29,13 @@
             </tr>
             <tr>
                 <td>
-                    <a href="/secure/bankInfo.jsp">
+                    <a href="/jsp/secure/office/bankInfo.jsp">
                     <button>Next</button>
                     </a>
                 </td>
             </tr>
         </table>
     </form>
-    <
 </div>
 </body>
 </html>

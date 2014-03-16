@@ -19,10 +19,13 @@ public class CheckLoggedFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpSession session = ((HttpServletRequest) servletRequest).getSession();
         String clientName = (String) session.getAttribute("clientName");
+        String bankName = (String) session.getAttribute("bankName");
         String path = ((HttpServletRequest) servletRequest).getRequestURI();
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        if (path.startsWith("/jsp/secure") && clientName == null) {
-            response.sendRedirect("jsp/login.jsp");
+        if (path.startsWith("/jsp/secure/client/") && clientName == null) {
+            response.sendRedirect("/jsp/login.jsp");
+        } else if (path.startsWith("/jsp/secure/office/") && bankName == null) {
+            response.sendRedirect("/jsp/office_login.jsp");
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }

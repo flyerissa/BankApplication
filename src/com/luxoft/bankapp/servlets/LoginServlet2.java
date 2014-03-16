@@ -57,7 +57,7 @@ public class LoginServlet2 extends HttpServlet {
         req.getSession().setAttribute("clientName", clientName);
         req.getSession().setAttribute("bankName", bankName);
         req.getSession().setAttribute("accountId", accountId);
-        resp.sendRedirect("/jsp/secure/menu.jsp");
+        resp.sendRedirect("/jsp/secure/client/menu.jsp");
     }
 
 
